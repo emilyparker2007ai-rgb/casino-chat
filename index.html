@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>463 · Atención</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230b7d6e'/><text x='50' y='68' font-size='46' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>463</text></svg>">
+<style>
+  :root{
+    --header:#0b7d6e;        /* verde tipo WhatsApp, propio */
+    --header-dark:#075f54;
+    --bg:#e7ded3;            /* fondo natural del chat */
+    --bubble-in:#ffffff;
+    --bubble-out:#d6f5cf;
+    --ink:#111b21;
+    --muted:#667781;
+    --bar:#f0f2f5;
+    --send:#0b7d6e;
+    --tick:#53bdeb;
+  }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ margin:0; height:100%; overflow:hidden; }
+  body{
+    font-family:-apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color:var(--ink);
+    background:var(--header-dark);
+    height:100dvh;
+    display:flex; flex-direction:column;
+  }
+  /* ---------- Header ---------- */
+  .top{
+    background:var(--header); color:#fff; flex:0 0 auto;
+    padding:calc(env(safe-area-inset-top) + 8px) 12px 8px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .back{ font-size:24px; line-height:1; opacity:.95; }
+  .av{
+    width:40px; height:40px; border-radius:50%; background:#fff; color:var(--header);
+    font-weight:800; font-size:15px; display:grid; place-items:center; flex:0 0 auto;
+  }
+  .who{ flex:1 1 auto; min-width:0; line-height:1.2; }
+  .who .n{ font-weight:600; font-size:16.5px; }
+  .who .s{ font-size:12.5px; opacity:.85; }
+  .who .s b{ color:#c9f5d0; font-weight:500; }
+  .acts{ display:flex; gap:18px; font-size:20px; opacity:.95; }
+  /* ---------- Chat area ---------- */
+  .chat{
+    flex:1 1 auto; overflow-y:auto; padding:14px 10px 6px;
+    background:
+      radial-gradient(circle at 20% 15%, rgba(255,255,255,.05), transparent 40%),
+      var(--bg);
+    display:flex; flex-direction:column; gap:8px;
+  }
+  .day{ align-self:center; background:#fff; color:var(--muted); font-size:12px; padding:5px 12px; border-radius:8px; box-shadow:0 1px 1px rgba(0,0,0,.06); margin:2px 0 6px; }
+  .msg{ max-width:82%; padding:7px 10px 5px; border-radius:9px; font-size:15px; line-height:1.35; position:relative; box-shadow:0 1px .5px rgba(0,0,0,.12); }
+  .in{ align-self:flex-start; background:var(--bubble-in); border-top-left-radius:2px; }
+  .out{ align-self:flex-end; background:var(--bubble-out); border-top-right-radius:2px; }
+  .msg .t{ font-size:10.5px; color:var(--muted); float:right; margin:6px 0 -2px 8px; }
+  .out .t::after{ content:" ✓✓"; color:var(--tick); }
+  /* ---------- Input bar ---------- */
+  .bar{
+    flex:0 0 auto; background:var(--bar);
+    padding:7px 8px calc(env(safe-area-inset-bottom) + 7px);
+    display:flex; align-items:center; gap:7px;
+  }
+  .field{
+    flex:1 1 auto; background:#fff; border-radius:22px; padding:11px 15px;
+    color:var(--muted); font-size:15px; display:flex; align-items:center; gap:8px;
+    box-shadow:0 1px 1px rgba(0,0,0,.05); cursor:pointer; user-select:none;
+  }
+  .field .ico{ opacity:.6; }
+  .go{
+    flex:0 0 auto; width:46px; height:46px; border-radius:50%; background:var(--send); color:#fff;
+    border:0; font-size:21px; display:grid; place-items:center; cursor:pointer;
+    box-shadow:0 1px 3px rgba(0,0,0,.2);
+  }
+  .go:active{ transform:scale(.94); }
+  /* Cartel para abrir el chat (fallback visible) */
+  .hint{ align-self:center; margin-top:auto; margin-bottom:4px; background:rgba(11,125,110,.12); color:var(--header-dark); font-size:12.5px; padding:6px 12px; border-radius:20px; }
+</style>
+</head>
+<body>
+
+  <div class="top">
+    <span class="back">‹</span>
+    <div class="av">463</div>
+    <div class="who">
+      <div class="n">463 · Atención</div>
+      <div class="s"><b>en línea</b> · te respondemos ahora</div>
+    </div>
+    <div class="acts"><span>📹</span><span>📞</span><span>⋮</span></div>
+  </div>
+
+  <div class="chat" id="chat">
+    <div class="day">HOY</div>
+    <div class="msg in">¡Hola! 👋 Bienvenido a <b>463</b>.<span class="t">10:21</span></div>
+    <div class="msg in">Escribinos por acá y un asesor te ayuda a <b>cargar fichas y empezar a jugar</b> en segundos 🎰<span class="t">10:21</span></div>
+    <div class="msg in">Tocá <b>“Escribí un mensaje”</b> y te atendemos al toque 👇<span class="t">10:22</span></div>
+    <div class="hint" id="hint">Abriendo el chat…</div>
+  </div>
+
+  <div class="bar">
+    <div class="field" id="open"><span class="ico">😊</span><span>Escribí un mensaje…</span><span class="ico" style="margin-left:auto">📎</span><span class="ico">📷</span></div>
+    <button class="go" id="send" aria-label="Enviar">➤</button>
+  </div>
+
+  <!-- ================== INTEGRACIÓN KOMMO ================== -->
+  <script>
+    // 1) Le pegamos el ORIGEN DEL ANUNCIO al lead (para el ROAS): cl_id / subid / fbclid de la URL.
+    (function () {
+      try {
+        var qs = new URLSearchParams(location.search);
+        var clid = qs.get('cl_id') || qs.get('subid') || qs.get('fbclid') || '';
+        if (clid) { try { localStorage.setItem('cl_id', clid); } catch (e) {} }
+        else { try { clid = localStorage.getItem('cl_id') || ''; } catch (e) {} }
+        if (clid) {
+          window.crmPluginConfig = window.crmPluginConfig || {};
+          window.crmPluginConfig.onlinechat = window.crmPluginConfig.onlinechat || {};
+          window.crmPluginConfig.onlinechat.user_id = clid;
+        }
+      } catch (e) {}
+    })();
+
+    // 2) Abrir el chat de Kommo (mejor esfuerzo). En mobile Kommo abre a pantalla completa solo.
+    function abrirKommo() {
+      try { if (window.amoSocialButton) { window.amoSocialButton('runChatShow'); return true; } } catch (e) {}
+      // fallback: click al botón que inyecta Kommo
+      var b = document.querySelector('[class*="amocrm"] , [id*="amo"] button, .amocrm-button, [class*="online-chat"] , iframe[src*="kommo"], iframe[src*="amocrm"]');
+      if (b) { try { (b.click ? b : b.contentWindow).click && b.click(); return true; } catch (e) {} }
+      return false;
+    }
+    document.getElementById('open').addEventListener('click', abrirKommo);
+    document.getElementById('send').addEventListener('click', abrirKommo);
+    // reintentos hasta que el widget de Kommo termine de cargar
+    var tries = 0, iv = setInterval(function () {
+      tries++;
+      var ok = abrirKommo();
+      var hint = document.getElementById('hint');
+      if (ok || tries > 20) { clearInterval(iv); if (hint) hint.textContent = 'Chat listo · tocá para escribir'; }
+    }, 700);
+  </script>
+
+  <!-- ============================================================
+       PEGAR ACÁ EL CÓDIGO DEL CHAT DE KOMMO (reemplazá esta línea):
+
+       Kommo  →  Ajustes (tuerca)  →  Fuentes de leads / "Chat en vivo"
+              →  tu canal de chat  →  botón "Copiar código".
+       Pegá el <script>...</script> completo JUSTO ACÁ DEBAJO.
+
+       (El bloque de arriba ya le pasa el origen del anuncio al lead.)
+  ============================================================ -->
+
+</body>
+</html>
