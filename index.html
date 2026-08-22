@@ -16,7 +16,7 @@
       radial-gradient(55% 60% at 38% 50%, #4a1489 0%, rgba(74,20,137,0) 60%),
       radial-gradient(40% 45% at 72% 40%, #2a0f5e 0%, rgba(42,15,94,0) 65%),
       linear-gradient(180deg,#150632 0%,#0d0322 60%,#08021a 100%); }
-  #gl{ position:fixed; inset:0; z-index:1; display:block; }
+  #gl{ position:fixed; inset:0; z-index:1; display:block; width:100vw !important; height:100dvh !important; }
   .vig{ position:fixed; inset:0; z-index:2; pointer-events:none; background:radial-gradient(80% 70% at 50% 50%, transparent 45%, rgba(6,1,18,.7) 100%); }
   .ui{ position:fixed; inset:0; z-index:3; pointer-events:none; }
   .ui *{ pointer-events:auto; }
@@ -27,7 +27,7 @@
   .reg{ border:1.5px solid rgba(255,255,255,.55); color:#fff; background:rgba(255,255,255,.08); backdrop-filter:blur(8px); border-radius:26px; padding:10px 22px; font-family:"Manrope"; font-weight:800; font-size:14px; cursor:pointer; transition:background .2s, box-shadow .2s; }
   .reg:hover{ background:rgba(255,255,255,.16); box-shadow:0 0 22px rgba(180,120,255,.45); }
 
-  .hero{ position:absolute; right:6vw; top:50%; transform:translateY(-50%); width:min(520px,44vw); text-align:left; }
+  .hero{ position:absolute; right:12vw; top:50%; transform:translateY(-50%); width:min(540px,44vw); text-align:left; }
   .eyebrow{ font-family:"Exo 2"; font-weight:800; font-size:clamp(18px,1.6vw,26px); letter-spacing:.55em; text-transform:uppercase; color:#fff; opacity:.95; margin:0 0 2px; text-shadow:0 0 18px rgba(180,120,255,.7); }
   .big{ font-family:"Exo 2"; font-style:italic; font-weight:900; font-size:clamp(64px,7.6vw,118px); line-height:.9; margin:0; letter-spacing:-1px;
     background:linear-gradient(180deg,#fff 0%,#fff4cf 38%,#ffd24a 62%,#ff9f1c 100%); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
@@ -204,7 +204,7 @@
     composer.addPass(new OutputPass());
 
     // layout segun pantalla: desktop slot a la izquierda, mobile arriba
-    function layout(){ const w = innerWidth, h = innerHeight, mob = w < 900; renderer.setSize(w, h, false); composer.setSize(w, h); camera.aspect = w/h; camera.updateProjectionMatrix();
+    function layout(){ const w = innerWidth, h = innerHeight, mob = w < 900; renderer.setSize(w, h); composer.setSize(w, h); camera.aspect = w/h; camera.updateProjectionMatrix();
       if (mob){ const k = Math.min(1, w/430); slot.position.set(0, 2.35, 0); slot.scale.setScalar(0.78*k); camera.position.z = 11.5;
         floaters.forEach(o => { const m = o.userData.mob || [o.userData.base.x*0.55, o.userData.base.y*0.75, o.userData.base.z]; o.position.set(m[0], m[1], m[2]); o.userData.base2 = o.position.clone(); }); }
       else { slot.position.set(-3.1, 0.15, 0); slot.scale.setScalar(1.05); camera.position.z = 11; floaters.forEach(o => { o.position.copy(o.userData.base); o.userData.base2 = o.position.clone(); }); }
@@ -224,7 +224,8 @@
     tick();
   </script>
 
-  <!-- Chat web NATIVO de Kommo -->
+  <!-- Chat web NATIVO de Kommo. En celular se oculta el boton flotante (tapa el texto): el CTA abre el chat -->
+  <script>window.crmPluginConfig = { hidden: window.innerWidth < 900 };</script>
   <script>(function(a,m,o,c,r,m){a[m]={id:"1079587",hash:"f4787e77ef5a8f993efa4b6e0a1768713acd0304ee2069e270e61bad0c299138",locale:"es",setMeta:function(p){this.params=(this.params||[]).concat([p])}};a[o]=a[o]||function(){(a[o].q=a[o].q||[]).push(arguments)};var d=a.document,s=d.createElement('script');s.async=true;s.id=m+'_script';s.src='https://gso.kommo.com/js/button.js';d.head&&d.head.appendChild(s)}(window,0,'crmPlugin',0,0,'crm_plugin'));</script>
   <script>
     // API oficial del boton de chat de Kommo: abre la ventana de chat (abajo a la derecha)
