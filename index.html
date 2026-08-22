@@ -225,7 +225,11 @@
   </script>
 
   <!-- Chat web NATIVO de Kommo. En celular se oculta el boton flotante (tapa el texto): el CTA abre el chat -->
-  <script>window.crmPluginConfig = { hidden: window.innerWidth < 900 };</script>
+  <script>
+    // user_id estable por visitante => Kommo conserva SIEMPRE el historial del chat de esa persona
+    (function(){ var uid = ''; try { uid = localStorage.getItem('k463_uid') || ''; if (!uid) { uid = 'w463-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 12); localStorage.setItem('k463_uid', uid); } } catch (e) { uid = 'w463-' + Date.now().toString(36); }
+      window.crmPluginConfig = { hidden: window.innerWidth < 900, onlinechat: { user_id: uid } }; })();
+  </script>
   <script>(function(a,m,o,c,r,m){a[m]={id:"1079587",hash:"f4787e77ef5a8f993efa4b6e0a1768713acd0304ee2069e270e61bad0c299138",locale:"es",setMeta:function(p){this.params=(this.params||[]).concat([p])}};a[o]=a[o]||function(){(a[o].q=a[o].q||[]).push(arguments)};var d=a.document,s=d.createElement('script');s.async=true;s.id=m+'_script';s.src='https://gso.kommo.com/js/button.js';d.head&&d.head.appendChild(s)}(window,0,'crmPlugin',0,0,'crm_plugin'));</script>
   <script>
     // API oficial del boton de chat de Kommo: abre la ventana de chat (abajo a la derecha)
