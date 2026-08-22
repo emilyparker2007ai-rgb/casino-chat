@@ -19,6 +19,7 @@ function page(name) {
 }
 const INDEX = page("index.html");
 const ADMIN = page("admin.html");
+const GSAP = page("gsap.min.js");
 
 // ---- store en memoria (Kommo es el registro durable via notas) ----
 const convs = new Map(); // id -> {id,name,phone,clid,leadId,contactId,createdAt,msgs:[],adminReadSeq}
@@ -141,6 +142,8 @@ const server = http.createServer(async (req, res) => {
     return send(res, 200, INDEX, "text/html; charset=utf-8");
   if (req.method === "GET" && (u === "/admin" || u === "/admin.html"))
     return send(res, 200, ADMIN, "text/html; charset=utf-8");
+  if (req.method === "GET" && u === "/gsap.min.js")
+    return send(res, 200, GSAP, "application/javascript; charset=utf-8");
 
   // ---------- CLIENTE ----------
   if (u === "/api/lead" && req.method === "POST") {

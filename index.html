@@ -8,123 +8,168 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@600;700;800&display=swap">
 <style>
-  :root{ --gold:#ffd24a; --gold2:#ffb020; --green:#16c95f; --green2:#0e9c46;
-    --bg0:#03130b; --ink:#eafff2; --mut:#9fc7ac; --H:52px; }
+  :root{ --gold:#ffd24a; --gold2:#ffb020; --green:#19d268; --green2:#0e9c46; --H:54px; --ink:#eafff2; --mut:#a9c9b6; }
   *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  html,body{ margin:0; }
-  body{ font-family:"Manrope",system-ui,-apple-system,"Segoe UI",Arial,sans-serif; color:var(--ink);
+  html,body{ margin:0; height:100%; }
+  body{ font-family:"Manrope",system-ui,-apple-system,"Segoe UI",Arial,sans-serif; color:var(--ink); background:#03110a; min-height:100dvh; overflow-x:hidden; }
+  #bg{ position:fixed; inset:0; z-index:0; display:block; }
+  .amb{ position:fixed; inset:0; z-index:1; pointer-events:none;
     background:
-      radial-gradient(120% 55% at 50% -8%, #1e7a41 0%, transparent 55%),
-      radial-gradient(80% 45% at 50% 108%, #0e5c30 0%, transparent 55%),
-      linear-gradient(180deg, var(--bg0), #02100a 62%, var(--bg0));
-    min-height:100dvh; overflow-x:hidden; }
-  .wrap{ max-width:520px; margin:0 auto; padding:14px 18px 60px; }
+      radial-gradient(42% 38% at 50% 32%, rgba(168,70,255,.20), transparent 70%),
+      radial-gradient(60% 45% at 50% 40%, rgba(25,210,104,.24), transparent 70%),
+      radial-gradient(120% 80% at 50% 122%, rgba(14,92,48,.5), transparent 60%),
+      linear-gradient(180deg,#04150c,#030d08 55%,#020a06); }
+  .objw{ position:fixed; z-index:2; pointer-events:none; will-change:transform; }
+  .obj{ position:relative; will-change:transform; display:grid; place-items:center; }
+  .coin{ border-radius:50%; background:radial-gradient(circle at 34% 30%,#fff6cf,#ffd24a 46%,#b9791a 100%);
+    border:2px solid #7d5210; color:#7a4d0a; font-family:"Anton";
+    box-shadow:0 0 26px rgba(255,190,60,.5), inset 0 3px 7px rgba(255,255,255,.6), inset 0 -7px 11px rgba(120,80,10,.55); }
+  .coin::after{ content:""; position:absolute; inset:14%; border-radius:50%; border:2px dashed rgba(150,100,20,.5); }
+  .chip{ border-radius:50%; position:relative; box-shadow:0 0 22px rgba(0,0,0,.35), inset 0 0 0 4px rgba(255,255,255,.9); }
+  .chip.r{ background:repeating-conic-gradient(#d81f2a 0 22.5deg,#fff 0 45deg); }
+  .chip.g{ background:repeating-conic-gradient(#0e9c46 0 22.5deg,#fff 0 45deg); }
+  .chip::after{ content:""; position:absolute; inset:24%; border-radius:50%; background:radial-gradient(circle at 40% 35%,#fff,#e9e9e9); box-shadow:inset 0 0 0 2px rgba(0,0,0,.12); }
+  .gem{ clip-path:polygon(50% 0,100% 38%,82% 100%,18% 100%,0 38%);
+    background:linear-gradient(135deg,#9af6ff,#2ea6ff 50%,#a24bff); box-shadow:0 0 30px rgba(120,180,255,.6); }
+  .gem::after{ content:""; position:absolute; inset:0; clip-path:inherit; background:linear-gradient(120deg,transparent 40%,rgba(255,255,255,.6) 50%,transparent 60%); }
+  .vig{ position:fixed; inset:0; z-index:3; pointer-events:none; background:radial-gradient(72% 62% at 50% 42%, transparent 38%, rgba(2,8,5,.6) 100%); }
+  .wrap{ position:relative; z-index:4; max-width:540px; margin:0 auto; padding:16px 18px 60px; }
 
-  /* topbar */
-  .top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+  .top{ display:flex; align-items:center; justify-content:space-between; }
   .logo{ display:flex; align-items:center; gap:9px; }
-  .logo .c{ width:38px; height:38px; border-radius:50%; background:linear-gradient(160deg,var(--green),var(--green2));
-    display:grid; place-items:center; font-family:"Anton"; font-size:16px; color:#042012; box-shadow:0 0 18px rgba(22,201,95,.5); }
+  .logo .c{ width:38px; height:38px; border-radius:50%; background:linear-gradient(160deg,var(--green),var(--green2)); display:grid; place-items:center; font-family:"Anton"; font-size:16px; color:#042012; box-shadow:0 0 18px rgba(25,210,104,.6); }
   .logo .t{ font-weight:800; font-size:16px; } .logo .t span{ color:var(--gold); }
-  .reg{ border:1.5px solid var(--gold); color:var(--gold); background:rgba(255,210,74,.08); border-radius:22px;
-    padding:9px 18px; font-family:"Manrope"; font-weight:800; font-size:14px; cursor:pointer; }
+  .reg{ border:0; color:#04140c; background:linear-gradient(180deg,#ffe081,var(--gold2)); border-radius:24px; padding:10px 20px; font-family:"Manrope"; font-weight:800; font-size:14px; cursor:pointer; box-shadow:0 6px 20px rgba(255,176,32,.4); }
   .reg:active{ transform:scale(.96); }
 
-  /* hero title 463 CASINO */
-  .htitle{ text-align:center; font-family:"Anton"; line-height:.86; margin:2px 0 4px; }
-  .htitle .a{ display:block; font-size:20px; letter-spacing:.5em; color:var(--green); text-indent:.5em; }
-  .htitle .b{ display:block; font-size:clamp(58px,17vw,92px); letter-spacing:1px;
-    background:linear-gradient(180deg,#fff3c4 0%,var(--gold) 45%,var(--gold2) 80%,#a9701a 100%);
+  .htitle{ text-align:center; font-family:"Anton"; line-height:.82; margin:16px 0 2px; }
+  .htitle .a{ display:block; font-size:19px; letter-spacing:.62em; color:var(--green); text-indent:.62em; text-shadow:0 0 14px rgba(25,210,104,.7); }
+  .htitle .b{ display:block; font-size:clamp(60px,17vw,96px); letter-spacing:1px; position:relative;
+    background:linear-gradient(180deg,#fff7d6,var(--gold) 44%,var(--gold2) 78%,#96610f);
     -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
-    filter:drop-shadow(0 4px 16px rgba(255,176,32,.4)); }
+    filter:drop-shadow(0 3px 0 #6e480c) drop-shadow(0 8px 22px rgba(255,176,32,.45)); }
+  .htitle .b::after{ content:"CASINO"; position:absolute; inset:0;
+    background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.85) 48%,transparent 62%);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; background-size:250% 100%; animation:shine 3.6s ease-in-out infinite; }
+  @keyframes shine{ 0%{ background-position:180% 0;} 55%,100%{ background-position:-80% 0;} }
 
-  /* SLOT */
-  .slot{ position:relative; display:flex; justify-content:center; margin:14px auto 10px; width:max-content; }
-  .glow{ position:absolute; inset:-24px; border-radius:50%; background:radial-gradient(closest-side, rgba(22,201,95,.5), transparent 70%);
-    filter:blur(10px); animation:breathe 2.6s ease-in-out infinite; z-index:0; }
-  @keyframes breathe{ 0%,100%{ opacity:.5; } 50%{ opacity:1; } }
-  .cabinet{ position:relative; z-index:1; display:flex; gap:8px; padding:14px; border-radius:16px;
-    background:linear-gradient(180deg,#241706,#0e0a04); border:3px solid var(--gold);
-    box-shadow:0 0 0 2px #7a5310, 0 14px 40px rgba(0,0,0,.6), inset 0 2px 10px rgba(255,210,74,.25); }
-  .reel{ width:60px; height:var(--H); overflow:hidden; border-radius:8px;
-    background:linear-gradient(180deg,#fff,#e9e9e9); box-shadow:inset 0 6px 10px rgba(0,0,0,.35), inset 0 -6px 10px rgba(0,0,0,.35); }
-  .strip{ display:flex; flex-direction:column; will-change:transform; }
-  .reel:nth-child(1) .strip{ animation:reel 3.4s cubic-bezier(.15,.75,.2,1) infinite; }
-  .reel:nth-child(2) .strip{ animation:reel 3.4s cubic-bezier(.15,.75,.2,1) infinite .18s; }
-  .reel:nth-child(3) .strip{ animation:reel 3.4s cubic-bezier(.15,.75,.2,1) infinite .36s; }
-  @keyframes reel{ 0%,14%{ transform:translateY(0); filter:blur(0);} 20%{ filter:blur(2px);}
-    60%{ transform:translateY(calc(-9 * var(--H))); filter:blur(7px);}
-    82%,100%{ transform:translateY(calc(-12 * var(--H))); filter:blur(0);} }
-  .sym{ height:var(--H); display:grid; place-items:center; font-size:30px; }
-  .sym.seven{ font-family:"Anton"; font-size:36px; color:#e01e2b; text-shadow:0 1px 0 #ffd24a, 0 0 8px rgba(224,30,43,.5); }
-  .payline{ position:absolute; z-index:2; left:8px; right:8px; top:50%; height:2px; transform:translateY(-1px);
-    background:linear-gradient(90deg,transparent,rgba(255,210,74,.9),transparent); pointer-events:none; }
-  .coin{ position:absolute; z-index:0; font-size:26px; filter:drop-shadow(0 4px 6px rgba(0,0,0,.5)); animation:float 3.4s ease-in-out infinite; }
-  .coin.a{ left:-30px; top:6px; } .coin.b{ right:-30px; top:30px; animation-delay:.8s; } .coin.c{ right:-14px; top:-26px; animation-delay:1.5s; }
-  @keyframes float{ 0%,100%{ transform:translateY(0) rotate(-8deg);} 50%{ transform:translateY(-12px) rotate(8deg);} }
-  @media (prefers-reduced-motion:reduce){ .strip,.glow,.coin{ animation:none !important; } }
+  .slot{ display:flex; justify-content:center; margin:6px auto 4px; width:max-content; }
+  .cabinet{ position:relative; display:flex; gap:9px; padding:16px; border-radius:18px;
+    background:linear-gradient(180deg,#2a1a06,#0c0904); border:3px solid var(--gold);
+    box-shadow:0 0 0 2px #6e4a10, 0 0 42px rgba(255,190,60,.45), 0 18px 44px rgba(0,0,0,.6), inset 0 2px 10px rgba(255,210,74,.25); }
+  .reel{ width:62px; height:var(--H); overflow:hidden; border-radius:9px; position:relative; background:linear-gradient(180deg,#fff,#ededed); box-shadow:inset 0 8px 12px rgba(0,0,0,.4), inset 0 -8px 12px rgba(0,0,0,.4); }
+  .reel::after{ content:""; position:absolute; inset:0; pointer-events:none; background:linear-gradient(180deg,rgba(0,0,0,.35),transparent 24%,transparent 76%,rgba(0,0,0,.35)); }
+  .strip{ display:flex; flex-direction:column; filter:blur(.5px); }
+  .reel:nth-child(1) .strip{ animation:spin 1.55s linear infinite; }
+  .reel:nth-child(2) .strip{ animation:spin 1.9s linear infinite; }
+  .reel:nth-child(3) .strip{ animation:spin 2.25s linear infinite; }
+  @keyframes spin{ from{ transform:translateY(0);} to{ transform:translateY(calc(-6 * var(--H)));} }
+  .sym{ height:var(--H); display:grid; place-items:center; font-size:31px; }
+  .sym.seven{ font-family:"Anton"; font-size:37px; color:#e01e2b; text-shadow:0 1px 0 #ffd24a; }
+  .payline{ position:absolute; left:9px; right:9px; top:50%; height:3px; transform:translateY(-1.5px); z-index:2; background:linear-gradient(90deg,transparent,rgba(255,210,74,.95),transparent); box-shadow:0 0 10px rgba(255,210,74,.7); }
+  @media (prefers-reduced-motion:reduce){ .strip,.htitle .b::after{ animation:none !important; } }
 
-  /* offer + cta */
-  .offer{ text-align:center; margin:14px 0 2px; }
-  .offer .l1{ font-family:"Anton"; font-size:clamp(24px,7vw,34px); letter-spacing:.5px; text-transform:uppercase; color:#fff; line-height:1; }
-  .offer .l2{ font-family:"Anton"; font-size:clamp(50px,16vw,78px); line-height:.9; letter-spacing:-1px;
-    background:linear-gradient(180deg,#fff3c4,var(--gold) 50%,var(--gold2) 85%);
-    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 4px 14px rgba(255,176,32,.35)); }
-  .sub{ text-align:center; color:var(--mut); font-size:14.5px; margin:6px auto 18px; max-width:320px; } .sub b{ color:#fff; }
-  .cta{ display:block; width:100%; border:0; cursor:pointer; text-align:center;
-    background:linear-gradient(180deg,#3af07a,var(--green2)); color:#042012; border-radius:18px; padding:20px; font-family:"Manrope"; font-weight:800;
-    box-shadow:0 10px 34px rgba(22,201,95,.5), inset 0 1px 0 rgba(255,255,255,.4); animation:pulse 2.2s ease-in-out infinite; }
-  .cta .big{ font-size:24px; letter-spacing:.5px; display:flex; align-items:center; justify-content:center; gap:9px; }
-  .cta .sm{ font-weight:700; font-size:13px; opacity:.85; margin-top:2px; }
-  @keyframes pulse{ 0%,100%{ box-shadow:0 10px 30px rgba(22,201,95,.45), inset 0 1px 0 rgba(255,255,255,.4);} 50%{ box-shadow:0 10px 46px rgba(22,201,95,.8), inset 0 1px 0 rgba(255,255,255,.4);} }
-  @media (prefers-reduced-motion:reduce){ .cta{ animation:none; } }
+  .offer{ text-align:center; margin:16px 0 2px; }
+  .offer .l1{ font-family:"Anton"; font-size:clamp(22px,6.4vw,32px); letter-spacing:.5px; text-transform:uppercase; color:#fff; line-height:1; text-shadow:0 2px 10px rgba(0,0,0,.5); }
+  .offer .l2{ font-family:"Anton"; font-size:clamp(52px,16vw,80px); line-height:.9; letter-spacing:-1px;
+    background:linear-gradient(180deg,#fff7d6,var(--gold) 50%,var(--gold2) 85%);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 4px 16px rgba(255,176,32,.4)); }
+  .sub{ text-align:center; color:var(--mut); font-size:14.5px; margin:6px auto 18px; max-width:320px; text-shadow:0 1px 6px rgba(0,0,0,.6); } .sub b{ color:#fff; }
+  .cta{ display:block; width:100%; border:0; cursor:pointer; text-align:center; position:relative; overflow:hidden;
+    background:linear-gradient(180deg,#37f27e,var(--green2)); color:#032012; border-radius:20px; padding:21px; font-family:"Manrope"; font-weight:800;
+    box-shadow:0 12px 38px rgba(25,210,104,.55), inset 0 1px 0 rgba(255,255,255,.45); animation:pulse 2.1s ease-in-out infinite; }
+  .cta::after{ content:""; position:absolute; top:0; left:-60%; width:45%; height:100%; transform:skewX(-20deg); background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent); animation:sweep 3.4s ease-in-out infinite; }
+  @keyframes sweep{ 0%{ left:-60%;} 55%,100%{ left:140%;} }
+  .cta .big{ font-size:25px; letter-spacing:.5px; display:flex; align-items:center; justify-content:center; gap:9px; position:relative; z-index:1; }
+  .cta .sm{ font-weight:700; font-size:13px; opacity:.9; margin-top:2px; position:relative; z-index:1; }
+  @keyframes pulse{ 0%,100%{ box-shadow:0 12px 30px rgba(25,210,104,.5), inset 0 1px 0 rgba(255,255,255,.45);} 50%{ box-shadow:0 12px 52px rgba(25,210,104,.85), inset 0 1px 0 rgba(255,255,255,.45);} }
+  @media (prefers-reduced-motion:reduce){ .cta,.cta::after{ animation:none; } }
   .foot{ text-align:center; color:#6f9781; font-size:11px; margin-top:16px; } .foot b{ color:#9fc7ac; }
 </style>
 </head>
 <body>
+  <canvas id="bg"></canvas>
+  <div class="amb"></div>
+  <div class="vig"></div>
+
   <div class="wrap">
     <div class="top">
       <div class="logo"><div class="c">463</div><div class="t">Casino <span>463</span></div></div>
       <button class="reg" id="reg">Registrarse</button>
     </div>
-
     <div class="htitle"><span class="a">463</span><span class="b">CASINO</span></div>
-
-    <div class="slot">
-      <div class="glow"></div>
-      <span class="coin a">&#129689;</span><span class="coin b">&#128176;</span><span class="coin c">&#129689;</span>
-      <div class="cabinet">
-        <div class="reel"><div class="strip"></div></div>
-        <div class="reel"><div class="strip"></div></div>
-        <div class="reel"><div class="strip"></div></div>
-        <div class="payline"></div>
-      </div>
-    </div>
-
+    <div class="slot"><div class="cabinet">
+      <div class="reel"><div class="strip"></div></div>
+      <div class="reel"><div class="strip"></div></div>
+      <div class="reel"><div class="strip"></div></div>
+      <div class="payline"></div>
+    </div></div>
     <div class="offer"><div class="l1">Triplicamos tu dep&oacute;sito</div><div class="l2">200%</div></div>
     <p class="sub">Cre&aacute; tu cuenta y llevate <b>200% extra</b> en tu primera carga. Te la activamos en <b>1 minuto</b>.</p>
-
     <button class="cta" id="reclamar"><span class="big">&#127873; RECLAMAR BONO</span><span class="sm">Te lo activa un asesor ahora &#128071;</span></button>
-
     <p class="foot">Juego responsable &middot; Solo <b>+18</b>. Jug&aacute; con responsabilidad.</p>
   </div>
 
   <script>
-    // rodillos del slot
-    var SY=['7','🍒','⭐','💎','🔔','🍋','🎰','7','🍋','💎','⭐','🍒','7'];
-    document.querySelectorAll('.strip').forEach(function(s){
-      s.innerHTML=SY.map(function(x){ return '<div class="sym'+(x==='7'?' seven':'')+'">'+x+'</div>'; }).join('');
+    // rodillos
+    var SY=['7','🍒','💎','⭐','🔔','🍋','7'];
+    document.querySelectorAll('.strip').forEach(function(s){ s.innerHTML=SY.map(function(x){ return '<div class="sym'+(x==='7'?' seven':'')+'">'+x+'</div>'; }).join(''); });
+
+    // objetos glossy flotando
+    var OBJS=[
+      {t:'coin',x:11,y:15,s:66,d:.8,v:'7'},{t:'chip r',x:85,y:13,s:60,d:1},{t:'gem',x:19,y:40,s:52,d:.55},
+      {t:'coin',x:82,y:38,s:56,d:.7,v:'$'},{t:'chip g',x:9,y:60,s:54,d:.9},{t:'gem',x:89,y:58,s:46,d:.75},
+      {t:'coin',x:52,y:7,s:44,d:.4,v:'7'},{t:'chip r',x:72,y:65,s:46,d:.5},{t:'coin',x:28,y:70,s:42,d:.6,v:'$'},
+      {t:'gem',x:63,y:20,s:40,d:.45},{t:'coin',x:94,y:78,s:38,d:.5,v:'7'},{t:'chip g',x:6,y:82,s:40,d:.6}
+    ];
+    var frag=document.createDocumentFragment();
+    OBJS.forEach(function(o){
+      var w=document.createElement('div'); w.className='objw'; w.dataset.d=o.d;
+      w.style.left=o.x+'vw'; w.style.top=o.y+'vh';
+      var el=document.createElement('div'); el.className='obj '+o.t;
+      el.style.width=o.s+'px'; el.style.height=o.s+'px'; el.style.fontSize=(o.s*.42)+'px';
+      if(o.v) el.textContent=o.v;
+      w.appendChild(el); frag.appendChild(w);
     });
+    document.body.appendChild(frag);
+
+    // particulas (canvas liviano)
+    (function(){
+      var cv=document.getElementById('bg'), ctx=cv.getContext('2d'), W,H,DPR,rnd=Math.random;
+      function rs(){ DPR=Math.min(devicePixelRatio||1,2); W=cv.width=innerWidth*DPR; H=cv.height=innerHeight*DPR; cv.style.width=innerWidth+'px'; cv.style.height=innerHeight+'px'; }
+      addEventListener('resize',rs); rs();
+      var P=[]; for(var i=0;i<64;i++) P.push({x:rnd(),y:rnd(),r:rnd()*1.8+.5,s:rnd()*.0005+.00015,tw:rnd()*6.28});
+      var red=matchMedia('(prefers-reduced-motion:reduce)').matches;
+      (function f(now){ var t=now*.001; ctx.clearRect(0,0,W,H); ctx.globalCompositeOperation='lighter';
+        for(var i=0;i<P.length;i++){ var p=P[i]; if(!red){ p.y-=p.s; if(p.y<-.02)p.y=1.02; }
+          var a=.28+.5*Math.abs(Math.sin(t+p.tw)); ctx.beginPath(); ctx.arc(p.x*W,p.y*H,p.r*DPR,0,6.283);
+          ctx.fillStyle='rgba(255,228,150,'+(a*.5)+')'; ctx.shadowColor='rgba(255,220,120,.8)'; ctx.shadowBlur=6*DPR; ctx.fill(); }
+        requestAnimationFrame(f); })(0);
+    })();
+  </script>
+
+  <!-- GSAP: motion fluido profesional -->
+  <script src="/gsap.min.js"></script>
+  <script>
+    if(window.gsap && !matchMedia('(prefers-reduced-motion:reduce)').matches){
+      var ws=gsap.utils.toArray('.objw'), inners=gsap.utils.toArray('.obj');
+      gsap.from(inners,{ scale:0, opacity:0, duration:1, ease:'back.out(1.7)', stagger:{each:.06, from:'random'} });
+      inners.forEach(function(el){
+        gsap.to(el,{ y:'+='+(16+Math.random()*22), duration:2.4+Math.random()*2, ease:'sine.inOut', yoyo:true, repeat:-1, delay:Math.random() });
+        gsap.to(el,{ rotation:(Math.random()<.5?'+=':'-=')+(24+Math.random()*46), duration:5+Math.random()*4, ease:'sine.inOut', yoyo:true, repeat:-1 });
+      });
+      var setters=ws.map(function(w){ return { x:gsap.quickTo(w,'x',{duration:.7,ease:'power2'}), y:gsap.quickTo(w,'y',{duration:.7,ease:'power2'}), d:parseFloat(w.dataset.d||.5) }; });
+      addEventListener('pointermove', function(e){ var mx=(e.clientX/innerWidth-.5), my=(e.clientY/innerHeight-.5);
+        setters.forEach(function(s){ s.x(mx*46*s.d); s.y(my*46*s.d); }); });
+    }
   </script>
 
   <!-- Chat web NATIVO de Kommo -->
   <script>(function(a,m,o,c,r,m){a[m]={id:"1079587",hash:"f4787e77ef5a8f993efa4b6e0a1768713acd0304ee2069e270e61bad0c299138",locale:"es",setMeta:function(p){this.params=(this.params||[]).concat([p])}};a[o]=a[o]||function(){(a[o].q=a[o].q||[]).push(arguments)};var d=a.document,s=d.createElement('script');s.async=true;s.id=m+'_script';s.src='https://gso.kommo.com/js/button.js';d.head&&d.head.appendChild(s)}(window,0,'crmPlugin',0,0,'crm_plugin'));</script>
   <script>
-    function openKommo(){
-      try{ if(window.crmPlugin){ window.crmPlugin('showChat'); } }catch(e){}
-      var sels=['#crm_plugin_button','[id^="crm_plugin"]','[class*="crm-plugin"]','[class*="chat-button"]','iframe[src*="kommo"]'];
-      for(var i=0;i<sels.length;i++){ var el=document.querySelector(sels[i]); if(el){ try{ el.click(); }catch(e){} break; } }
-    }
+    function openKommo(){ try{ if(window.crmPlugin){ window.crmPlugin('showChat'); } }catch(e){}
+      var s=['#crm_plugin_button','[id^="crm_plugin"]','[class*="crm-plugin"]','[class*="chat-button"]','iframe[src*="kommo"]'];
+      for(var i=0;i<s.length;i++){ var el=document.querySelector(s[i]); if(el){ try{ el.click(); }catch(e){} break; } } }
     ['reg','reclamar'].forEach(function(id){ var b=document.getElementById(id); if(b) b.addEventListener('click', openKommo); });
   </script>
 </body>
