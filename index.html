@@ -4,149 +4,163 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>463 · Atención</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230b7d6e'/><text x='50' y='68' font-size='46' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>463</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230b7d6e'/><text x='50' y='68' font-size='42' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>463</text></svg>">
 <style>
   :root{
-    --header:#0b7d6e;        /* verde tipo WhatsApp, propio */
-    --header-dark:#075f54;
-    --bg:#e7ded3;            /* fondo natural del chat */
-    --bubble-in:#ffffff;
-    --bubble-out:#d6f5cf;
-    --ink:#111b21;
-    --muted:#667781;
-    --bar:#f0f2f5;
-    --send:#0b7d6e;
-    --tick:#53bdeb;
+    --header:#0b7d6e; --header-dark:#075f54; --bg:#e7ded3;
+    --bubble-in:#ffffff; --bubble-out:#d6f5cf; --ink:#111b21; --muted:#667781;
+    --bar:#f0f2f5; --send:#0b7d6e; --tick:#53bdeb;
   }
   *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html,body{ margin:0; height:100%; overflow:hidden; }
   body{
-    font-family:-apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    color:var(--ink);
-    background:var(--header-dark);
-    height:100dvh;
-    display:flex; flex-direction:column;
+    font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; color:var(--ink);
+    background:var(--header-dark); height:100dvh; display:flex; flex-direction:column;
   }
-  /* ---------- Header ---------- */
-  .top{
-    background:var(--header); color:#fff; flex:0 0 auto;
-    padding:calc(env(safe-area-inset-top) + 8px) 12px 8px;
-    display:flex; align-items:center; gap:10px;
-  }
+  .top{ background:var(--header); color:#fff; flex:0 0 auto;
+    padding:calc(env(safe-area-inset-top) + 8px) 12px 8px; display:flex; align-items:center; gap:10px; }
   .back{ font-size:24px; line-height:1; opacity:.95; }
-  .av{
-    width:40px; height:40px; border-radius:50%; background:#fff; color:var(--header);
-    font-weight:800; font-size:15px; display:grid; place-items:center; flex:0 0 auto;
-  }
+  .av{ width:40px; height:40px; border-radius:50%; background:#fff; color:var(--header);
+    font-weight:800; font-size:16px; display:grid; place-items:center; flex:0 0 auto; }
   .who{ flex:1 1 auto; min-width:0; line-height:1.2; }
   .who .n{ font-weight:600; font-size:16.5px; }
   .who .s{ font-size:12.5px; opacity:.85; }
   .who .s b{ color:#c9f5d0; font-weight:500; }
   .acts{ display:flex; gap:18px; font-size:20px; opacity:.95; }
-  /* ---------- Chat area ---------- */
-  .chat{
-    flex:1 1 auto; overflow-y:auto; padding:14px 10px 6px;
-    background:
-      radial-gradient(circle at 20% 15%, rgba(255,255,255,.05), transparent 40%),
-      var(--bg);
-    display:flex; flex-direction:column; gap:8px;
-  }
-  .day{ align-self:center; background:#fff; color:var(--muted); font-size:12px; padding:5px 12px; border-radius:8px; box-shadow:0 1px 1px rgba(0,0,0,.06); margin:2px 0 6px; }
-  .msg{ max-width:82%; padding:7px 10px 5px; border-radius:9px; font-size:15px; line-height:1.35; position:relative; box-shadow:0 1px .5px rgba(0,0,0,.12); }
+  .chat{ flex:1 1 auto; overflow-y:auto; padding:14px 10px 8px;
+    background:radial-gradient(circle at 20% 15%, rgba(255,255,255,.05), transparent 40%), var(--bg);
+    display:flex; flex-direction:column; gap:8px; }
+  .day{ align-self:center; background:#fff; color:var(--muted); font-size:12px; padding:5px 12px;
+    border-radius:8px; box-shadow:0 1px 1px rgba(0,0,0,.06); margin:2px 0 6px; }
+  .msg{ max-width:82%; padding:7px 10px 5px; border-radius:9px; font-size:15px; line-height:1.35;
+    position:relative; box-shadow:0 1px .5px rgba(0,0,0,.12); word-wrap:break-word; white-space:pre-wrap; }
   .in{ align-self:flex-start; background:var(--bubble-in); border-top-left-radius:2px; }
   .out{ align-self:flex-end; background:var(--bubble-out); border-top-right-radius:2px; }
   .msg .t{ font-size:10.5px; color:var(--muted); float:right; margin:6px 0 -2px 8px; }
-  .out .t::after{ content:" ✓✓"; color:var(--tick); }
-  /* ---------- Input bar ---------- */
-  .bar{
-    flex:0 0 auto; background:var(--bar);
-    padding:7px 8px calc(env(safe-area-inset-bottom) + 7px);
-    display:flex; align-items:center; gap:7px;
-  }
-  .field{
-    flex:1 1 auto; background:#fff; border-radius:22px; padding:11px 15px;
-    color:var(--muted); font-size:15px; display:flex; align-items:center; gap:8px;
-    box-shadow:0 1px 1px rgba(0,0,0,.05); cursor:pointer; user-select:none;
-  }
-  .field .ico{ opacity:.6; }
-  .go{
-    flex:0 0 auto; width:46px; height:46px; border-radius:50%; background:var(--send); color:#fff;
-    border:0; font-size:21px; display:grid; place-items:center; cursor:pointer;
-    box-shadow:0 1px 3px rgba(0,0,0,.2);
-  }
+  .out .t::after{ content:" \2713\2713"; color:var(--tick); }
+  .typing{ align-self:flex-start; background:#fff; border-radius:9px; padding:10px 14px; box-shadow:0 1px .5px rgba(0,0,0,.12); }
+  .typing span{ display:inline-block; width:7px; height:7px; margin:0 1.5px; background:#9aa; border-radius:50%; animation:b 1.2s infinite; }
+  .typing span:nth-child(2){ animation-delay:.2s } .typing span:nth-child(3){ animation-delay:.4s }
+  @keyframes b{ 0%,60%,100%{ transform:translateY(0); opacity:.4 } 30%{ transform:translateY(-4px); opacity:1 } }
+  .bar{ flex:0 0 auto; background:var(--bar);
+    padding:7px 8px calc(env(safe-area-inset-bottom) + 7px); display:flex; align-items:center; gap:7px; }
+  form.bar{ margin:0; }
+  .field{ flex:1 1 auto; background:#fff; border-radius:22px; padding:0 6px 0 15px; display:flex; align-items:center; gap:8px;
+    box-shadow:0 1px 1px rgba(0,0,0,.05); }
+  .field .ico{ opacity:.55; font-size:19px; }
+  .field input{ flex:1 1 auto; border:0; outline:0; background:transparent; font-size:16px; padding:12px 4px; color:var(--ink); }
+  .go{ flex:0 0 auto; width:46px; height:46px; border-radius:50%; background:var(--send); color:#fff; border:0;
+    font-size:21px; display:grid; place-items:center; cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,.2); }
   .go:active{ transform:scale(.94); }
-  /* Cartel para abrir el chat (fallback visible) */
-  .hint{ align-self:center; margin-top:auto; margin-bottom:4px; background:rgba(11,125,110,.12); color:var(--header-dark); font-size:12.5px; padding:6px 12px; border-radius:20px; }
 </style>
 </head>
 <body>
 
   <div class="top">
-    <span class="back">‹</span>
+    <span class="back">&lsaquo;</span>
     <div class="av">T</div>
     <div class="who">
-      <div class="n">Tomi · Casino 463</div>
-      <div class="s"><b>en línea</b> · te responde ahora</div>
+      <div class="n">Tomi &middot; Casino 463</div>
+      <div class="s"><b>en l&iacute;nea</b> &middot; te responde ahora</div>
     </div>
-    <div class="acts"><span>📹</span><span>📞</span><span>⋮</span></div>
+    <div class="acts"><span>&#128249;</span><span>&#128222;</span><span>&#8942;</span></div>
   </div>
 
   <div class="chat" id="chat">
     <div class="day">HOY</div>
-    <div class="msg in">Hola, bienvenido a <b>Casino 463</b> 👋 Soy Tomi, decime tu nombre para crear tu usuario 😉<span class="t" id="t1"></span></div>
-    <div class="hint" id="hint">Tocá abajo para escribirle a Tomi 👇</div>
   </div>
 
-  <div class="bar">
-    <div class="field" id="open"><span class="ico">😊</span><span>Escribí un mensaje…</span><span class="ico" style="margin-left:auto">📎</span><span class="ico">📷</span></div>
-    <button class="go" id="send" aria-label="Enviar">➤</button>
-  </div>
+  <form class="bar" id="bar" autocomplete="off">
+    <div class="field">
+      <span class="ico">&#128512;</span>
+      <input id="inp" type="text" placeholder="Escrib&iacute; un mensaje&hellip;" autocomplete="off" />
+      <span class="ico">&#128206;</span>
+    </div>
+    <button class="go" id="send" type="submit" aria-label="Enviar">&#10148;</button>
+  </form>
 
-  <!-- ================== INTEGRACIÓN KOMMO ================== -->
-  <script>
-    // 1) Le pegamos el ORIGEN DEL ANUNCIO al lead (para el ROAS): cl_id / subid / fbclid de la URL.
-    (function () {
-      try {
-        var qs = new URLSearchParams(location.search);
-        var clid = qs.get('cl_id') || qs.get('subid') || qs.get('fbclid') || '';
-        if (clid) { try { localStorage.setItem('cl_id', clid); } catch (e) {} }
-        else { try { clid = localStorage.getItem('cl_id') || ''; } catch (e) {} }
-        if (clid) {
-          window.crmPluginConfig = window.crmPluginConfig || {};
-          window.crmPluginConfig.onlinechat = window.crmPluginConfig.onlinechat || {};
-          window.crmPluginConfig.onlinechat.user_id = clid;
-        }
-      } catch (e) {}
-    })();
+<script>
+(function(){
+  var API = "/api/lead"; // mismo origen (servido por el backend)
+  var chat = document.getElementById("chat");
+  var inp  = document.getElementById("inp");
+  var form = document.getElementById("bar");
 
-    // 2) Abrir el chat de Kommo (mejor esfuerzo). En mobile Kommo abre a pantalla completa solo.
-    function abrirKommo() {
-      try { if (window.amoSocialButton) { window.amoSocialButton('runChatShow'); return true; } } catch (e) {}
-      // fallback: click al botón que inyecta Kommo
-      var b = document.querySelector('[class*="amocrm"] , [id*="amo"] button, .amocrm-button, [class*="online-chat"] , iframe[src*="kommo"], iframe[src*="amocrm"]');
-      if (b) { try { (b.click ? b : b.contentWindow).click && b.click(); return true; } catch (e) {} }
-      return false;
+  // origen del anuncio (para ROAS)
+  var qs = new URLSearchParams(location.search);
+  var clid = qs.get("cl_id") || qs.get("subid") || qs.get("fbclid") || "";
+  try{ if(clid) localStorage.setItem("cl_id", clid); else clid = localStorage.getItem("cl_id")||""; }catch(e){}
+
+  var S = { step:"name", name:"", leadId:0, contactId:0 };
+  try{ var saved = JSON.parse(localStorage.getItem("chat463")||"{}"); if(saved.leadId){ S = saved; } }catch(e){}
+  function save(){ try{ localStorage.setItem("chat463", JSON.stringify(S)); }catch(e){} }
+
+  function now(){ var d=new Date(); return ("0"+d.getHours()).slice(-2)+":"+("0"+d.getMinutes()).slice(-2); }
+  function scroll(){ chat.scrollTop = chat.scrollHeight; }
+
+  function bubble(text, cls){
+    var m=document.createElement("div"); m.className="msg "+cls;
+    m.innerHTML = text.replace(/&/g,"&amp;").replace(/</g,"&lt;") + '<span class="t">'+now()+'</span>';
+    chat.appendChild(m); scroll(); return m;
+  }
+  var typingEl=null;
+  function typing(on){
+    if(on){ if(typingEl) return; typingEl=document.createElement("div"); typingEl.className="typing";
+      typingEl.innerHTML="<span></span><span></span><span></span>"; chat.appendChild(typingEl); scroll(); }
+    else if(typingEl){ typingEl.remove(); typingEl=null; }
+  }
+  // Tomi habla con un pequeno delay para sentirse humano
+  function tomi(text, cb, delay){
+    typing(true);
+    setTimeout(function(){ typing(false); bubble(text,"in"); if(cb) cb(); }, delay||900+Math.min(text.length*18,1400));
+  }
+
+  function post(payload){
+    payload.clid = clid;
+    return fetch(API, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload) })
+      .then(function(r){ return r.json(); }).catch(function(){ return {ok:false}; });
+  }
+
+  // saludo inicial (exacto pedido por el cliente)
+  if(S.step==="name" && !S.leadId){
+    tomi("Hola, bienvenido a Casino 463 👋 Soy Tomi, decime tu nombre para crear tu usuario 😉", null, 600);
+  } else {
+    bubble("Hola, bienvenido a Casino 463 👋 Soy Tomi.", "in");
+    tomi("Seguí escribiéndome por acá y un asesor te atiende 🎰", null, 700);
+  }
+
+  var canned = [
+    "¡Genial! Ya le avisé a un asesor, te contacta enseguida 🙌",
+    "Perfecto 👌 En un ratito te escriben para dejarte todo listo.",
+    "Buenísimo, quedó anotado ✅ Cualquier cosa seguí escribiendo."
+  ];
+  var ci=0;
+
+  form.addEventListener("submit", function(ev){
+    ev.preventDefault();
+    var text = inp.value.trim(); if(!text) return;
+    inp.value=""; bubble(text,"out");
+
+    if(S.step==="name"){
+      S.name = text.slice(0,80);
+      post({ action:"create", name:S.name, message:text }).then(function(res){
+        if(res.ok){ S.leadId=res.leadId; S.contactId=res.contactId; }
+        S.step="phone"; save();
+      });
+      tomi("¡Genial, "+S.name+"! 🎉 Ya te estoy generando tu usuario. Pasame tu número de WhatsApp 📲 así un asesor te contacta y te paso los datos para cargar.");
     }
-    document.getElementById('open').addEventListener('click', abrirKommo);
-    document.getElementById('send').addEventListener('click', abrirKommo);
-    // reintentos hasta que el widget de Kommo termine de cargar
-    var tries = 0, iv = setInterval(function () {
-      tries++;
-      var ok = abrirKommo();
-      var hint = document.getElementById('hint');
-      if (ok || tries > 20) { clearInterval(iv); if (hint) hint.textContent = 'Chat listo · tocá para escribir'; }
-    }, 700);
-  </script>
-
-  <!-- ============================================================
-       PEGAR ACÁ EL CÓDIGO DEL CHAT DE KOMMO (reemplazá esta línea):
-
-       Kommo  →  Ajustes (tuerca)  →  Fuentes de leads / "Chat en vivo"
-              →  tu canal de chat  →  botón "Copiar código".
-       Pegá el <script>...</script> completo JUSTO ACÁ DEBAJO.
-
-       (El bloque de arriba ya le pasa el origen del anuncio al lead.)
-  ============================================================ -->
-
+    else if(S.step==="phone"){
+      post({ action:"phone", leadId:S.leadId, contactId:S.contactId, phone:text, name:S.name });
+      S.step="open"; save();
+      tomi("¡Listo! ✅ Un asesor te escribe en un toque. Mientras, contame: ¿cuánto querés cargar para arrancar? 🎰");
+    }
+    else {
+      post({ action:"msg", leadId:S.leadId, message:text });
+      tomi(canned[ci % canned.length]); ci++;
+    }
+  });
+  inp.focus();
+})();
+</script>
 </body>
 </html>

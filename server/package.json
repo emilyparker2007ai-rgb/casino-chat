@@ -1,0 +1,9 @@
+{
+  "name": "casino-chat",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Chat web tipo WhatsApp (Tomi) que carga leads en Kommo",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" }
+}
