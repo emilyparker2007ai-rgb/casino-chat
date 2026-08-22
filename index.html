@@ -81,7 +81,7 @@
     m.innerHTML=linkify(text)+'<span class="t">'+now()+'</span>';
     chat.appendChild(m); scroll(); }
 
-  bubble("Hola, bienvenido a Casino 463 👋 Decime tu nombre para pasarte tu usuario y contraseña! 😉","in");
+  var WELCOME="Hola, bienvenido a Casino 463 👋 Decime tu nombre para pasarte tu usuario y contraseña! 😉";
 
   function post(url,body){ return fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)})
     .then(function(r){return r.json();}).catch(function(){return {ok:false};}); }
@@ -111,7 +111,18 @@
     }
   });
 
-  if(S.step==="live" && S.convId){ startPoll(); }
+  if(S.step==="live" && S.convId){
+    // cliente que vuelve: traer TODO el historial y pintarlo (no arrancar de cero)
+    fetch("/api/poll?convId="+encodeURIComponent(S.convId)+"&after=0")
+      .then(function(r){return r.json();}).then(function(d){
+        if(d && d.ok){
+          (d.msgs||[]).forEach(function(m){ bubble(m.text, m.from==="admin"?"in":"out"); if(m.id>S.seen) S.seen=m.id; });
+          save(); startPoll();
+        } else { S={step:"name",name:"",convId:0,seen:0}; save(); bubble(WELCOME,"in"); }
+      }).catch(function(){ startPoll(); });
+  } else {
+    bubble(WELCOME,"in");
+  }
   inp.focus();
 })();
 </script>
