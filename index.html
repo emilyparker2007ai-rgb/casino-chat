@@ -27,7 +27,7 @@
   .reg{ border:1.5px solid rgba(255,255,255,.55); color:#fff; background:rgba(255,255,255,.08); backdrop-filter:blur(8px); border-radius:26px; padding:10px 22px; font-family:"Manrope"; font-weight:800; font-size:14px; cursor:pointer; transition:background .2s, box-shadow .2s; }
   .reg:hover{ background:rgba(255,255,255,.16); box-shadow:0 0 22px rgba(180,120,255,.45); }
 
-  .hero{ position:absolute; left:52vw; right:auto; top:50%; transform:translateY(-50%); width:min(560px,40vw); text-align:left; }
+  .hero{ position:absolute; left:47vw; right:auto; top:50%; transform:translateY(-50%); width:min(560px,42vw); text-align:left; }
   .eyebrow{ font-family:"Exo 2"; font-weight:800; font-size:clamp(18px,1.6vw,26px); letter-spacing:.55em; text-transform:uppercase; color:#fff; opacity:.95; margin:0 0 2px; text-shadow:0 0 18px rgba(180,120,255,.7); }
   .big{ font-family:"Exo 2"; font-style:italic; font-weight:900; font-size:clamp(64px,7.6vw,118px); line-height:.9; margin:0; letter-spacing:-1px;
     background:linear-gradient(180deg,#fff 0%,#fff4cf 38%,#ffd24a 62%,#ff9f1c 100%); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
@@ -207,7 +207,7 @@
     function layout(){ const w = innerWidth, h = innerHeight, mob = w < 900; renderer.setSize(w, h); composer.setSize(w, h); camera.aspect = w/h; camera.updateProjectionMatrix();
       if (mob){ const k = Math.min(1, w/430); slot.position.set(0, 2.35, 0); slot.scale.setScalar(0.78*k); camera.position.z = 11.5;
         floaters.forEach(o => { const m = o.userData.mob || [o.userData.base.x*0.55, o.userData.base.y*0.75, o.userData.base.z]; o.position.set(m[0], m[1], m[2]); o.userData.base2 = o.position.clone(); }); }
-      else { slot.position.set(-3.1, 0.15, 0); slot.scale.setScalar(1.05); camera.position.z = 11; floaters.forEach(o => { o.position.copy(o.userData.base); o.userData.base2 = o.position.clone(); }); }
+      else { slot.position.set(-3.6, 0.15, 0); slot.scale.setScalar(1.05); camera.position.z = 11; floaters.forEach(o => { o.position.copy(o.userData.base); o.userData.base2 = o.position.clone(); }); }
       halo.position.set(slot.position.x, slot.position.y - 0.3, slot.position.z - 1.6); halo.scale.set(mob ? 8 : 11, mob ? 6.5 : 9, 1); }
     addEventListener('resize', layout); layout();
 
