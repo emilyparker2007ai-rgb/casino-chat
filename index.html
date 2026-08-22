@@ -6,93 +6,126 @@
 <title>Casino 463 · Bono 200%</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%2315c25a'/><text x='50' y='70' font-size='44' text-anchor='middle' fill='%23042012' font-family='Arial' font-weight='bold'>463</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@600;700;800&display=swap">
 <style>
-  :root{
-    --gold:#ffd24a; --gold2:#ffb020; --green:#16c95f; --green2:#0e9c46;
-    --bg0:#03130b; --card:#0d2417; --line:#1d4a30; --ink:#eafff2; --mut:#9fc7ac;
-  }
+  :root{ --gold:#ffd24a; --gold2:#ffb020; --green:#16c95f; --green2:#0e9c46;
+    --bg0:#03130b; --ink:#eafff2; --mut:#9fc7ac; --H:52px; }
   *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html,body{ margin:0; }
-  body{
-    font-family:"Manrope",system-ui,-apple-system,"Segoe UI",Arial,sans-serif; color:var(--ink);
+  body{ font-family:"Manrope",system-ui,-apple-system,"Segoe UI",Arial,sans-serif; color:var(--ink);
     background:
-      radial-gradient(120% 60% at 50% -5%, #1a6b38 0%, transparent 55%),
-      radial-gradient(90% 50% at 50% 105%, #0e5c30 0%, transparent 55%),
-      linear-gradient(180deg, var(--bg0), #02100a 60%, var(--bg0));
-    min-height:100dvh; overflow-x:hidden;
-  }
-  .wrap{ max-width:560px; margin:0 auto; padding:18px 18px 120px; }
-  .brand{ display:flex; align-items:center; gap:10px; justify-content:center; margin:6px 0 22px; }
-  .brand .logo{ width:44px; height:44px; border-radius:50%; background:linear-gradient(160deg,var(--green),var(--green2));
-    display:grid; place-items:center; font-family:"Anton"; font-size:19px; color:#042012; box-shadow:0 0 22px rgba(22,201,95,.55); }
-  .brand .nm{ font-weight:800; font-size:19px; letter-spacing:.5px; }
-  .brand .nm span{ color:var(--gold); }
-  .eyebrow{ text-align:center; font-weight:700; font-size:12.5px; letter-spacing:.28em; color:var(--gold); text-transform:uppercase; margin:0 0 10px; }
-  h1{ font-family:"Anton"; font-weight:400; text-align:center; line-height:.92; margin:0;
-    font-size:clamp(34px,10vw,52px); letter-spacing:.5px; text-transform:uppercase; color:#fff; text-shadow:0 2px 0 rgba(0,0,0,.35); }
-  .pct{ font-family:"Anton"; text-align:center; line-height:.85; margin:2px 0 4px; font-size:clamp(96px,32vw,168px); letter-spacing:-2px;
-    background:linear-gradient(180deg,#fff3c4 0%,var(--gold) 42%,var(--gold2) 78%,#a9701a 100%);
-    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 6px 18px rgba(255,176,32,.35)); }
-  .sub{ text-align:center; color:var(--mut); font-size:15px; margin:0 auto 22px; max-width:340px; } .sub b{ color:#fff; }
-  .cta{ display:block; width:100%; border:0; cursor:pointer; text-align:center; text-decoration:none;
-    background:linear-gradient(180deg,#2ee06e,var(--green2)); color:#042012; border-radius:18px; padding:20px 18px; font-family:"Manrope"; font-weight:800;
-    box-shadow:0 10px 30px rgba(22,201,95,.45), inset 0 1px 0 rgba(255,255,255,.35); animation:pulse 2.4s ease-in-out infinite; }
-  .cta .big{ font-size:23px; letter-spacing:.5px; display:flex; align-items:center; justify-content:center; gap:8px; }
-  .cta .sm{ font-weight:700; font-size:13.5px; opacity:.85; margin-top:3px; }
-  @keyframes pulse{ 0%,100%{ box-shadow:0 10px 30px rgba(22,201,95,.4), inset 0 1px 0 rgba(255,255,255,.35);} 50%{ box-shadow:0 10px 44px rgba(22,201,95,.75), inset 0 1px 0 rgba(255,255,255,.35);} }
+      radial-gradient(120% 55% at 50% -8%, #1e7a41 0%, transparent 55%),
+      radial-gradient(80% 45% at 50% 108%, #0e5c30 0%, transparent 55%),
+      linear-gradient(180deg, var(--bg0), #02100a 62%, var(--bg0));
+    min-height:100dvh; overflow-x:hidden; }
+  .wrap{ max-width:520px; margin:0 auto; padding:14px 18px 60px; }
+
+  /* topbar */
+  .top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+  .logo{ display:flex; align-items:center; gap:9px; }
+  .logo .c{ width:38px; height:38px; border-radius:50%; background:linear-gradient(160deg,var(--green),var(--green2));
+    display:grid; place-items:center; font-family:"Anton"; font-size:16px; color:#042012; box-shadow:0 0 18px rgba(22,201,95,.5); }
+  .logo .t{ font-weight:800; font-size:16px; } .logo .t span{ color:var(--gold); }
+  .reg{ border:1.5px solid var(--gold); color:var(--gold); background:rgba(255,210,74,.08); border-radius:22px;
+    padding:9px 18px; font-family:"Manrope"; font-weight:800; font-size:14px; cursor:pointer; }
+  .reg:active{ transform:scale(.96); }
+
+  /* hero title 463 CASINO */
+  .htitle{ text-align:center; font-family:"Anton"; line-height:.86; margin:2px 0 4px; }
+  .htitle .a{ display:block; font-size:20px; letter-spacing:.5em; color:var(--green); text-indent:.5em; }
+  .htitle .b{ display:block; font-size:clamp(58px,17vw,92px); letter-spacing:1px;
+    background:linear-gradient(180deg,#fff3c4 0%,var(--gold) 45%,var(--gold2) 80%,#a9701a 100%);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 4px 16px rgba(255,176,32,.4)); }
+
+  /* SLOT */
+  .slot{ position:relative; display:flex; justify-content:center; margin:14px auto 10px; width:max-content; }
+  .glow{ position:absolute; inset:-24px; border-radius:50%; background:radial-gradient(closest-side, rgba(22,201,95,.5), transparent 70%);
+    filter:blur(10px); animation:breathe 2.6s ease-in-out infinite; z-index:0; }
+  @keyframes breathe{ 0%,100%{ opacity:.5; } 50%{ opacity:1; } }
+  .cabinet{ position:relative; z-index:1; display:flex; gap:8px; padding:14px; border-radius:16px;
+    background:linear-gradient(180deg,#241706,#0e0a04); border:3px solid var(--gold);
+    box-shadow:0 0 0 2px #7a5310, 0 14px 40px rgba(0,0,0,.6), inset 0 2px 10px rgba(255,210,74,.25); }
+  .reel{ width:60px; height:var(--H); overflow:hidden; border-radius:8px;
+    background:linear-gradient(180deg,#fff,#e9e9e9); box-shadow:inset 0 6px 10px rgba(0,0,0,.35), inset 0 -6px 10px rgba(0,0,0,.35); }
+  .strip{ display:flex; flex-direction:column; will-change:transform; }
+  .reel:nth-child(1) .strip{ animation:reel 3.4s cubic-bezier(.15,.75,.2,1) infinite; }
+  .reel:nth-child(2) .strip{ animation:reel 3.4s cubic-bezier(.15,.75,.2,1) infinite .18s; }
+  .reel:nth-child(3) .strip{ animation:reel 3.4s cubic-bezier(.15,.75,.2,1) infinite .36s; }
+  @keyframes reel{ 0%,14%{ transform:translateY(0); filter:blur(0);} 20%{ filter:blur(2px);}
+    60%{ transform:translateY(calc(-9 * var(--H))); filter:blur(7px);}
+    82%,100%{ transform:translateY(calc(-12 * var(--H))); filter:blur(0);} }
+  .sym{ height:var(--H); display:grid; place-items:center; font-size:30px; }
+  .sym.seven{ font-family:"Anton"; font-size:36px; color:#e01e2b; text-shadow:0 1px 0 #ffd24a, 0 0 8px rgba(224,30,43,.5); }
+  .payline{ position:absolute; z-index:2; left:8px; right:8px; top:50%; height:2px; transform:translateY(-1px);
+    background:linear-gradient(90deg,transparent,rgba(255,210,74,.9),transparent); pointer-events:none; }
+  .coin{ position:absolute; z-index:0; font-size:26px; filter:drop-shadow(0 4px 6px rgba(0,0,0,.5)); animation:float 3.4s ease-in-out infinite; }
+  .coin.a{ left:-30px; top:6px; } .coin.b{ right:-30px; top:30px; animation-delay:.8s; } .coin.c{ right:-14px; top:-26px; animation-delay:1.5s; }
+  @keyframes float{ 0%,100%{ transform:translateY(0) rotate(-8deg);} 50%{ transform:translateY(-12px) rotate(8deg);} }
+  @media (prefers-reduced-motion:reduce){ .strip,.glow,.coin{ animation:none !important; } }
+
+  /* offer + cta */
+  .offer{ text-align:center; margin:14px 0 2px; }
+  .offer .l1{ font-family:"Anton"; font-size:clamp(24px,7vw,34px); letter-spacing:.5px; text-transform:uppercase; color:#fff; line-height:1; }
+  .offer .l2{ font-family:"Anton"; font-size:clamp(50px,16vw,78px); line-height:.9; letter-spacing:-1px;
+    background:linear-gradient(180deg,#fff3c4,var(--gold) 50%,var(--gold2) 85%);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 4px 14px rgba(255,176,32,.35)); }
+  .sub{ text-align:center; color:var(--mut); font-size:14.5px; margin:6px auto 18px; max-width:320px; } .sub b{ color:#fff; }
+  .cta{ display:block; width:100%; border:0; cursor:pointer; text-align:center;
+    background:linear-gradient(180deg,#3af07a,var(--green2)); color:#042012; border-radius:18px; padding:20px; font-family:"Manrope"; font-weight:800;
+    box-shadow:0 10px 34px rgba(22,201,95,.5), inset 0 1px 0 rgba(255,255,255,.4); animation:pulse 2.2s ease-in-out infinite; }
+  .cta .big{ font-size:24px; letter-spacing:.5px; display:flex; align-items:center; justify-content:center; gap:9px; }
+  .cta .sm{ font-weight:700; font-size:13px; opacity:.85; margin-top:2px; }
+  @keyframes pulse{ 0%,100%{ box-shadow:0 10px 30px rgba(22,201,95,.45), inset 0 1px 0 rgba(255,255,255,.4);} 50%{ box-shadow:0 10px 46px rgba(22,201,95,.8), inset 0 1px 0 rgba(255,255,255,.4);} }
   @media (prefers-reduced-motion:reduce){ .cta{ animation:none; } }
-  .chips{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:16px 0; }
-  .chip{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 8px; text-align:center; }
-  .chip .ic{ font-size:22px; } .chip .t{ font-weight:800; font-size:14.5px; margin-top:4px; }
-  .chip .d{ color:var(--mut); font-size:11.5px; line-height:1.25; margin-top:2px; }
-  .list{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px 18px; margin:6px 0 18px; }
-  .list .li{ display:flex; align-items:center; gap:10px; padding:7px 0; font-weight:600; font-size:14.5px; }
-  .list .li:not(:last-child){ border-bottom:1px solid rgba(255,255,255,.05); }
-  .list .li .ck{ color:var(--green); font-weight:800; font-size:16px; }
-  .trust{ text-align:center; color:var(--mut); font-size:12.5px; margin:8px 0 0; } .trust b{ color:#fff; }
-  .foot{ text-align:center; color:#6f9781; font-size:11px; margin-top:18px; line-height:1.5; } .foot b{ color:#9fc7ac; }
+  .foot{ text-align:center; color:#6f9781; font-size:11px; margin-top:16px; } .foot b{ color:#9fc7ac; }
 </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="brand"><div class="logo">463</div><div class="nm">Casino <span>463</span></div></div>
-    <p class="eyebrow">Bono de bienvenida</p>
-    <h1>Triplicamos tu dep&oacute;sito</h1>
-    <div class="pct">200%</div>
-    <p class="sub">Cre&aacute; tu cuenta y te damos <b>200% extra</b> en tu primera carga. Te la activamos en <b>1 minuto</b>.</p>
-
-    <button class="cta" id="crear"><span class="big">&#9889; CREAR MI CUENTA</span><span class="sm">Te la activamos en 1 minuto &#128071;</span></button>
-
-    <div class="chips">
-      <div class="chip"><div class="ic">&#9889;</div><div class="t">Al instante</div><div class="d">Cargas y retiros</div></div>
-      <div class="chip"><div class="ic">&#128274;</div><div class="t">Seguro</div><div class="d">Plataforma verificada</div></div>
-      <div class="chip"><div class="ic">&#128340;</div><div class="t">24/7</div><div class="d">Siempre online</div></div>
+    <div class="top">
+      <div class="logo"><div class="c">463</div><div class="t">Casino <span>463</span></div></div>
+      <button class="reg" id="reg">Registrarse</button>
     </div>
 
-    <div class="list">
-      <div class="li"><span class="ck">&#10003;</span> +10.000 juegos disponibles</div>
-      <div class="li"><span class="ck">&#10003;</span> Ingresos desde $2.000</div>
-      <div class="li"><span class="ck">&#10003;</span> Retiros r&aacute;pidos, sin vueltas</div>
-      <div class="li"><span class="ck">&#10003;</span> Soporte humano 24/7</div>
+    <div class="htitle"><span class="a">463</span><span class="b">CASINO</span></div>
+
+    <div class="slot">
+      <div class="glow"></div>
+      <span class="coin a">&#129689;</span><span class="coin b">&#128176;</span><span class="coin c">&#129689;</span>
+      <div class="cabinet">
+        <div class="reel"><div class="strip"></div></div>
+        <div class="reel"><div class="strip"></div></div>
+        <div class="reel"><div class="strip"></div></div>
+        <div class="payline"></div>
+      </div>
     </div>
 
-    <p class="trust">M&aacute;s de <b>15.000</b> jugadores activos &middot; Atenci&oacute;n al instante</p>
-    <a class="cta" id="crear2" style="margin-top:14px"><span class="big">&#128172; QUIERO MI CUENTA + BONO</span><span class="sm">Chateá con un asesor ahora</span></a>
+    <div class="offer"><div class="l1">Triplicamos tu dep&oacute;sito</div><div class="l2">200%</div></div>
+    <p class="sub">Cre&aacute; tu cuenta y llevate <b>200% extra</b> en tu primera carga. Te la activamos en <b>1 minuto</b>.</p>
+
+    <button class="cta" id="reclamar"><span class="big">&#127873; RECLAMAR BONO</span><span class="sm">Te lo activa un asesor ahora &#128071;</span></button>
+
     <p class="foot">Juego responsable &middot; Solo <b>+18</b>. Jug&aacute; con responsabilidad.</p>
   </div>
 
-  <!-- Chat web NATIVO de Kommo: las charlas caen en la bandeja de Chats -->
-  <script>(function(a,m,o,c,r,m){a[m]={id:"1079587",hash:"f4787e77ef5a8f993efa4b6e0a1768713acd0304ee2069e270e61bad0c299138",locale:"es",setMeta:function(p){this.params=(this.params||[]).concat([p])}};a[o]=a[o]||function(){(a[o].q=a[o].q||[]).push(arguments)};var d=a.document,s=d.createElement('script');s.async=true;s.id=m+'_script';s.src='https://gso.kommo.com/js/button.js';d.head&&d.head.appendChild(s)}(window,0,'crmPlugin',0,0,'crm_plugin'));</script>
+  <script>
+    // rodillos del slot
+    var SY=['7','🍒','⭐','💎','🔔','🍋','🎰','7','🍋','💎','⭐','🍒','7'];
+    document.querySelectorAll('.strip').forEach(function(s){
+      s.innerHTML=SY.map(function(x){ return '<div class="sym'+(x==='7'?' seven':'')+'">'+x+'</div>'; }).join('');
+    });
+  </script>
 
-  <!-- CREAR MI CUENTA abre el chat de Kommo (mejor esfuerzo; si no, el botón verde queda abajo a la derecha) -->
+  <!-- Chat web NATIVO de Kommo -->
+  <script>(function(a,m,o,c,r,m){a[m]={id:"1079587",hash:"f4787e77ef5a8f993efa4b6e0a1768713acd0304ee2069e270e61bad0c299138",locale:"es",setMeta:function(p){this.params=(this.params||[]).concat([p])}};a[o]=a[o]||function(){(a[o].q=a[o].q||[]).push(arguments)};var d=a.document,s=d.createElement('script');s.async=true;s.id=m+'_script';s.src='https://gso.kommo.com/js/button.js';d.head&&d.head.appendChild(s)}(window,0,'crmPlugin',0,0,'crm_plugin'));</script>
   <script>
     function openKommo(){
       try{ if(window.crmPlugin){ window.crmPlugin('showChat'); } }catch(e){}
-      var sels=['#crm_plugin_button','[id^="crm_plugin"]','[class*="crm-plugin"]','[class*="chat-button"]','iframe[src*="kommo"]','iframe[src*="amocrm"]'];
-      for(var i=0;i<sels.length;i++){ var el=document.querySelector(sels[i]); if(el){ try{ (el.contentWindow?el:el).click(); }catch(e){} break; } }
+      var sels=['#crm_plugin_button','[id^="crm_plugin"]','[class*="crm-plugin"]','[class*="chat-button"]','iframe[src*="kommo"]'];
+      for(var i=0;i<sels.length;i++){ var el=document.querySelector(sels[i]); if(el){ try{ el.click(); }catch(e){} break; } }
     }
-    ['crear','crear2'].forEach(function(id){ var b=document.getElementById(id); if(b) b.addEventListener('click', function(e){ e.preventDefault(); openKommo(); }); });
+    ['reg','reclamar'].forEach(function(id){ var b=document.getElementById(id); if(b) b.addEventListener('click', openKommo); });
   </script>
 </body>
 </html>
