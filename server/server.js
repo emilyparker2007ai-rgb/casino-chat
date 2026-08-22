@@ -78,6 +78,39 @@ async function note(leadId, text) {
   await kommo("/leads/" + leadId + "/notes", "POST", [{ note_type: "common", params: { text: clean(text, 900) } }]).catch(() => {});
 }
 
+// Reconstruye el panel desde Kommo (registro durable): leads con tag chat-web + sus notas.
+async function loadFromKommo() {
+  try {
+    var tg = await kommo("/leads/tags?filter[name]=chat-web&limit=1", "GET");
+    var tag = tg.json && tg.json._embedded && tg.json._embedded.tags && tg.json._embedded.tags[0];
+    var url = "/leads?limit=50&order[updated_at]=desc&with=contacts";
+    if (tag) url += "&filter[tags][0]=" + tag.id;
+    var r = await kommo(url, "GET");
+    var leads = (r.json && r.json._embedded && r.json._embedded.leads) || [];
+    for (var i = 0; i < leads.length; i++) {
+      var L = leads[i];
+      if (L.status_id === 143) continue;               // saltar Perdido / tests
+      var id = String(L.id);
+      if (convs.has(id)) continue;                     // no pisar conversaciones vivas
+      var contact = L._embedded && L._embedded.contacts && L._embedded.contacts[0];
+      var c = { id: id, name: String(L.name || "").replace(/ \(chat web\)$/, ""), phone: "", clid: "",
+        leadId: L.id, contactId: contact ? contact.id : 0, createdAt: (L.created_at || 0) * 1000 || Date.now(),
+        msgs: [], adminReadSeq: 0 };
+      var n = await kommo("/leads/" + L.id + "/notes?limit=100&order[created_at]=asc&filter[note_type]=common", "GET");
+      var notes = (n.json && n.json._embedded && n.json._embedded.notes) || [];
+      for (var k = 0; k < notes.length; k++) {
+        var txt = notes[k].params && notes[k].params.text; if (!txt) continue;
+        var from = null, body = txt;
+        if (txt.indexOf("Cliente: ") === 0) { from = "client"; body = txt.slice(9); }
+        else if (txt.indexOf("Asesor: ") === 0) { from = "admin"; body = txt.slice(8); }
+        else if (txt.indexOf("Primer mensaje:") >= 0) { from = "client"; body = txt.split("Primer mensaje:")[1].trim(); }
+        if (from) c.msgs.push({ id: SEQ++, from: from, text: body, ts: (notes[k].created_at || 0) * 1000 || Date.now() });
+      }
+      convs.set(id, c);
+    }
+  } catch (e) {}
+}
+
 function send(res, code, obj, ctype) {
   if (ctype) { res.writeHead(code, { "Content-Type": ctype }); res.end(obj); return; }
   res.writeHead(code, {
@@ -170,4 +203,8 @@ const server = http.createServer(async (req, res) => {
 
   send(res, 404, { ok: false });
 });
-server.listen(PORT, () => console.log("casino-chat 2-vias en puerto " + PORT));
+server.listen(PORT, () => {
+  console.log("casino-chat 2-vias en puerto " + PORT);
+  loadFromKommo();
+  setInterval(loadFromKommo, 90000);
+});
