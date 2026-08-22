@@ -60,9 +60,19 @@
     .top{ padding:12px 16px; } .reg{ padding:9px 16px; font-size:13px; }
   }
   @media (prefers-reduced-motion:reduce){ .cta,.cta::after{ animation:none; } }
+
+  /* Kommo en celular: en vez de pantalla completa, panel flotante (se pisa su CSS con mayor especificidad) */
+  @media (max-width:450px){
+    html[class*="amo-livechat-iframe-"][class*="-active"] > body#page{ background:transparent !important; }
+    html[class*="amo-livechat-iframe-"][class*="-active"] > body#page > *:not(.amo-button-holder):not(#amo-livechat):not(script):not(style){ display:block !important; }
+    html body#page #amo-livechat.amo-livechat_chat{
+      position:fixed !important; top:auto !important; left:10px !important; right:10px !important; bottom:88px !important;
+      width:auto !important; height:min(68dvh,560px) !important; max-height:68dvh !important; min-height:360px !important;
+      border-radius:18px !important; overflow:hidden !important; box-shadow:0 24px 60px rgba(0,0,0,.6) !important; }
+  }
 </style>
 </head>
-<body>
+<body id="page">
   <canvas id="gl"></canvas>
   <div class="vig"></div>
 
@@ -240,6 +250,7 @@
       try { crmPlugin('runChatShow'); } catch(e) {}
       if (!kommoReady) { var tries = 0, iv = setInterval(function(){ tries++; try { crmPlugin('runChatShow'); } catch(e) {} if (kommoReady || tries > 12) clearInterval(iv); }, 500); } }
     ['reg','reclamar'].forEach(function(id){ var b=document.getElementById(id); if(b) b.addEventListener('click', openKommo); });
+    if (/[?&]openchat=1/.test(location.search)) { setTimeout(openKommo, 2500); }
   </script>
 </body>
 </html>
