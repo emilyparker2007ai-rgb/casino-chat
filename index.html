@@ -50,11 +50,12 @@
   .foot{ position:absolute; bottom:12px; left:0; right:0; text-align:center; color:#8f7bb8; font-size:11px; } .foot b{ color:#c9b8ea; }
 
   @media (max-width:900px){
-    .hero{ right:0; left:0; top:43%; bottom:auto; transform:none; width:100%; padding:0 20px; text-align:center; }
-    .eyebrow{ font-size:15px; letter-spacing:.45em; } .big{ font-size:clamp(54px,16vw,76px); }
-    .offer{ margin-top:10px; } .offer .l1{ font-size:clamp(17px,4.9vw,22px);} .offer .l2{ font-size:clamp(58px,18vw,80px);}
-    .sub{ margin:6px auto 14px; font-size:14px; }
-    .cta{ width:100%; padding:17px 20px; border-radius:22px; }
+    .hero{ right:0; left:0; top:31%; bottom:auto; transform:none; width:100%; padding:0 18px; text-align:center; }
+    .eyebrow{ font-size:14px; letter-spacing:.45em; margin-bottom:0; } .big{ font-size:clamp(50px,14.5vw,68px); }
+    .offer{ margin-top:8px; } .offer .l1{ font-size:clamp(16px,4.6vw,21px);} .offer .l2{ font-size:clamp(52px,16vw,70px);}
+    .sub{ margin:4px auto 12px; font-size:13.5px; max-width:340px; }
+    .cta{ width:calc(100% - 12px); padding:15px 18px; border-radius:22px; margin-right:12px; }
+    .cta .b1{ font-size:20px; }
     .foot{ bottom:6px; font-size:10px; }
     .top{ padding:12px 16px; } .reg{ padding:9px 16px; font-size:13px; }
   }
@@ -205,7 +206,7 @@
 
     // layout segun pantalla: desktop slot a la izquierda, mobile arriba
     function layout(){ const w = innerWidth, h = innerHeight, mob = w < 900; renderer.setSize(w, h); composer.setSize(w, h); camera.aspect = w/h; camera.updateProjectionMatrix();
-      if (mob){ const k = Math.min(1, w/430); slot.position.set(0, 2.35, 0); slot.scale.setScalar(0.78*k); camera.position.z = 11.5;
+      if (mob){ const k = Math.min(1, w/430); slot.position.set(0, 2.75, 0); slot.scale.setScalar(0.7*k); camera.position.z = 11.5;
         floaters.forEach(o => { const m = o.userData.mob || [o.userData.base.x*0.55, o.userData.base.y*0.75, o.userData.base.z]; o.position.set(m[0], m[1], m[2]); o.userData.base2 = o.position.clone(); }); }
       else { slot.position.set(-3.6, 0.15, 0); slot.scale.setScalar(1.05); camera.position.z = 11; floaters.forEach(o => { o.position.copy(o.userData.base); o.userData.base2 = o.position.clone(); }); }
       halo.position.set(slot.position.x, slot.position.y - 0.3, slot.position.z - 1.6); halo.scale.set(mob ? 8 : 11, mob ? 6.5 : 9, 1); }
@@ -228,7 +229,7 @@
   <script>
     // user_id estable por visitante => Kommo conserva SIEMPRE el historial del chat de esa persona
     (function(){ var uid = ''; try { uid = localStorage.getItem('k463_uid') || ''; if (!uid) { uid = 'w463-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 12); localStorage.setItem('k463_uid', uid); } } catch (e) { uid = 'w463-' + Date.now().toString(36); }
-      window.crmPluginConfig = { hidden: window.innerWidth < 900, onlinechat: { user_id: uid } }; })();
+      window.crmPluginConfig = { hidden: false, onlinechat: { user_id: uid } }; })();
   </script>
   <script>(function(a,m,o,c,r,m){a[m]={id:"1079587",hash:"f4787e77ef5a8f993efa4b6e0a1768713acd0304ee2069e270e61bad0c299138",locale:"es",setMeta:function(p){this.params=(this.params||[]).concat([p])}};a[o]=a[o]||function(){(a[o].q=a[o].q||[]).push(arguments)};var d=a.document,s=d.createElement('script');s.async=true;s.id=m+'_script';s.src='https://gso.kommo.com/js/button.js';d.head&&d.head.appendChild(s)}(window,0,'crmPlugin',0,0,'crm_plugin'));</script>
   <script>
