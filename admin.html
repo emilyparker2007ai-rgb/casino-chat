@@ -58,6 +58,18 @@
     .quick{ overflow-x:auto; flex-wrap:nowrap; }
     .quick button{ white-space:nowrap; flex:0 0 auto; }
   }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#0b141a; --panel:#111b21; --line:#2a3942; --ink:#e9edef; --muted:#8696a0; --in:#202c33; --out:#005c4b; }
+    body{ background:var(--panel); color:var(--ink); }
+    #login{ background:#0b141a; } #login .box{ background:#111b21; color:var(--ink); }
+    #login input{ background:#202c33; color:var(--ink); border-color:#2a3942; }
+    .item:hover{ background:#182229; } .item.active{ background:#2a3942; }
+    .empty{ color:var(--muted); }
+    .b{ color:var(--ink); } .b .t,.item .ls,.item .tm{ color:var(--muted); }
+    .rep{ background:#111b21; } .rep input{ background:#202c33; color:var(--ink); border-color:#2a3942; }
+    .quick{ background:#111b21; } .quick button{ background:#202c33; color:var(--ink); border-color:#2a3942; }
+    .item .nm{ color:var(--ink); }
+  }
 </style>
 </head>
 <body>
