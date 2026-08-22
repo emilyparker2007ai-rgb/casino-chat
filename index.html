@@ -206,7 +206,7 @@
 
     // layout segun pantalla: desktop slot a la izquierda, mobile arriba
     function layout(){ const w = innerWidth, h = innerHeight, mob = w < 900; renderer.setSize(w, h); composer.setSize(w, h); camera.aspect = w/h; camera.updateProjectionMatrix();
-      if (mob){ const k = Math.min(1, w/430); slot.position.set(0, 2.75, 0); slot.scale.setScalar(0.7*k); camera.position.z = 11.5;
+      if (mob){ const k = Math.min(1, w/430); slot.position.set(0, 2.5, 0); slot.scale.setScalar(0.7*k); camera.position.z = 11.5;
         floaters.forEach(o => { const m = o.userData.mob || [o.userData.base.x*0.55, o.userData.base.y*0.75, o.userData.base.z]; o.position.set(m[0], m[1], m[2]); o.userData.base2 = o.position.clone(); }); }
       else { slot.position.set(-3.6, 0.15, 0); slot.scale.setScalar(1.05); camera.position.z = 11; floaters.forEach(o => { o.position.copy(o.userData.base); o.userData.base2 = o.position.clone(); }); }
       halo.position.set(slot.position.x, slot.position.y - 0.3, slot.position.z - 1.6); halo.scale.set(mob ? 8 : 11, mob ? 6.5 : 9, 1); }
