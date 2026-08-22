@@ -80,11 +80,12 @@
 <script>
 (function(){
   var KEY=""; try{ KEY=localStorage.getItem("adminkey")||""; }catch(e){}
-  var active=null, lastMsgId=0, listTimer=null, convTimer=null;
+  var active=null, lastMsgId=0, listTimer=null, convTimer=null, rendered={};
 
   function show(id,disp){ document.getElementById(id).style.display=disp; }
   function fmt(ts){ var d=new Date(ts); return ("0"+d.getHours()).slice(-2)+":"+("0"+d.getMinutes()).slice(-2); }
   function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;"); }
+  function linkify(s){ return esc(s).replace(/(https?:\/\/[^\s]+)/g,function(u){return '<a href="'+u+'" target="_blank" rel="noopener" style="color:#0b57d0;text-decoration:underline;word-break:break-all">'+u+'</a>';}); }
   function api(path){ return "/api/admin/"+path+(path.indexOf("?")<0?"?":"&")+"key="+encodeURIComponent(KEY); }
 
   function login(){
@@ -123,7 +124,7 @@
   }
 
   function open(id){
-    active=id; lastMsgId=0;
+    active=id; lastMsgId=0; rendered={};
     document.getElementById("msgs").innerHTML="";
     show("empty","none"); show("mh","flex"); show("msgs","flex"); show("rep","flex"); show("quick","flex");
     if(convTimer) clearInterval(convTimer);
@@ -145,8 +146,9 @@
       }
       var box=document.getElementById("msgs");
       (d.msgs||[]).forEach(function(m){
+        if(rendered[m.id]) return; rendered[m.id]=1;
         var b=document.createElement("div"); b.className="b "+(m.from==="admin"?"adm":"cli");
-        b.innerHTML=esc(m.text)+'<span class="t">'+fmt(m.ts)+'</span>'; box.appendChild(b);
+        b.innerHTML=linkify(m.text)+'<span class="t">'+fmt(m.ts)+'</span>'; box.appendChild(b);
         if(m.id>lastMsgId) lastMsgId=m.id;
       });
       if((d.msgs||[]).length) box.scrollTop=box.scrollHeight;

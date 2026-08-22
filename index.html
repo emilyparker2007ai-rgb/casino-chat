@@ -76,8 +76,9 @@
   function save(){ try{ localStorage.setItem("chat463", JSON.stringify(S)); }catch(e){} }
   function now(){ var d=new Date(); return ("0"+d.getHours()).slice(-2)+":"+("0"+d.getMinutes()).slice(-2); }
   function scroll(){ chat.scrollTop=chat.scrollHeight; }
+  function linkify(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/(https?:\/\/[^\s]+)/g,function(u){return '<a href="'+u+'" target="_blank" rel="noopener" style="color:#0b57d0;text-decoration:underline;word-break:break-all">'+u+'</a>';}); }
   function bubble(text,cls){ var m=document.createElement("div"); m.className="msg "+cls;
-    m.innerHTML=String(text).replace(/&/g,"&amp;").replace(/</g,"&lt;")+'<span class="t">'+now()+'</span>';
+    m.innerHTML=linkify(text)+'<span class="t">'+now()+'</span>';
     chat.appendChild(m); scroll(); }
 
   bubble("Hola, bienvenido a Casino 463 👋 Decime tu nombre para pasarte tu usuario y contraseña! 😉","in");
