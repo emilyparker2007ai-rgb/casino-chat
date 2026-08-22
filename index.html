@@ -9,9 +9,8 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@500;600;700;800&display=swap">
 <style>
   :root{
-    --gold:#ffd24a; --gold2:#ffb020; --green:#16c95f; --green2:#0e9c46; --green-dk:#0a7d38;
-    --bg0:#03130b; --bg1:#0b3a1e; --card:#0d2417; --card2:#123021; --line:#1d4a30;
-    --ink:#eafff2; --mut:#9fc7ac; --wa:#0b7d6e;
+    --gold:#ffd24a; --gold2:#ffb020; --green:#16c95f; --green2:#0e9c46;
+    --bg0:#03130b; --card:#0d2417; --line:#1d4a30; --ink:#eafff2; --mut:#9fc7ac;
   }
   *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html,body{ margin:0; }
@@ -24,99 +23,46 @@
     min-height:100dvh; overflow-x:hidden;
   }
   .wrap{ max-width:560px; margin:0 auto; padding:18px 18px 120px; }
-
-  /* top */
   .brand{ display:flex; align-items:center; gap:10px; justify-content:center; margin:6px 0 22px; }
   .brand .logo{ width:44px; height:44px; border-radius:50%; background:linear-gradient(160deg,var(--green),var(--green2));
     display:grid; place-items:center; font-family:"Anton"; font-size:19px; color:#042012; box-shadow:0 0 22px rgba(22,201,95,.55); }
   .brand .nm{ font-weight:800; font-size:19px; letter-spacing:.5px; }
   .brand .nm span{ color:var(--gold); }
-
-  /* hero */
-  .eyebrow{ text-align:center; font-weight:700; font-size:12.5px; letter-spacing:.28em; color:var(--gold);
-    text-transform:uppercase; margin:0 0 10px; }
+  .eyebrow{ text-align:center; font-weight:700; font-size:12.5px; letter-spacing:.28em; color:var(--gold); text-transform:uppercase; margin:0 0 10px; }
   h1{ font-family:"Anton"; font-weight:400; text-align:center; line-height:.92; margin:0;
-    font-size:clamp(34px,10vw,52px); letter-spacing:.5px; text-transform:uppercase; color:#fff;
-    text-shadow:0 2px 0 rgba(0,0,0,.35); }
-  .pct{ font-family:"Anton"; text-align:center; line-height:.85; margin:2px 0 4px;
-    font-size:clamp(96px,32vw,168px); letter-spacing:-2px;
+    font-size:clamp(34px,10vw,52px); letter-spacing:.5px; text-transform:uppercase; color:#fff; text-shadow:0 2px 0 rgba(0,0,0,.35); }
+  .pct{ font-family:"Anton"; text-align:center; line-height:.85; margin:2px 0 4px; font-size:clamp(96px,32vw,168px); letter-spacing:-2px;
     background:linear-gradient(180deg,#fff3c4 0%,var(--gold) 42%,var(--gold2) 78%,#a9701a 100%);
-    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
-    filter:drop-shadow(0 6px 18px rgba(255,176,32,.35)); }
-  .sub{ text-align:center; color:var(--mut); font-size:15px; margin:0 auto 22px; max-width:340px; }
-  .sub b{ color:#fff; }
-
-  /* CTA */
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 6px 18px rgba(255,176,32,.35)); }
+  .sub{ text-align:center; color:var(--mut); font-size:15px; margin:0 auto 22px; max-width:340px; } .sub b{ color:#fff; }
   .cta{ display:block; width:100%; border:0; cursor:pointer; text-align:center; text-decoration:none;
-    background:linear-gradient(180deg,#2ee06e,var(--green2)); color:#042012; border-radius:18px; padding:20px 18px;
-    font-family:"Manrope"; font-weight:800; box-shadow:0 10px 30px rgba(22,201,95,.45), inset 0 1px 0 rgba(255,255,255,.35);
-    animation:pulse 2.4s ease-in-out infinite; }
+    background:linear-gradient(180deg,#2ee06e,var(--green2)); color:#042012; border-radius:18px; padding:20px 18px; font-family:"Manrope"; font-weight:800;
+    box-shadow:0 10px 30px rgba(22,201,95,.45), inset 0 1px 0 rgba(255,255,255,.35); animation:pulse 2.4s ease-in-out infinite; }
   .cta .big{ font-size:23px; letter-spacing:.5px; display:flex; align-items:center; justify-content:center; gap:8px; }
   .cta .sm{ font-weight:700; font-size:13.5px; opacity:.85; margin-top:3px; }
   @keyframes pulse{ 0%,100%{ box-shadow:0 10px 30px rgba(22,201,95,.4), inset 0 1px 0 rgba(255,255,255,.35);} 50%{ box-shadow:0 10px 44px rgba(22,201,95,.75), inset 0 1px 0 rgba(255,255,255,.35);} }
   @media (prefers-reduced-motion:reduce){ .cta{ animation:none; } }
-
-  /* chips */
   .chips{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:16px 0; }
   .chip{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 8px; text-align:center; }
   .chip .ic{ font-size:22px; } .chip .t{ font-weight:800; font-size:14.5px; margin-top:4px; }
   .chip .d{ color:var(--mut); font-size:11.5px; line-height:1.25; margin-top:2px; }
-
-  /* bullets */
   .list{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px 18px; margin:6px 0 18px; }
   .list .li{ display:flex; align-items:center; gap:10px; padding:7px 0; font-weight:600; font-size:14.5px; }
   .list .li:not(:last-child){ border-bottom:1px solid rgba(255,255,255,.05); }
   .list .li .ck{ color:var(--green); font-weight:800; font-size:16px; }
-
-  .trust{ text-align:center; color:var(--mut); font-size:12.5px; margin:8px 0 0; }
-  .foot{ text-align:center; color:#6f9781; font-size:11px; margin-top:18px; line-height:1.5; }
-  .foot b{ color:#9fc7ac; }
-
-  /* ---------- CHAT WIDGET ---------- */
-  #launcher{ position:fixed; right:16px; bottom:16px; z-index:40; border:0; cursor:pointer;
-    background:linear-gradient(160deg,var(--green),var(--green2)); color:#042012; border-radius:30px;
-    padding:13px 18px 13px 15px; font-family:"Manrope"; font-weight:800; font-size:15px; display:flex; align-items:center; gap:9px;
-    box-shadow:0 8px 26px rgba(0,0,0,.5), 0 0 0 4px rgba(22,201,95,.18); }
-  #launcher .dot{ width:9px; height:9px; border-radius:50%; background:#0b3; box-shadow:0 0 0 3px rgba(0,255,120,.25); }
-  #launcher .close-i{ display:none; }
-  #chatwrap{ position:fixed; z-index:50; right:16px; bottom:84px; width:380px; height:min(564px,78dvh);
-    display:none; flex-direction:column; overflow:hidden; border-radius:16px; background:#e7ded3;
-    box-shadow:0 24px 60px rgba(0,0,0,.6); border:1px solid rgba(0,0,0,.2); }
-  #chatwrap.open{ display:flex; }
-  @media (max-width:560px){
-    #chatwrap{ right:0; left:0; bottom:0; top:0; width:100%; height:100dvh; border-radius:0; border:0; }
-  }
-  .ch-top{ background:var(--wa); color:#fff; flex:0 0 auto; padding:12px 14px; display:flex; align-items:center; gap:10px; }
-  .ch-top .av{ width:38px; height:38px; border-radius:50%; background:#fff; color:var(--wa); font-weight:800; display:grid; place-items:center; }
-  .ch-top .who{ flex:1 1 auto; line-height:1.2; } .ch-top .who .n{ font-weight:700; font-size:15.5px; } .ch-top .who .s{ font-size:12px; opacity:.9; }
-  .ch-top .x{ font-size:24px; cursor:pointer; opacity:.9; line-height:1; padding:0 4px; }
-  .ch-body{ flex:1 1 auto; overflow-y:auto; min-height:0; padding:14px 10px 8px;
-    background:radial-gradient(circle at 20% 12%, rgba(255,255,255,.05), transparent 40%), #e7ded3;
-    display:flex; flex-direction:column; gap:8px; }
-  .day{ align-self:center; background:#fff; color:#667781; font-size:12px; padding:5px 12px; border-radius:8px; box-shadow:0 1px 1px rgba(0,0,0,.06); margin:2px 0 4px; }
-  .msg{ max-width:84%; padding:7px 10px 5px; border-radius:9px; font-size:14.5px; line-height:1.35; color:#111b21; box-shadow:0 1px .5px rgba(0,0,0,.12); white-space:pre-wrap; word-wrap:break-word; }
-  .in{ align-self:flex-start; background:#fff; border-top-left-radius:2px; }
-  .out{ align-self:flex-end; background:#d6f5cf; border-top-right-radius:2px; }
-  .msg .t{ font-size:10.5px; color:#667781; float:right; margin:6px 0 -2px 8px; }
-  .out .t::after{ content:" \2713\2713"; color:#53bdeb; }
-  .ch-bar{ flex:0 0 auto; background:#f0f2f5; padding:8px; display:flex; gap:7px; align-items:center; }
-  .ch-bar input{ flex:1 1 auto; border:1px solid #ddd; border-radius:22px; padding:11px 15px; font-size:16px; outline:0; background:#fff; color:#111b21; }
-  .ch-bar button{ flex:0 0 auto; width:44px; height:44px; border-radius:50%; background:var(--wa); color:#fff; border:0; font-size:20px; cursor:pointer; }
+  .trust{ text-align:center; color:var(--mut); font-size:12.5px; margin:8px 0 0; } .trust b{ color:#fff; }
+  .foot{ text-align:center; color:#6f9781; font-size:11px; margin-top:18px; line-height:1.5; } .foot b{ color:#9fc7ac; }
 </style>
 </head>
 <body>
   <div class="wrap">
     <div class="brand"><div class="logo">463</div><div class="nm">Casino <span>463</span></div></div>
-
     <p class="eyebrow">Bono de bienvenida</p>
     <h1>Triplicamos tu dep&oacute;sito</h1>
     <div class="pct">200%</div>
     <p class="sub">Cre&aacute; tu cuenta y te damos <b>200% extra</b> en tu primera carga. Te la activamos en <b>1 minuto</b>.</p>
 
-    <button class="cta" id="crear">
-      <span class="big">&#9889; CREAR MI CUENTA</span>
-      <span class="sm">Te la activamos en 1 minuto &#128071;</span>
-    </button>
+    <button class="cta" id="crear"><span class="big">&#9889; CREAR MI CUENTA</span><span class="sm">Te la activamos en 1 minuto &#128071;</span></button>
 
     <div class="chips">
       <div class="chip"><div class="ic">&#9889;</div><div class="t">Al instante</div><div class="d">Cargas y retiros</div></div>
@@ -131,78 +77,22 @@
       <div class="li"><span class="ck">&#10003;</span> Soporte humano 24/7</div>
     </div>
 
-    <p class="trust">M&aacute;s de <b style="color:#fff">15.000</b> jugadores activos &middot; Atenci&oacute;n al instante</p>
+    <p class="trust">M&aacute;s de <b>15.000</b> jugadores activos &middot; Atenci&oacute;n al instante</p>
     <a class="cta" id="crear2" style="margin-top:14px"><span class="big">&#128172; QUIERO MI CUENTA + BONO</span><span class="sm">Chateá con un asesor ahora</span></a>
-
     <p class="foot">Juego responsable &middot; Solo <b>+18</b>. Jug&aacute; con responsabilidad.</p>
   </div>
 
-  <button id="launcher"><span class="dot"></span> Chatear</button>
+  <!-- Chat web NATIVO de Kommo: las charlas caen en la bandeja de Chats -->
+  <script>(function(a,m,o,c,r,m){a[m]={id:"1079587",hash:"f4787e77ef5a8f993efa4b6e0a1768713acd0304ee2069e270e61bad0c299138",locale:"es",setMeta:function(p){this.params=(this.params||[]).concat([p])}};a[o]=a[o]||function(){(a[o].q=a[o].q||[]).push(arguments)};var d=a.document,s=d.createElement('script');s.async=true;s.id=m+'_script';s.src='https://gso.kommo.com/js/button.js';d.head&&d.head.appendChild(s)}(window,0,'crmPlugin',0,0,'crm_plugin'));</script>
 
-  <div id="chatwrap">
-    <div class="ch-top">
-      <div class="av">463</div>
-      <div class="who"><div class="n">Casino 463</div><div class="s">en l&iacute;nea &middot; te responde un asesor</div></div>
-      <span class="x" id="chx">&times;</span>
-    </div>
-    <div class="ch-body" id="chat"><div class="day">HOY</div></div>
-    <form class="ch-bar" id="bar" autocomplete="off">
-      <input id="inp" placeholder="Escrib&iacute; ac&aacute;&hellip;" autocomplete="off" />
-      <button type="submit" aria-label="Enviar">&#10148;</button>
-    </form>
-  </div>
-
-<script>
-(function(){
-  var chat=document.getElementById("chat"), inp=document.getElementById("inp"), form=document.getElementById("bar");
-  var wrap=document.getElementById("chatwrap"), launcher=document.getElementById("launcher");
-  var qs=new URLSearchParams(location.search);
-  var clid=qs.get("cl_id")||qs.get("subid")||qs.get("fbclid")||"";
-  try{ if(clid) localStorage.setItem("cl_id",clid); else clid=localStorage.getItem("cl_id")||""; }catch(e){}
-
-  var GREETING="🔥 ¡Buenísimo! Para activarte la cuenta con el 200% de bono, decime qué USUARIO y CONTRASEÑA querés usar y te la creo en 1 minuto 👇";
-  var S={ step:"name", name:"", convId:0, seen:0, greeted:false };
-  try{ var sv=JSON.parse(localStorage.getItem("chat463")||"{}"); if(sv.convId||sv.greeted){ S=sv; } }catch(e){}
-  function save(){ try{ localStorage.setItem("chat463", JSON.stringify(S)); }catch(e){} }
-  function now(){ var d=new Date(); return ("0"+d.getHours()).slice(-2)+":"+("0"+d.getMinutes()).slice(-2); }
-  function scroll(){ chat.scrollTop=chat.scrollHeight; }
-  function linkify(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/(https?:\/\/[^\s]+)/g,function(u){return '<a href="'+u+'" target="_blank" rel="noopener" style="color:#0b57d0;text-decoration:underline;word-break:break-all">'+u+'</a>';}); }
-  function bubble(text,cls){ var m=document.createElement("div"); m.className="msg "+cls; m.innerHTML=linkify(text)+'<span class="t">'+now()+'</span>'; chat.appendChild(m); scroll(); }
-  function post(url,body){ return fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}).then(function(r){return r.json();}).catch(function(){return {ok:false};}); }
-
-  var polling=false;
-  function startPoll(){ if(polling) return; polling=true; setInterval(tick,2200); tick(); }
-  function tick(){ if(!S.convId) return;
-    fetch("/api/poll?convId="+encodeURIComponent(S.convId)+"&after="+S.seen).then(function(r){return r.json();}).then(function(d){
-      if(!d||!d.msgs) return; d.msgs.forEach(function(m){ if(m.from==="admin") bubble(m.text,"in"); if(m.id>S.seen) S.seen=m.id; }); save();
-    }).catch(function(){}); }
-
-  var built=false;
-  function buildHistory(){
-    if(built) return; built=true;
-    if(S.step==="live" && S.convId){
-      fetch("/api/poll?convId="+encodeURIComponent(S.convId)+"&after=0").then(function(r){return r.json();}).then(function(d){
-        if(d&&d.ok){ (d.msgs||[]).forEach(function(m){ bubble(m.text, m.from==="admin"?"in":"out"); if(m.id>S.seen) S.seen=m.id; }); save(); startPoll(); }
-        else { S={step:"name",name:"",convId:0,seen:0,greeted:true}; save(); bubble(GREETING,"in"); }
-      }).catch(function(){ startPoll(); });
-    } else { bubble(GREETING,"in"); S.greeted=true; save(); }
-  }
-
-  function openChat(){ wrap.classList.add("open"); buildHistory(); setTimeout(function(){ inp.focus(); },150); }
-  function closeChat(){ wrap.classList.remove("open"); }
-  launcher.addEventListener("click", function(){ wrap.classList.contains("open")?closeChat():openChat(); });
-  document.getElementById("chx").addEventListener("click", closeChat);
-  document.getElementById("crear").addEventListener("click", openChat);
-  document.getElementById("crear2").addEventListener("click", openChat);
-
-  form.addEventListener("submit", function(ev){
-    ev.preventDefault(); var text=inp.value.trim(); if(!text) return; inp.value=""; bubble(text,"out");
-    if(S.step==="name"){
-      S.name=text.slice(0,120);
-      post("/api/lead",{action:"create",name:S.name,message:text,clid:clid}).then(function(res){ if(res.ok){ S.convId=res.convId; S.step="live"; save(); startPoll(); } });
-    } else { post("/api/send",{convId:S.convId,text:text}); }
-  });
-})();
-</script>
+  <!-- CREAR MI CUENTA abre el chat de Kommo (mejor esfuerzo; si no, el botón verde queda abajo a la derecha) -->
+  <script>
+    function openKommo(){
+      try{ if(window.crmPlugin){ window.crmPlugin('showChat'); } }catch(e){}
+      var sels=['#crm_plugin_button','[id^="crm_plugin"]','[class*="crm-plugin"]','[class*="chat-button"]','iframe[src*="kommo"]','iframe[src*="amocrm"]'];
+      for(var i=0;i<sels.length;i++){ var el=document.querySelector(sels[i]); if(el){ try{ (el.contentWindow?el:el).click(); }catch(e){} break; } }
+    }
+    ['crear','crear2'].forEach(function(id){ var b=document.getElementById(id); if(b) b.addEventListener('click', function(e){ e.preventDefault(); openKommo(); }); });
+  </script>
 </body>
 </html>
