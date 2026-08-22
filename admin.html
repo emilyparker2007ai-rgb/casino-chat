@@ -45,6 +45,19 @@
   .rep button{ background:var(--header); color:#fff; border:0; border-radius:50%; width:44px; height:44px; font-size:20px; cursor:pointer; flex:0 0 auto; }
   .quick{ padding:0 12px 8px; display:none; gap:6px; flex-wrap:wrap; background:#f0f2f5; }
   .quick button{ font-size:12px; background:#fff; border:1px solid var(--line); border-radius:14px; padding:5px 10px; cursor:pointer; color:var(--ink); }
+  .mh .backm{ display:none; font-size:27px; line-height:1; cursor:pointer; margin-right:2px; }
+  @media (max-width:640px){
+    #app{ grid-template-columns:1fr; }
+    .side{ grid-area:1 / 1; }
+    .main{ grid-area:1 / 1; display:none; }
+    #app.open .side{ display:none; }
+    #app.open .main{ display:flex; }
+    .mh .backm{ display:inline-flex; }
+    .b{ max-width:85%; font-size:15px; }
+    .rep input{ font-size:16px; }
+    .quick{ overflow-x:auto; flex-wrap:nowrap; }
+    .quick button{ white-space:nowrap; flex:0 0 auto; }
+  }
 </style>
 </head>
 <body>
@@ -64,6 +77,7 @@
     </div>
     <div class="main">
       <div class="mh" id="mh">
+        <span class="backm" id="backm">&lsaquo;</span>
         <div class="ava" id="mhav">?</div>
         <div class="info"><div class="n" id="mhn">-</div><div class="d" id="mhd"></div></div>
       </div>
@@ -125,6 +139,7 @@
 
   function open(id){
     active=id; lastMsgId=0; rendered={};
+    document.getElementById("app").classList.add("open");
     document.getElementById("msgs").innerHTML="";
     show("empty","none"); show("mh","flex"); show("msgs","flex"); show("rep","flex"); show("quick","flex");
     if(convTimer) clearInterval(convTimer);
@@ -172,6 +187,11 @@
     document.getElementById("rinp").value="";
     fetch(api("reply"),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:active,text:t})})
       .then(function(r){return r.json();}).then(function(){ loadConv(false); loadList(); }).catch(function(){});
+  });
+
+  document.getElementById("backm").addEventListener("click", function(){
+    document.getElementById("app").classList.remove("open");
+    active=null; if(convTimer) clearInterval(convTimer);
   });
 
   if(KEY){ fetch(api("list")).then(function(r){ return r.status===200?r.json():null; }).then(function(d){ if(d&&d.ok) start(); }); }
