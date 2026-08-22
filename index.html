@@ -104,7 +104,7 @@
       post("/api/lead",{action:"create",name:S.name,message:text,clid:clid}).then(function(res){
         if(res.ok){ S.convId=res.convId; S.step="live"; save(); startPoll(); }
       });
-      bubble("¡Genial, "+S.name+"! 🙌 En un momento un asesor te pasa tu usuario y contraseña por acá 👇","in");
+      // sin respuesta automatica: espera a que el operador responda a mano
     } else {
       post("/api/send",{convId:S.convId,text:text});
     }
