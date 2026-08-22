@@ -3,25 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>463 · Atención</title>
+<title>Casino 463 · Atención</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230b7d6e'/><text x='50' y='68' font-size='42' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>463</text></svg>">
 <style>
-  :root{
-    --header:#0b7d6e; --header-dark:#075f54; --bg:#e7ded3;
-    --bubble-in:#ffffff; --bubble-out:#d6f5cf; --ink:#111b21; --muted:#667781;
-    --bar:#f0f2f5; --send:#0b7d6e; --tick:#53bdeb;
-  }
+  :root{ --header:#0b7d6e; --header-dark:#075f54; --bg:#e7ded3; --bubble-in:#ffffff; --bubble-out:#d6f5cf;
+    --ink:#111b21; --muted:#667781; --bar:#f0f2f5; --send:#0b7d6e; --tick:#53bdeb; }
   *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html,body{ margin:0; height:100%; overflow:hidden; }
-  body{
-    font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; color:var(--ink);
-    background:var(--header-dark); height:100dvh; display:flex; flex-direction:column;
-  }
-  .top{ background:var(--header); color:#fff; flex:0 0 auto;
-    padding:calc(env(safe-area-inset-top) + 8px) 12px 8px; display:flex; align-items:center; gap:10px; }
+  body{ font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; color:var(--ink);
+    background:var(--header-dark); height:100dvh; display:flex; flex-direction:column; }
+  .top{ background:var(--header); color:#fff; flex:0 0 auto; padding:calc(env(safe-area-inset-top) + 8px) 12px 8px;
+    display:flex; align-items:center; gap:10px; }
   .back{ font-size:24px; line-height:1; opacity:.95; }
-  .av{ width:40px; height:40px; border-radius:50%; background:#fff; color:var(--header);
-    font-weight:800; font-size:16px; display:grid; place-items:center; flex:0 0 auto; }
+  .av{ width:40px; height:40px; border-radius:50%; background:#fff; color:var(--header); font-weight:800; font-size:15px;
+    display:grid; place-items:center; flex:0 0 auto; }
   .who{ flex:1 1 auto; min-width:0; line-height:1.2; }
   .who .n{ font-weight:600; font-size:16.5px; }
   .who .s{ font-size:12.5px; opacity:.85; }
@@ -30,135 +25,92 @@
   .chat{ flex:1 1 auto; overflow-y:auto; padding:14px 10px 8px;
     background:radial-gradient(circle at 20% 15%, rgba(255,255,255,.05), transparent 40%), var(--bg);
     display:flex; flex-direction:column; gap:8px; }
-  .day{ align-self:center; background:#fff; color:var(--muted); font-size:12px; padding:5px 12px;
-    border-radius:8px; box-shadow:0 1px 1px rgba(0,0,0,.06); margin:2px 0 6px; }
-  .msg{ max-width:82%; padding:7px 10px 5px; border-radius:9px; font-size:15px; line-height:1.35;
-    position:relative; box-shadow:0 1px .5px rgba(0,0,0,.12); word-wrap:break-word; white-space:pre-wrap; }
+  .day{ align-self:center; background:#fff; color:var(--muted); font-size:12px; padding:5px 12px; border-radius:8px;
+    box-shadow:0 1px 1px rgba(0,0,0,.06); margin:2px 0 6px; }
+  .msg{ max-width:82%; padding:7px 10px 5px; border-radius:9px; font-size:15px; line-height:1.35; position:relative;
+    box-shadow:0 1px .5px rgba(0,0,0,.12); word-wrap:break-word; white-space:pre-wrap; }
   .in{ align-self:flex-start; background:var(--bubble-in); border-top-left-radius:2px; }
   .out{ align-self:flex-end; background:var(--bubble-out); border-top-right-radius:2px; }
   .msg .t{ font-size:10.5px; color:var(--muted); float:right; margin:6px 0 -2px 8px; }
   .out .t::after{ content:" \2713\2713"; color:var(--tick); }
-  .typing{ align-self:flex-start; background:#fff; border-radius:9px; padding:10px 14px; box-shadow:0 1px .5px rgba(0,0,0,.12); }
-  .typing span{ display:inline-block; width:7px; height:7px; margin:0 1.5px; background:#9aa; border-radius:50%; animation:b 1.2s infinite; }
-  .typing span:nth-child(2){ animation-delay:.2s } .typing span:nth-child(3){ animation-delay:.4s }
-  @keyframes b{ 0%,60%,100%{ transform:translateY(0); opacity:.4 } 30%{ transform:translateY(-4px); opacity:1 } }
-  .bar{ flex:0 0 auto; background:var(--bar);
-    padding:7px 8px calc(env(safe-area-inset-bottom) + 7px); display:flex; align-items:center; gap:7px; }
-  form.bar{ margin:0; }
+  .bar{ flex:0 0 auto; background:var(--bar); padding:7px 8px calc(env(safe-area-inset-bottom) + 7px);
+    display:flex; align-items:center; gap:7px; margin:0; }
   .field{ flex:1 1 auto; background:#fff; border-radius:22px; padding:0 6px 0 15px; display:flex; align-items:center; gap:8px;
     box-shadow:0 1px 1px rgba(0,0,0,.05); }
   .field .ico{ opacity:.55; font-size:19px; }
   .field input{ flex:1 1 auto; border:0; outline:0; background:transparent; font-size:16px; padding:12px 4px; color:var(--ink); }
-  .go{ flex:0 0 auto; width:46px; height:46px; border-radius:50%; background:var(--send); color:#fff; border:0;
-    font-size:21px; display:grid; place-items:center; cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,.2); }
+  .go{ flex:0 0 auto; width:46px; height:46px; border-radius:50%; background:var(--send); color:#fff; border:0; font-size:21px;
+    display:grid; place-items:center; cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,.2); }
   .go:active{ transform:scale(.94); }
 </style>
 </head>
 <body>
-
   <div class="top">
     <span class="back">&lsaquo;</span>
-    <div class="av">T</div>
+    <div class="av">463</div>
     <div class="who">
-      <div class="n">Tomi &middot; Casino 463</div>
-      <div class="s"><b>en l&iacute;nea</b> &middot; te responde ahora</div>
+      <div class="n">Casino 463</div>
+      <div class="s"><b>en l&iacute;nea</b> &middot; te responde un asesor</div>
     </div>
     <div class="acts"><span>&#128249;</span><span>&#128222;</span><span>&#8942;</span></div>
   </div>
 
-  <div class="chat" id="chat">
-    <div class="day">HOY</div>
-  </div>
+  <div class="chat" id="chat"><div class="day">HOY</div></div>
 
   <form class="bar" id="bar" autocomplete="off">
-    <div class="field">
-      <span class="ico">&#128512;</span>
+    <div class="field"><span class="ico">&#128512;</span>
       <input id="inp" type="text" placeholder="Escrib&iacute; un mensaje&hellip;" autocomplete="off" />
-      <span class="ico">&#128206;</span>
-    </div>
+      <span class="ico">&#128206;</span></div>
     <button class="go" id="send" type="submit" aria-label="Enviar">&#10148;</button>
   </form>
 
 <script>
 (function(){
-  var API = "/api/lead"; // mismo origen (servido por el backend)
-  var chat = document.getElementById("chat");
-  var inp  = document.getElementById("inp");
-  var form = document.getElementById("bar");
+  var chat=document.getElementById("chat"), inp=document.getElementById("inp"), form=document.getElementById("bar");
+  var qs=new URLSearchParams(location.search);
+  var clid=qs.get("cl_id")||qs.get("subid")||qs.get("fbclid")||"";
+  try{ if(clid) localStorage.setItem("cl_id",clid); else clid=localStorage.getItem("cl_id")||""; }catch(e){}
 
-  // origen del anuncio (para ROAS)
-  var qs = new URLSearchParams(location.search);
-  var clid = qs.get("cl_id") || qs.get("subid") || qs.get("fbclid") || "";
-  try{ if(clid) localStorage.setItem("cl_id", clid); else clid = localStorage.getItem("cl_id")||""; }catch(e){}
-
-  var S = { step:"name", name:"", leadId:0, contactId:0 };
-  try{ var saved = JSON.parse(localStorage.getItem("chat463")||"{}"); if(saved.leadId){ S = saved; } }catch(e){}
+  var S={ step:"name", name:"", convId:0, seen:0 };
+  try{ var sv=JSON.parse(localStorage.getItem("chat463")||"{}"); if(sv.convId){ S=sv; } }catch(e){}
   function save(){ try{ localStorage.setItem("chat463", JSON.stringify(S)); }catch(e){} }
-
   function now(){ var d=new Date(); return ("0"+d.getHours()).slice(-2)+":"+("0"+d.getMinutes()).slice(-2); }
-  function scroll(){ chat.scrollTop = chat.scrollHeight; }
+  function scroll(){ chat.scrollTop=chat.scrollHeight; }
+  function bubble(text,cls){ var m=document.createElement("div"); m.className="msg "+cls;
+    m.innerHTML=String(text).replace(/&/g,"&amp;").replace(/</g,"&lt;")+'<span class="t">'+now()+'</span>';
+    chat.appendChild(m); scroll(); }
 
-  function bubble(text, cls){
-    var m=document.createElement("div"); m.className="msg "+cls;
-    m.innerHTML = text.replace(/&/g,"&amp;").replace(/</g,"&lt;") + '<span class="t">'+now()+'</span>';
-    chat.appendChild(m); scroll(); return m;
-  }
-  var typingEl=null;
-  function typing(on){
-    if(on){ if(typingEl) return; typingEl=document.createElement("div"); typingEl.className="typing";
-      typingEl.innerHTML="<span></span><span></span><span></span>"; chat.appendChild(typingEl); scroll(); }
-    else if(typingEl){ typingEl.remove(); typingEl=null; }
-  }
-  // Tomi habla con un pequeno delay para sentirse humano
-  function tomi(text, cb, delay){
-    typing(true);
-    setTimeout(function(){ typing(false); bubble(text,"in"); if(cb) cb(); }, delay||900+Math.min(text.length*18,1400));
-  }
+  bubble("Hola, bienvenido a Casino 463 👋 Decime tu nombre para pasarte tu usuario y contraseña! 😉","in");
 
-  function post(payload){
-    payload.clid = clid;
-    return fetch(API, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload) })
-      .then(function(r){ return r.json(); }).catch(function(){ return {ok:false}; });
-  }
+  function post(url,body){ return fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)})
+    .then(function(r){return r.json();}).catch(function(){return {ok:false};}); }
 
-  // saludo inicial (exacto pedido por el cliente)
-  if(S.step==="name" && !S.leadId){
-    tomi("Hola, bienvenido a Casino 463 👋 Soy Tomi, decime tu nombre para crear tu usuario 😉", null, 600);
-  } else {
-    bubble("Hola, bienvenido a Casino 463 👋 Soy Tomi.", "in");
-    tomi("Seguí escribiéndome por acá y un asesor te atiende 🎰", null, 700);
+  var polling=false;
+  function startPoll(){ if(polling) return; polling=true; setInterval(tick, 2200); tick(); }
+  function tick(){
+    if(!S.convId) return;
+    fetch("/api/poll?convId="+encodeURIComponent(S.convId)+"&after="+S.seen)
+      .then(function(r){return r.json();}).then(function(d){
+        if(!d||!d.msgs) return;
+        d.msgs.forEach(function(m){ if(m.from==="admin") bubble(m.text,"in"); if(m.id>S.seen) S.seen=m.id; });
+        save();
+      }).catch(function(){});
   }
-
-  var canned = [
-    "¡Genial! Ya le avisé a un asesor, te contacta enseguida 🙌",
-    "Perfecto 👌 En un ratito te escriben para dejarte todo listo.",
-    "Buenísimo, quedó anotado ✅ Cualquier cosa seguí escribiendo."
-  ];
-  var ci=0;
 
   form.addEventListener("submit", function(ev){
-    ev.preventDefault();
-    var text = inp.value.trim(); if(!text) return;
-    inp.value=""; bubble(text,"out");
-
+    ev.preventDefault(); var text=inp.value.trim(); if(!text) return; inp.value=""; bubble(text,"out");
     if(S.step==="name"){
-      S.name = text.slice(0,80);
-      post({ action:"create", name:S.name, message:text }).then(function(res){
-        if(res.ok){ S.leadId=res.leadId; S.contactId=res.contactId; }
-        S.step="phone"; save();
+      S.name=text.slice(0,80);
+      post("/api/lead",{action:"create",name:S.name,message:text,clid:clid}).then(function(res){
+        if(res.ok){ S.convId=res.convId; S.step="live"; save(); startPoll(); }
       });
-      tomi("¡Genial, "+S.name+"! 🎉 Ya te estoy generando tu usuario. Pasame tu número de WhatsApp 📲 así un asesor te contacta y te paso los datos para cargar.");
-    }
-    else if(S.step==="phone"){
-      post({ action:"phone", leadId:S.leadId, contactId:S.contactId, phone:text, name:S.name });
-      S.step="open"; save();
-      tomi("¡Listo! ✅ Un asesor te escribe en un toque. Mientras, contame: ¿cuánto querés cargar para arrancar? 🎰");
-    }
-    else {
-      post({ action:"msg", leadId:S.leadId, message:text });
-      tomi(canned[ci % canned.length]); ci++;
+      bubble("¡Genial, "+S.name+"! 🙌 En un momento un asesor te pasa tu usuario y contraseña por acá 👇","in");
+    } else {
+      post("/api/send",{convId:S.convId,text:text});
     }
   });
+
+  if(S.step==="live" && S.convId){ startPoll(); }
   inp.focus();
 })();
 </script>
