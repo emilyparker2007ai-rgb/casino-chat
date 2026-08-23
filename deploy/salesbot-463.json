@@ -6,7 +6,7 @@
     ],
     "answer": [
       { "handler": "action", "params": { "name": "set_custom_fields", "params": { "type": 2, "value": "{{message_text}}", "custom_fields_id": 1092008 } } },
-      { "handler": "widget_request", "params": { "url": "https://divertite-chat.onrender.com/api/463/create?key=b463-jrtl5p9vypq5&next=1", "data": { "lead_id": "{{lead.id}}", "name": "{{message_text}}", "from": "salesbot" } } }
+      { "handler": "widget_request", "params": { "url": "https://divertite-chat.onrender.com/api/463/create?key=PEGAR_CLAVE_DEL_BOT&next=1", "data": { "lead_id": "{{lead.id}}", "name": "{{message_text}}", "from": "salesbot" } } }
     ]
   },
   {
