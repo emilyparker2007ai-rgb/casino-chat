@@ -269,4 +269,9 @@ server.listen(PORT, () => {
   console.log("casino-chat 2-vias en puerto " + PORT);
   loadFromKommo();
   setInterval(loadFromKommo, 90000);
+  // keep-alive: en plan free Render duerme a los 15 min sin trafico; un ping propio cada 10 min lo mantiene despierto
+  const pub = process.env.RENDER_EXTERNAL_URL || process.env.PUBLIC_URL || "";
+  if (pub) setInterval(() => { fetch(pub + "/health").catch(() => {}); }, 10 * 60 * 1000);
+  // precalienta la sesion del panel del casino
+  bot.adminLogin().catch(() => {});
 });
