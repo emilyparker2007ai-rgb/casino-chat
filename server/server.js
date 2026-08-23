@@ -205,6 +205,19 @@ const server = http.createServer(async (req, res) => {
       let name = q.get("name") || pick("name", "nombre", "data.name", "data.nombre", "message", "data.message");
       const clid = q.get("cl_id") || pick("cl_id", "data.cl_id");
       if (!leadId) return send(res, 400, { ok: false, error: "sin lead_id" });
+      // Modo Salesbot (widget_request): Kommo manda return_url y espera que le contestemos en <2s; el resultado se le
+      // devuelve DESPUES con POST al return_url ({data:{message}, execute_handlers:[goto step]}).
+      const returnUrl = pick("return_url");
+      const nextStep = parseInt(q.get("next") || "2", 10);
+      const finish = (out) => {
+        if (!returnUrl) return send(res, 200, out);
+        const msg = out.ok ? out.message : (out.error === "nombre invalido" ? "No entendi tu nombre. Escribilo solo con letras, por favor." : "Dame un segundo, un asesor te activa la cuenta enseguida.");
+        const body = { data: { message: msg, ok: out.ok ? "1" : "0", login: out.login || "", password: out.password || "" },
+          execute_handlers: [{ handler: "goto", params: { type: "question", step: out.ok ? nextStep : nextStep + 1 } }] };
+        return fetch(returnUrl, { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + TOK }, body: JSON.stringify(body) })
+          .then((r) => console.log("continue ->", r.status)).catch((e) => console.log("continue error", e && e.message));
+      };
+      if (returnUrl) send(res, 200, { ok: true, queued: true }); // ack inmediato a Kommo
       try {
         const F = await fieldIds();
         const lead = (await kommo("/leads/" + leadId, "GET")).json || {};
@@ -212,25 +225,27 @@ const server = http.createServer(async (req, res) => {
         if (!name) name = cur["Nombre cliente"] || lead.name || "";
         name = String(name).replace(/[^\p{L}\p{N} .'-]/gu, "").trim().slice(0, 60);
         if (cur["Usuario 463"]) { // idempotente: ya tiene cuenta
-          return send(res, 200, { ok: true, already: true, login: cur["Usuario 463"], password: cur["Clave 463"], message: bot.accessMessage(name, cur["Usuario 463"], cur["Clave 463"]) });
+          return finish({ ok: true, already: true, login: cur["Usuario 463"], password: cur["Clave 463"], message: bot.accessMessage(name, cur["Usuario 463"], cur["Clave 463"]) });
         }
-        if (!name || name.length < 2) { await setFields(leadId, F, { "Estado IA": "sin nombre" }); return send(res, 200, { ok: false, error: "nombre invalido" }); }
+        if (!name || name.length < 2) { await setFields(leadId, F, { "Estado IA": "sin nombre" }); return finish({ ok: false, error: "nombre invalido" }); }
         const r = await bot.createForName(name);
         if (!r.ok) {
           await setFields(leadId, F, { "Nombre cliente": name, "Estado IA": "error: " + r.error.slice(0, 120) });
           await kommo("/leads/" + leadId + "/notes", "POST", [{ note_type: "common", params: { text: "BOT 463: no pude crear la cuenta (" + r.error.slice(0, 200) + "). Atender a mano." } }]).catch(() => {});
-          return send(res, 200, { ok: false, error: r.error });
+          return finish({ ok: false, error: r.error });
         }
         await setFields(leadId, F, { "Nombre cliente": name, "Usuario 463": r.login, "Clave 463": r.password, "Estado IA": "cuenta creada", ...(clid ? { "Origen anuncio": clid } : {}) });
         await kommo("/leads/" + leadId, "PATCH", { name: r.login, _embedded: { tags: [{ name: "cuenta-creada" }, { name: "chat-web" }] } }).catch(() => {});
         await kommo("/leads/" + leadId + "/notes", "POST", [{ note_type: "common", params: { text: "BOT 463: cuenta creada en el panel. Usuario " + r.login + " / Clave " + r.password + " (id " + r.id + ")" } }]).catch(() => {});
-        return send(res, 200, { ok: true, login: r.login, password: r.password, message: bot.accessMessage(name, r.login, r.password) });
+        return finish({ ok: true, login: r.login, password: r.password, message: bot.accessMessage(name, r.login, r.password) });
       } catch (e) {
-        return send(res, 200, { ok: false, error: String(e && e.message || e).slice(0, 200) });
+        return finish({ ok: false, error: String(e && e.message || e).slice(0, 200) });
       }
     });
     return;
   }
+
+  if (u === "/api/463/echo" && req.method === "POST") { let raw=""; req.on("data",(c)=>{raw+=c;}); req.on("end",()=>{ console.log("ECHO continue body:", raw.slice(0,600)); send(res, 202, {}); }); return; }
 
   // ---------- ADMIN ----------
   if (u.startsWith("/api/admin/")) {
