@@ -243,6 +243,22 @@
   </script>
   <script>(function(a,m,o,c,r,m){a[m]={id:"1079587",hash:"f4787e77ef5a8f993efa4b6e0a1768713acd0304ee2069e270e61bad0c299138",locale:"es",setMeta:function(p){this.params=(this.params||[]).concat([p])}};a[o]=a[o]||function(){(a[o].q=a[o].q||[]).push(arguments)};var d=a.document,s=d.createElement('script');s.async=true;s.id=m+'_script';s.src='https://gso.kommo.com/js/button.js';d.head&&d.head.appendChild(s)}(window,0,'crmPlugin',0,0,'crm_plugin'));</script>
   <script>
+    // ATRIBUCION (ROAS): manda al lead de Kommo los UTM/fbclid del anuncio + cl_id, como campos y como nota.
+    (function(){
+      try {
+        var qs = new URLSearchParams(location.search);
+        var keys = { utm_source:1022490, utm_medium:1022486, utm_campaign:1022488, utm_content:1022484, utm_term:1022492, fbclid:1022502, gclid:1022500, referrer:1022496 };
+        var saved = {}; try { saved = JSON.parse(localStorage.getItem('k463_attr') || '{}'); } catch (e) {}
+        var attr = {}, any = false;
+        Object.keys(keys).forEach(function(k){ var v = qs.get(k) || saved[k] || ''; if (k === 'referrer' && !v) v = document.referrer || ''; if (v) { attr[k] = String(v).slice(0, 250); any = true; } });
+        var clid = ''; try { clid = localStorage.getItem('cl_id') || localStorage.getItem('k463_uid') || ''; } catch (e) {}
+        if (any) { try { localStorage.setItem('k463_attr', JSON.stringify(attr)); } catch (e) {} }
+        var cfs = Object.keys(attr).map(function(k){ return { id: keys[k], values: [{ value: attr[k] }] }; });
+        if (clid) cfs.push({ id: 1092016, values: [{ value: clid }] });
+        var noteText = 'Origen anuncio: ' + (Object.keys(attr).map(function(k){ return k + '=' + attr[k]; }).join(' | ') || '(directo)') + ' | cl_id=' + clid + ' | url=' + location.href.slice(0, 200);
+        crmPlugin('setMeta', { lead: { custom_fields: cfs }, note: { text: noteText, element_type: 2, note_type: 'common' }, bot_params: { cl_id: clid, utm_campaign: attr.utm_campaign || '', utm_content: attr.utm_content || '', fbclid: attr.fbclid || '' } });
+      } catch (e) {}
+    })();
     // API oficial del boton de chat de Kommo: abre la ventana de chat (abajo a la derecha)
     var kommoReady = false, wantOpen = false;
     try { crmPlugin('onChatReady', function(){ kommoReady = true; if (wantOpen) crmPlugin('runChatShow'); }); } catch(e) {}
