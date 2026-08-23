@@ -112,6 +112,26 @@ async function loadFromKommo() {
   } catch (e) {}
 }
 
+// ---- campos personalizados del lead (por nombre, cacheados) ----
+const bot = require("./bot463");
+let FIELD_CACHE = null;
+async function fieldIds() {
+  if (FIELD_CACHE) return FIELD_CACHE;
+  const r = await kommo("/leads/custom_fields?limit=250", "GET");
+  const list = (r.json && r.json._embedded && r.json._embedded.custom_fields) || [];
+  FIELD_CACHE = {}; list.forEach((f) => { FIELD_CACHE[f.name] = f.id; });
+  return FIELD_CACHE;
+}
+function fieldMap(lead) {
+  const out = {}; (lead.custom_fields_values || []).forEach((f) => { const v = f.values && f.values[0] && f.values[0].value; if (v != null) out[f.field_name] = String(v); });
+  return out;
+}
+async function setFields(leadId, F, values) {
+  const cfv = Object.keys(values).filter((k) => F[k]).map((k) => ({ field_id: F[k], values: [{ value: String(values[k]).slice(0, 250) }] }));
+  if (!cfv.length) return;
+  return kommo("/leads/" + leadId, "PATCH", { custom_fields_values: cfv });
+}
+
 function send(res, code, obj, ctype) {
   if (ctype) { res.writeHead(code, { "Content-Type": ctype }); res.end(obj); return; }
   res.writeHead(code, {
@@ -171,6 +191,45 @@ const server = http.createServer(async (req, res) => {
     const c = conv(q.get("convId"));
     if (!c) return send(res, 200, { ok: false, msgs: [] });
     return send(res, 200, { ok: true, msgs: msgsAfter(c, parseInt(q.get("after") || "0", 10)) });
+  }
+
+  // ---------- BOT 463: crear jugador desde el Salesbot de Kommo ----------
+  // POST /api/463/create?key=BOT_SECRET  body: {lead_id, name}  (acepta JSON o form; {{lead.id}} en la URL tambien)
+  if (u === "/api/463/create" && req.method === "POST") {
+    if ((q.get("key") || "") !== (process.env.BOT_SECRET || "")) return send(res, 401, { ok: false });
+    let raw = ""; req.on("data", (c) => { raw += c; if (raw.length > 20000) req.destroy(); });
+    req.on("end", async () => {
+      let b = {}; try { b = JSON.parse(raw || "{}"); } catch (e) { b = Object.fromEntries(new URLSearchParams(raw)); }
+      const pick = (...ks) => { for (const k of ks) { const v = k.split(".").reduce((o, p) => (o && o[p] != null ? o[p] : undefined), b); if (v != null && String(v).trim()) return String(v).trim(); } return ""; };
+      const leadId = q.get("lead_id") || pick("lead_id", "leadId", "data.lead_id", "lead.id", "leads[add][0][id]", "leads[status][0][id]");
+      let name = q.get("name") || pick("name", "nombre", "data.name", "data.nombre", "message", "data.message");
+      const clid = q.get("cl_id") || pick("cl_id", "data.cl_id");
+      if (!leadId) return send(res, 400, { ok: false, error: "sin lead_id" });
+      try {
+        const F = await fieldIds();
+        const lead = (await kommo("/leads/" + leadId, "GET")).json || {};
+        const cur = fieldMap(lead);
+        if (!name) name = cur["Nombre cliente"] || lead.name || "";
+        name = String(name).replace(/[^\p{L}\p{N} .'-]/gu, "").trim().slice(0, 60);
+        if (cur["Usuario 463"]) { // idempotente: ya tiene cuenta
+          return send(res, 200, { ok: true, already: true, login: cur["Usuario 463"], password: cur["Clave 463"], message: bot.accessMessage(name, cur["Usuario 463"], cur["Clave 463"]) });
+        }
+        if (!name || name.length < 2) { await setFields(leadId, F, { "Estado IA": "sin nombre" }); return send(res, 200, { ok: false, error: "nombre invalido" }); }
+        const r = await bot.createForName(name);
+        if (!r.ok) {
+          await setFields(leadId, F, { "Nombre cliente": name, "Estado IA": "error: " + r.error.slice(0, 120) });
+          await kommo("/leads/" + leadId + "/notes", "POST", [{ note_type: "common", params: { text: "BOT 463: no pude crear la cuenta (" + r.error.slice(0, 200) + "). Atender a mano." } }]).catch(() => {});
+          return send(res, 200, { ok: false, error: r.error });
+        }
+        await setFields(leadId, F, { "Nombre cliente": name, "Usuario 463": r.login, "Clave 463": r.password, "Estado IA": "cuenta creada", ...(clid ? { "Origen anuncio": clid } : {}) });
+        await kommo("/leads/" + leadId, "PATCH", { name: r.login, _embedded: { tags: [{ name: "cuenta-creada" }, { name: "chat-web" }] } }).catch(() => {});
+        await kommo("/leads/" + leadId + "/notes", "POST", [{ note_type: "common", params: { text: "BOT 463: cuenta creada en el panel. Usuario " + r.login + " / Clave " + r.password + " (id " + r.id + ")" } }]).catch(() => {});
+        return send(res, 200, { ok: true, login: r.login, password: r.password, message: bot.accessMessage(name, r.login, r.password) });
+      } catch (e) {
+        return send(res, 200, { ok: false, error: String(e && e.message || e).slice(0, 200) });
+      }
+    });
+    return;
   }
 
   // ---------- ADMIN ----------
