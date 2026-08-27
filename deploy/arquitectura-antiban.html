@@ -1,0 +1,524 @@
+<title>Arquitectura Antiban</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+  :root{
+    --bg:#f2f4f7; --surface:#ffffff; --surface-2:#eceff3; --surface-3:#e3e7ed;
+    --line:#dde2e9; --line-2:#c6ced9;
+    --ink:#111721; --ink-mid:#4a5462; --ink-mut:#6b7686;
+    --ours:#0b8f63; --ours-bg:#e6f5ef; --ours-line:#a9ddc7;
+    --meta:#c2402f; --meta-bg:#fdecea; --meta-line:#f2bcb4;
+    --warn:#9a6b12; --warn-bg:#fbf2df; --warn-line:#e7d3a4;
+    --accent:#0b8f63;
+    --radius:14px; --maxw:980px;
+    color-scheme: light dark;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#080b10; --surface:#111722; --surface-2:#161d29; --surface-3:#1c2432;
+      --line:#222b3a; --line-2:#334052;
+      --ink:#e9eef6; --ink-mid:#b4c0d0; --ink-mut:#8593a6;
+      --ours:#34d399; --ours-bg:#0c2a20; --ours-line:#1d5b45;
+      --meta:#ff7a68; --meta-bg:#2c1512; --meta-line:#6b2c24;
+      --warn:#f0b849; --warn-bg:#2a2113; --warn-line:#54431d;
+      --accent:#34d399;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#080b10; --surface:#111722; --surface-2:#161d29; --surface-3:#1c2432;
+    --line:#222b3a; --line-2:#334052;
+    --ink:#e9eef6; --ink-mid:#b4c0d0; --ink-mut:#8593a6;
+    --ours:#34d399; --ours-bg:#0c2a20; --ours-line:#1d5b45;
+    --meta:#ff7a68; --meta-bg:#2c1512; --meta-line:#6b2c24;
+    --warn:#f0b849; --warn-bg:#2a2113; --warn-line:#54431d;
+    --accent:#34d399;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Instrument Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-size:16.5px; line-height:1.62; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{ max-width:var(--maxw); margin:0 auto; padding:clamp(24px,5vw,64px) clamp(18px,4vw,32px) 100px; }
+
+  h1{ font-family:"Archivo",sans-serif; font-weight:800; font-size:clamp(38px,7vw,68px); line-height:.98;
+      letter-spacing:-.025em; margin:0; text-wrap:balance; }
+  h2{ font-family:"Archivo",sans-serif; font-weight:700; font-size:clamp(23px,3.4vw,31px); line-height:1.08;
+      letter-spacing:-.018em; margin:0 0 6px; text-wrap:balance; }
+  h3{ font-family:"Archivo",sans-serif; font-weight:600; font-size:17px; line-height:1.25; letter-spacing:-.01em; margin:0; }
+  p{ margin:0 0 14px; max-width:68ch; }
+  .eyebrow{ font-family:"IBM Plex Mono",monospace; font-size:12px; font-weight:600; letter-spacing:.2em;
+    text-transform:uppercase; color:var(--accent); margin:0 0 16px; display:flex; align-items:center; gap:11px; }
+  .eyebrow::before{ content:""; width:24px; height:2px; background:var(--accent); }
+  code{ font-family:"IBM Plex Mono",monospace; font-size:.87em; background:var(--surface-2);
+    border:1px solid var(--line); border-radius:5px; padding:1px 6px; color:var(--ink); word-break:break-word; }
+  .lede{ font-size:clamp(17px,2.2vw,20px); color:var(--ink-mid); margin-top:22px; max-width:60ch; }
+  .lede b{ color:var(--ink); font-weight:600; }
+
+  section{ margin-top:clamp(48px,7vw,84px); }
+  .sec-head{ margin-bottom:22px; }
+  .sec-head .n{ font-family:"IBM Plex Mono",monospace; font-size:12px; letter-spacing:.16em; color:var(--ink-mut); display:block; margin-bottom:8px; }
+  .sec-head p{ color:var(--ink-mid); margin:8px 0 0; }
+
+  /* veredicto */
+  .verdict{ background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--accent);
+    border-radius:12px; padding:24px 28px; }
+  .verdict .big{ font-family:"Archivo",sans-serif; font-weight:700; font-size:clamp(19px,2.8vw,25px);
+    line-height:1.2; letter-spacing:-.015em; margin:0 0 12px; text-wrap:balance; }
+  .verdict p{ margin:0 0 10px; color:var(--ink-mid); }
+  .verdict p:last-child{ margin-bottom:0; }
+
+  /* dos numeros */
+  .two{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .num{ border-radius:12px; padding:20px 22px; border:1px solid var(--line); background:var(--surface); }
+  .num.a{ border-left:3px solid var(--meta); }
+  .num.b{ border-left:3px solid var(--ours); }
+  .num .k{ font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.13em; text-transform:uppercase; margin-bottom:9px; }
+  .num.a .k{ color:var(--meta); } .num.b .k{ color:var(--ours); }
+  .num h3{ margin-bottom:7px; }
+  .num p{ font-size:14.5px; color:var(--ink-mut); margin:0; }
+  .num .v{ font-family:"Archivo",sans-serif; font-weight:700; font-size:26px; color:var(--ink);
+    font-variant-numeric:tabular-nums; margin-top:12px; letter-spacing:-.02em; }
+
+  /* split ownership */
+  .split{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .col-head{ display:flex; align-items:baseline; gap:10px; margin-bottom:12px; padding-bottom:10px; border-bottom:2px solid var(--line); }
+  .col-head .tag{ font-family:"IBM Plex Mono",monospace; font-size:11px; font-weight:600; letter-spacing:.1em;
+    text-transform:uppercase; padding:3px 9px; border-radius:999px; }
+  .col.ours .col-head .tag{ color:var(--ours); background:var(--ours-bg); border:1px solid var(--ours-line); }
+  .col.meta .col-head .tag{ color:var(--meta); background:var(--meta-bg); border:1px solid var(--meta-line); }
+  .col-head .lbl{ font-family:"Archivo",sans-serif; font-weight:700; font-size:15px; color:var(--ink); }
+  .layer{ background:var(--surface); border:1px solid var(--line); border-radius:11px; padding:13px 15px; margin-bottom:9px; }
+  .col.ours .layer{ border-left:3px solid var(--ours); }
+  .col.meta .layer{ border-left:3px solid var(--meta); }
+  .layer h3{ font-size:15px; margin-bottom:4px; }
+  .layer p{ margin:0; font-size:13.5px; color:var(--ink-mut); line-height:1.5; }
+
+  /* flujo */
+  ol.flow{ list-style:none; margin:0; padding:0; counter-reset:s; }
+  ol.flow > li{ counter-increment:s; position:relative; padding:0 0 18px 54px; }
+  ol.flow > li::before{ content:counter(s); position:absolute; left:0; top:0; width:34px; height:34px;
+    border-radius:9px; display:grid; place-items:center; font-family:"IBM Plex Mono",monospace; font-size:13px;
+    font-weight:600; color:var(--accent); background:var(--surface); border:1px solid var(--line-2); }
+  ol.flow > li:not(:last-child)::after{ content:""; position:absolute; left:16.5px; top:38px; bottom:2px; width:1px; background:var(--line); }
+  ol.flow h3{ margin-bottom:5px; }
+  ol.flow .txt{ font-size:14.5px; color:var(--ink-mid); margin-bottom:7px; }
+  ol.flow .meta-row{ display:flex; flex-wrap:wrap; gap:8px; }
+  .pill{ font-family:"IBM Plex Mono",monospace; font-size:11.5px; padding:4px 10px; border-radius:7px; line-height:1.4; }
+  .pill.save{ color:var(--ours); background:var(--ours-bg); border:1px solid var(--ours-line); }
+  .pill.risk{ color:var(--warn); background:var(--warn-bg); border:1px solid var(--warn-line); }
+
+  pre{ margin:14px 0 0; background:var(--surface-3); border:1px solid var(--line); border-radius:10px;
+    padding:16px 18px; overflow-x:auto; font-family:"IBM Plex Mono",monospace; font-size:12.5px;
+    line-height:1.65; color:var(--ink); }
+  pre .c{ color:var(--ink-mut); }
+
+  /* escalera */
+  .ladder{ display:flex; flex-direction:column-reverse; gap:10px; }
+  .rung{ background:var(--surface); border:1px solid var(--line); border-radius:11px; padding:15px 18px;
+    display:grid; grid-template-columns:44px 1fr auto; gap:14px; align-items:start; }
+  .rung .lv{ font-family:"IBM Plex Mono",monospace; font-size:12px; font-weight:600; color:var(--accent);
+    background:var(--surface-2); border:1px solid var(--line-2); border-radius:8px; padding:6px 0; text-align:center; }
+  .rung h3{ font-size:15.5px; margin-bottom:3px; }
+  .rung p{ margin:0; font-size:13.5px; color:var(--ink-mut); }
+  .rung .gate{ font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--ink-mid); text-align:right;
+    white-space:nowrap; font-variant-numeric:tabular-nums; }
+  .rung.here{ border-color:var(--ours-line); background:var(--ours-bg); }
+  .rung.here .lv{ color:var(--ours); border-color:var(--ours-line); }
+  .rung.here p{ color:var(--ink-mid); }
+
+  /* generico */
+  .card{ background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:11px; }
+  .card h3{ margin-bottom:6px; }
+  .card p{ margin:0; font-size:14.5px; color:var(--ink-mid); }
+  .card.warn{ background:var(--warn-bg); border-left:3px solid var(--warn); }
+  .card.bad{ background:var(--meta-bg); border-left:3px solid var(--meta); }
+  .card.bad h3{ color:var(--meta); }
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:11px; }
+  ul.check{ list-style:none; margin:0; padding:0; }
+  ul.check li{ position:relative; padding:0 0 11px 28px; font-size:14.5px; color:var(--ink-mid); }
+  ul.check li::before{ content:"\2713"; position:absolute; left:0; top:0; color:var(--ours); font-weight:700; }
+  ul.check li b{ color:var(--ink); font-weight:600; }
+
+  .tbl-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:12px; background:var(--surface); }
+  table{ border-collapse:collapse; width:100%; min-width:600px; }
+  th,td{ text-align:left; padding:12px 15px; border-bottom:1px solid var(--line); vertical-align:top; font-size:14px; }
+  th{ font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--ink-mut); font-weight:600; background:var(--surface-2); }
+  tr:last-child td{ border-bottom:0; }
+  td.what{ font-weight:600; color:var(--ink); }
+  td.cost{ font-family:"IBM Plex Mono",monospace; color:var(--meta); white-space:nowrap; font-variant-numeric:tabular-nums; }
+
+  footer{ margin-top:64px; padding-top:24px; border-top:1px solid var(--line); color:var(--ink-mut); font-size:13.5px; }
+  footer b{ color:var(--ink-mid); }
+
+  @media (max-width:760px){
+    .split,.two,.grid2{ grid-template-columns:1fr; }
+    .rung{ grid-template-columns:38px 1fr; }
+    .rung .gate{ grid-column:2; text-align:left; white-space:normal; }
+  }
+</style>
+
+<div class="wrap">
+
+  <p class="eyebrow">Meta Ads &middot; Casinos &middot; Agencia</p>
+  <h1>Arquitectura Antiban</h1>
+  <p class="lede">Dejar de pedir credenciales cada vez que se cae el Business Manager, y pasar de optimizar por <b>cantidad de mensajes</b> a optimizar por <b>plata depositada</b>.</p>
+
+  <section style="margin-top:34px">
+    <div class="verdict">
+      <p class="big">Funciona &mdash; pero no es &ldquo;el ROAS en Meta&rdquo;. Es un sistema de dos n&uacute;meros.</p>
+      <p><b>Lo que s&iacute; se logra:</b> ver dep&oacute;sitos desglosados por anuncio en el Administrador de anuncios, 100% por CAPI y sin p&iacute;xel en el casino; que el algoritmo aprenda con se&ntilde;al de plata real; y un ROAS real por creativo, sin ventana y con recargas, en tu propia base.</p>
+      <p><b>Lo que no se logra nunca:</b> que el n&uacute;mero de Meta sea el n&uacute;mero del negocio. La ventana m&aacute;xima de clic es de 7 d&iacute;as: el primer dep&oacute;sito entra casi siempre (cae a las 24-48 h), pero las <b>recargas del d&iacute;a 20, 40 y 90 no las agarra ninguna ventana</b>. Con LTV de casino 3-10x el primer dep&oacute;sito, Meta va a mostrar 0,4-0,9x mientras el negocio est&aacute; en 2-4x. No es un bug: es la definici&oacute;n de la m&eacute;trica.</p>
+      <p style="color:var(--ink)"><b>El riesgo que se desprende de eso:</b> si el cliente escala mirando el n&uacute;mero de Meta, mata sistem&aacute;ticamente los creativos que traen jugadores lentos y recurrentes &mdash; que son los buenos.</p>
+    </div>
+  </section>
+
+  <!-- ============ DOS NUMEROS ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="n">01 / EL ENCUADRE</span>
+      <h2>Dos n&uacute;meros con nombre propio, y ninguno se llama solo &ldquo;ROAS&rdquo;</h2>
+      <p>Esta es la conversaci&oacute;n que hay que tener con el cliente <b>antes</b> de prender la primera campa&ntilde;a, no despu&eacute;s.</p>
+    </div>
+    <div class="two">
+      <div class="num a">
+        <div class="k">Lo que muestra Meta</div>
+        <h3>ROAS de adquisici&oacute;n (7 d&iacute;as)</h3>
+        <p>Solo el primer dep&oacute;sito, solo dentro de los 7 d&iacute;as del click. Sirve para <b>una sola cosa</b>: alimentar al algoritmo y rankear creativos entre s&iacute;.</p>
+        <div class="v">0,4 &ndash; 0,9x</div>
+      </div>
+      <div class="num b">
+        <div class="k">Lo que muestra tu tablero</div>
+        <h3>ROAS real del negocio</h3>
+        <p>Todos los dep&oacute;sitos, sin ventana, por creativo, en cohortes D+7 / D+30 / D+90. Es el n&uacute;mero con el que se decide presupuesto.</p>
+        <div class="v">2 &ndash; 4x</div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <h3>El factor de subreporte</h3>
+      <p>Divid&iacute; tu ROAS real a D+30 por el ROAS que muestra Meta a 7 d&iacute;as. Ese cociente es una constante bastante estable por cliente, y es la traducci&oacute;n entre los dos mundos: cuando Meta dice 0,6x y tu factor es 4, sab&eacute;s que est&aacute;s en 2,4x real. <b>Sin ese factor, todas las decisiones de escala se toman a ciegas.</b></p>
+    </div>
+  </section>
+
+  <!-- ============ ESTRUCTURA ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="n">02 / ESTRUCTURA</span>
+      <h2>Un BM t&eacute;cnico tuyo + un BM por cliente</h2>
+      <p>No es un t&eacute;rmino medio: es la <b>&uacute;nica</b> estructura que la pol&iacute;tica de Meta permite. Y la decide el juego, no los datos.</p>
+    </div>
+
+    <div class="card bad">
+      <h3>La regla que cierra la discusi&oacute;n</h3>
+      <p>La autorizaci&oacute;n para anunciar juego se otorga a <b>IDs de cuenta publicitaria espec&iacute;ficos</b> y solo se extiende a otras cuentas <b>del mismo portafolio</b>. No hay forma de prestarla cruzando portafolios. Conclusi&oacute;n: los anuncios de casino corren <b>siempre</b> en el BM del cliente, el que tiene la licencia del operador. Tu BM t&eacute;cnico jam&aacute;s corre un anuncio, jam&aacute;s tiene medio de pago y jam&aacute;s aloja una p&aacute;gina de casino.</p>
+    </div>
+
+    <div class="split" style="margin-top:16px">
+      <div class="col ours">
+        <div class="col-head"><span class="tag">Tuyo</span><span class="lbl">BM t&eacute;cnico (uno solo)</span></div>
+        <div class="layer"><h3>Los datasets</h3><p>Uno por cliente, nombrado <code>cliente-geo-casino</code>. Nunca uno por oferta ni uno compartido entre casinos.</p></div>
+        <div class="layer"><h3>El system user y los tokens</h3><p>Uno con <code>ads_management</code> para escribir en CAPI, otro con <code>ads_read</code> para leer el gasto.</p></div>
+        <div class="layer"><h3>La landing y toda la base</h3><p>Tabla de clicks, leads, puente usuario&harr;click, dep&oacute;sitos. El activo real del negocio.</p></div>
+      </div>
+      <div class="col meta">
+        <div class="col-head"><span class="tag">Del cliente</span><span class="lbl">BM del cliente (uno por cliente)</span></div>
+        <div class="layer"><h3>La cuenta publicitaria</h3><p>Corre los anuncios y gasta la plata. Es el consumible.</p></div>
+        <div class="layer"><h3>La autorizaci&oacute;n de juego</h3><p>Contra la licencia del operador, por cuenta + URL + territorio. No es portable.</p></div>
+        <div class="layer"><h3>La p&aacute;gina y el medio de pago</h3><p>Suyos. Nunca mezclados con los tuyos ni con los de otro cliente.</p></div>
+        <div class="layer"><h3>El dominio ra&iacute;z</h3><p>Lo verifica <b>&eacute;l</b> en su BM y te comparte acceso. Si lo verific&aacute;s vos, le bloque&aacute;s la suya, qued&aacute;s como reh&eacute;n en una salida conflictiva y es mala &oacute;ptica en una revisi&oacute;n de licencia.</p></div>
+      </div>
+    </div>
+
+    <div class="grid2" style="margin-top:16px">
+      <div class="card">
+        <h3>Por qu&eacute; el dataset va en tu BM</h3>
+        <p>Un activo pertenece a un solo portafolio: no hay copropiedad, solo pr&eacute;stamo. Si el dataset vive en el BM del cliente, el d&iacute;a que cae <b>se pierde todo el hist&oacute;rico de eventos y la se&ntilde;al de optimizaci&oacute;n acumulada</b>. Del lado tuyo, sobrevive intacto. Adem&aacute;s es la palanca comercial: el cliente no se lleva el aprendizaje si se va.</p>
+      </div>
+      <div class="card">
+        <h3>Por qu&eacute; un solo BM t&eacute;cnico y no uno por cliente</h3>
+        <p>Una persona solo puede <b>crear 2 portafolios</b>. Uno por cliente te obliga a un perfil personal nuevo cada dos clientes, y los perfiles nuevos son en s&iacute; mismos se&ntilde;al de riesgo. Adem&aacute;s, el vector de contagio que Meta reconoce por escrito no es el dataset compartido: <b>es el usuario</b>.</p>
+      </div>
+    </div>
+
+    <div class="card warn" style="margin-top:11px">
+      <h3>Qu&eacute; cubre el espejo y qu&eacute; no</h3>
+      <p><b>Cubre</b> una falla propia del BM t&eacute;cnico (cuenta comprometida, error humano, restricci&oacute;n por facturaci&oacute;n). <b>No cubre</b> una sanci&oacute;n de pol&iacute;tica sobre la agencia: mientras el espejo comparta perfil creador, admins, servidor y v&iacute;nculos de socio con el principal, para Meta es el mismo cl&uacute;ster y cae con &eacute;l. Para cobertura real hace falta otra entidad, otro perfil creador y otro servidor.<br><br>Y la buena noticia: <b>que un cliente baneado te arrastre es folklore</b> &mdash; no hay casos verificables, y la jerga que circula la inventaron vendedores de navegadores antidetect. El criterio real es propiedad com&uacute;n y evasi&oacute;n, no &ldquo;compartió un activo&rdquo;. Por eso: <b>cero admins humanos en com&uacute;n</b> entre tu BM t&eacute;cnico y el de cualquier cliente.</p>
+    </div>
+  </section>
+
+  <!-- ============ FLUJO ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="n">03 / EL FLUJO COMPLETO</span>
+      <h2>Del click al ROAS por anuncio</h2>
+      <p>El hilo que une todo es el <code>fbclid</code>. Cada paso dice qu&eacute; se guarda y d&oacute;nde se rompe.</p>
+    </div>
+
+    <ol class="flow">
+      <li>
+        <h3>Click en el anuncio</h3>
+        <div class="txt">Meta agrega <code>?fbclid=...</code> a la URL. Adem&aacute;s cargamos par&aacute;metros din&aacute;micos <b>a nivel anuncio</b>: <code>utm_content={{ad.name}}&amp;fb_ad_id={{ad.id}}</code>.</div>
+        <div class="meta-row"><span class="pill risk">Sin fb_ad_id no hay red de seguridad si el fbclid se pierde</span></div>
+      </li>
+      <li>
+        <h3>La landing captura, del lado del servidor</h3>
+        <div class="txt">Antes de cualquier JavaScript: se lee el <code>fbclid</code>, se genera un <code>click_uuid</code> propio y se escribe la fila de clicks.</div>
+        <div class="meta-row">
+          <span class="pill save">click_uuid &middot; fbclid crudo &middot; IP &middot; user agent &middot; UTMs</span>
+          <span class="pill risk">Nunca normalizar el fbclid: es sensible a may&uacute;sculas</span>
+        </div>
+      </li>
+      <li>
+        <h3>Se arma el <code>fbc</code> y se persiste</h3>
+        <div class="txt">Formato <code>fb.1.&lt;milisegundos&gt;.&lt;fbclid&gt;</code>, guardado como columna &mdash; no como cookie. La cookie se escribe igual, pero desde el servidor y a 400 d&iacute;as.</div>
+        <div class="meta-row"><span class="pill risk">El bug n&uacute;mero uno: poner segundos donde van milisegundos. Meta no tira error, y la atribuci&oacute;n muere en silencio</span></div>
+      </li>
+      <li>
+        <h3>Abre el chat y nace el lead en Kommo</h3>
+        <div class="txt">El widget vive en un iframe de otro dominio y <b>no puede leer tu cookie</b>: la p&aacute;gina padre le inyecta el <code>click_uuid</code> al lead.</div>
+        <div class="meta-row">
+          <span class="pill save">lead_id &middot; click_uuid &middot; tel&eacute;fono normalizado a 549...</span>
+          <span class="pill risk">Si el click_uuid no se inyecta, el lead nace hu&eacute;rfano y todo lo de abajo es decorativo</span>
+        </div>
+      </li>
+      <li>
+        <h3>El cajero crea el usuario y lo pega al lead</h3>
+        <div class="txt">Se materializa la tabla puente <code>usuario_casino &rarr; click_uuid &rarr; fbc</code>. Se manda <code>CompleteRegistration</code> por CAPI: el primer hecho verificable de la cadena.</div>
+        <div class="meta-row"><span class="pill risk">El techo de todo el sistema: depende de que un humano tipee bien un campo de texto</span></div>
+      </li>
+      <li>
+        <h3>El poller lee el panel del casino</h3>
+        <div class="txt">Cada 5-15 minutos, solo lectura: usuario, monto, moneda y fecha. Se clasifica en vivo como primer dep&oacute;sito o recarga.</div>
+        <div class="meta-row"><span class="pill save">deposit_key determinista &middot; monto ARS + USD con el FX del d&iacute;a</span></div>
+      </li>
+      <li>
+        <h3>Guarda de 7 d&iacute;as y de idempotencia</h3>
+        <div class="txt">Se descarta lo que tenga m&aacute;s de 6 d&iacute;as y se arman lotes de 50-100 eventos.</div>
+        <div class="meta-row"><span class="pill risk">Si un solo evento del lote est&aacute; vencido, Meta rechaza el request entero y no procesa ninguno</span></div>
+      </li>
+      <li>
+        <h3>POST a CAPI: <code>Purchase</code> si es el primero, <code>Redeposit</code> si es recarga</h3>
+        <div class="txt">Con el <code>fbc</code> original, el monto real y el <code>event_id</code> determinista. Meta busca el registro del click y le pega el evento <b>al anuncio exacto</b>.</div>
+        <div class="meta-row"><span class="pill risk">La dedupe de Meta solo cubre 48 h: la idempotencia real tiene que vivir en tu base</span></div>
+      </li>
+      <li>
+        <h3>Aparecen las columnas de ROAS por anuncio</h3>
+        <div class="txt">En el Administrador de anuncios, a nivel Anuncio: Compras, Valor de conversi&oacute;n y ROAS. Se verifica en <b>Events Manager</b>, nunca por el 200 de la API.</div>
+        <div class="meta-row"><span class="pill risk">El 200 mentiroso: un evento mal formado devuelve 200 y se descarta r&iacute;o abajo, invisible</span></div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ============ PAYLOAD ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="n">04 / EL EVENTO</span>
+      <h2>Las cuatro decisiones de una l&iacute;nea que definen todo</h2>
+    </div>
+    <pre><span class="c">POST https://graph.facebook.com/v25.0/{DATASET_ID}/events</span>
+{
+  "event_name": "Purchase",          <span class="c">// est&aacute;ndar. Un evento custom NO puebla ninguna columna de ROAS</span>
+  "event_time": 1756050000,          <span class="c">// SEGUNDOS. M&aacute;ximo 7 d&iacute;as de antig&uuml;edad</span>
+  "event_id": "dep_9f2c1a7e4b",      <span class="c">// determinista, del dep&oacute;sito. Nunca uuid4() al enviar</span>
+  "action_source": "website",        <span class="c">// el origen fue un click web y tenemos el fbc</span>
+  "event_source_url": "https://tudominio.com.ar/lp-a?...",
+  "user_data": {
+    "fbc": "fb.1.1755100000000.PAZXh0bgNhZW0BMAB...",   <span class="c">// MILISEGUNDOS ac&aacute;</span>
+    "fbp": "fb.1.1755100000000.1098765432",
+    "ph": "&lt;sha256 del tel&eacute;fono 549...&gt;",
+    "external_id": "&lt;sha256 del click_uuid&gt;",
+    "client_ip_address": "181.28.44.117",              <span class="c">// la del CLICK, no la del server</span>
+    "client_user_agent": "Mozilla/5.0 (iPhone...)"      <span class="c">// replayada del click</span>
+  },
+  "custom_data": { "currency": "ARS", "value": 15000.00 }
+}</pre>
+    <div class="grid2" style="margin-top:14px">
+      <div class="card"><h3><code>Purchase</code>, no un nombre propio</h3><p>Las columnas de ROAS est&aacute;n cableadas a acciones de tipo <i>purchase</i>. Un evento llamado &ldquo;Dep&oacute;sito&rdquo; no puebla ninguna. Adem&aacute;s baja el umbral de optimizaci&oacute;n por valor de <b>100 a 30</b> conversiones.</p></div>
+      <div class="card"><h3><code>currency</code> siempre expl&iacute;cito</h3><p>Sin moneda, Meta asume USD: con montos en pesos el ROAS aparece inflado <b>~1000x</b> y se ve como un &eacute;xito espectacular durante d&iacute;as, hasta que alguien lo cruza contra caja.</p></div>
+      <div class="card"><h3><code>action_source: website</code></h3><p>Es lo que ya manda nuestro c&oacute;digo y est&aacute; bien. <code>system_generated</code> no tira error, devuelve 200, y te deja sin <i>Event Match Quality</i> y probablemente sin optimizaci&oacute;n: te enter&aacute;s a las 3-6 semanas de gasto.</p></div>
+      <div class="card"><h3>Las recargas van como <code>Redeposit</code></h3><p>Evento custom aparte, solo para medici&oacute;n de LTV y p&uacute;blicos. Si entraran como <code>Purchase</code>, ensuciar&iacute;an la se&ntilde;al de adquisici&oacute;n. Nunca con <code>opt_out</code>: eso apaga la entrega sin avisar.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ ESCALERA ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="n">05 / LA ESCALERA</span>
+      <h2>De mensajes a ROAS no es un interruptor</h2>
+      <p>Los cinco escalones viven <b>dentro del mismo objetivo</b>: Ventas &rsaquo; Sitio web. El objetivo no se puede editar despu&eacute;s: si arranc&aacute;s en Mensajes, para subir hay que crear una campa&ntilde;a nueva y perder todo el historial.</p>
+    </div>
+
+    <div class="ladder">
+      <div class="rung"><div class="lv">05</div><div><h3>Objetivo de ROAS</h3><p>Puja por multiplicador. Riesgo: con volumen bajo no gasta el presupuesto y el cliente concluye que &ldquo;Meta no funciona&rdquo;.</p></div><div class="gate">50-100+ / semana</div></div>
+      <div class="rung"><div class="lv">04</div><div><h3>Purchase, maximizando valor</h3><p>Ojo con la trampa: pod&eacute;s estar habilitado y seguir en aprendizaje limitado. Activarla as&iacute; es peor que no activarla.</p></div><div class="gate">30 en 14 d&iacute;as<br>+ 5 valores distintos</div></div>
+      <div class="rung"><div class="lv">03</div><div><h3>Purchase, maximizando cantidad</h3><p>Presupuesto m&iacute;nimo por conjunto = CPA &times; 50 &divide; 7. Con CPA de USD 40 son <b>~USD 285/d&iacute;a</b>. Si no se sostiene, no es una opci&oacute;n t&eacute;cnica: es aritm&eacute;tica.</p></div><div class="gate">50 / semana<br>por conjunto</div></div>
+      <div class="rung"><div class="lv">02</div><div><h3>Initiate Checkout</h3><p>El usuario entra al cajero o pide un dep&oacute;sito. M&aacute;s cerca de la plata, menos frecuente.</p></div><div class="gate">50 / semana</div></div>
+      <div class="rung here"><div class="lv">01</div><div><h3>Complete Registration &mdash; ac&aacute; se arranca</h3><p>Usuario creado en el casino. En paralelo se manda <code>Purchase</code> <b>solo para reporte</b>: el tablero ya muestra ROAS por creativo desde la semana 3. Un casino chico argentino probablemente viva ac&aacute; de forma permanente, <b>y no es un fracaso</b>: rankear creativos por ROAS real optimizando por un evento intermedio ya es infinitamente mejor que optimizar por mensajes.</p></div><div class="gate">desde el d&iacute;a 1</div></div>
+    </div>
+
+    <div class="grid2" style="margin-top:16px">
+      <div class="card warn">
+        <h3>El gate de 10 minutos, antes de prometer nada</h3>
+        <p><b>1.</b> Calcul&aacute; sobre el panel cu&aacute;ntos d&iacute;as pasan entre el click y el primer dep&oacute;sito. Si la mediana supera 7 d&iacute;as, optimizar por <code>Purchase</code> es estructuralmente imposible.<br><b>2.</b> Cont&aacute; cu&aacute;ntos <b>montos distintos</b> hubo en 14 d&iacute;as. Si el bono fija un m&iacute;nimo y casi todos depositan ese monto, la optimizaci&oacute;n por valor no habilita nunca, con cualquier volumen.</p>
+      </div>
+      <div class="card">
+        <h3>Estructura de cuenta que sostiene la escalera</h3>
+        <p><b>1 campa&ntilde;a, 1 conjunto, N anuncios.</b> Los 50 eventos se cuentan por conjunto: fragmentar en 4 conjuntos garantiza matem&aacute;ticamente que ninguno salga de aprendizaje. Es el error de estructura m&aacute;s caro y el m&aacute;s f&aacute;cil de evitar. Y cambiar el evento de optimizaci&oacute;n resetea el aprendizaje: puede empeorar 1-2 semanas antes de mejorar.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONECTAR ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="n">06 / CONECTAR UNA CUENTA</span>
+      <h2>El n&uacute;cleo es siempre el mismo; cambian los enchufes</h2>
+      <p>Un solo sistema con dos interfaces: un adaptador de <b>entrada</b> (de d&oacute;nde viene el click) y uno de <b>salida</b> (de d&oacute;nde salen los dep&oacute;sitos). El motor &mdash; tabla de clicks, dedupe, guarda de 7 d&iacute;as, env&iacute;o, reconciliaci&oacute;n &mdash; se escribe una vez y no se toca.</p>
+    </div>
+
+    <ul class="check">
+      <li><b>Paso 0, gate de pol&iacute;tica:</b> que la cuenta que va a correr est&eacute; en la autorizaci&oacute;n de juego vigente. Sin esto, todo lo t&eacute;cnico es teor&iacute;a.</li>
+      <li><b>En tu BM:</b> crear el dataset del cliente y verificar su dominio ra&iacute;z.</li>
+      <li><b>Compartir el dataset</b> al portafolio del cliente con permiso <i>Usar conjunto de eventos</i>.</li>
+      <li><b>El cliente acepta y lo asigna a su cuenta publicitaria.</b> Compartir no alcanza: sin la asignaci&oacute;n expl&iacute;cita, la data se recolecta y <b>no optimiza</b>.</li>
+      <li><b>&Eacute;l te da acceso de socio</b> a la cuenta con permiso de an&aacute;lisis, para leer el gasto.</li>
+      <li><b>Par&aacute;metros de URL a nivel anuncio</b>, landing provisionada, Kommo cableado, poller andando.</li>
+      <li><b>Verificar en Events Manager</b> y cruzar el conteo de compras de ah&iacute; contra el del Administrador de anuncios: esa diferencia <b>es</b> tu tasa de p&eacute;rdida de atribuci&oacute;n.</li>
+    </ul>
+
+    <div class="tbl-wrap" style="margin-top:18px">
+      <table>
+        <thead><tr><th>Caso</th><th>Qu&eacute; se logra</th><th>El l&iacute;mite</th></tr></thead>
+        <tbody>
+          <tr><td class="what">Landing propia + cajero<br><span style="font-weight:400;color:var(--ink-mut)">(el est&aacute;ndar)</span></td><td>ROAS por creativo en Meta y real en el tablero. <b>&Uacute;nico caso con red de contenci&oacute;n</b>: si se pierde el fbc, queda el cruce por tel&eacute;fono, IP y user agent.</td><td>La prolijidad del cajero al pegar el usuario.</td></tr>
+          <tr><td class="what">Solo Click-to-WhatsApp<br><span style="font-weight:400;color:var(--ink-mut)">(sin landing)</span></td><td>Atribuci&oacute;n v&iacute;a <code>ctwa_clid</code> con CAPI de mensajer&iacute;a. Requiere WhatsApp Cloud API y el toggle de atribuci&oacute;n prendido.</td><td><b>Todo o nada</b>: sin ctwa_clid no se atribuye a nada. No hay fallback probabil&iacute;stico.</td></tr>
+          <tr><td class="what">Cuenta alquilada o de un tercero</td><td>Lo mismo que el est&aacute;ndar, si te dan las tres cosas: dataset compartido (tuyo), <code>ads_read</code> y acceso a nivel anuncio.</td><td>Sin <code>ads_read</code> ten&eacute;s dep&oacute;sitos por anuncio pero no gasto: es conteo, no ROAS.</td></tr>
+          <tr><td class="what">Cliente afiliado<br><span style="font-weight:400;color:var(--ink-mut)">(no toca el casino)</span></td><td>Se cierra el loop con el <b>postback de la red</b>, sin necesitar el panel. Casi tan bueno como el caso ideal.</td><td>El valor a mandar es <b>tu comisi&oacute;n</b>, no el dep&oacute;sito bruto, o Meta optimiza hacia lo que no te paga.</td></tr>
+          <tr><td class="what">Casino que puede tocar c&oacute;digo</td><td><b>Rompe el techo:</b> elimina al humano del camino cr&iacute;tico. Guardar el click id en el registro + webhook de dep&oacute;sito firmado.</td><td>Ninguno relevante. Es el objetivo a donde hay que llevar a todos.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ LANDING ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="n">07 / LA LANDING</span>
+      <h2>El KPI no es el mensaje: es el dep&oacute;sito por peso gastado</h2>
+      <p>Son objetivos opuestos en el margen. Bajar la fricci&oacute;n del chat <b>sube</b> los mensajes y <b>baja</b> la tasa mensaje&rarr;dep&oacute;sito, porque entra gente que solo pregunta.</p>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Calificar antes del chat, no despu&eacute;s</h3>
+        <p>Un selector de monto (&ldquo;&iquest;con cu&aacute;nto quer&eacute;s arrancar: 5.000 / 10.000 / 20.000?&rdquo;) antes de abrir la conversaci&oacute;n. Filtra al curioso <b>y</b> te genera los <b>5 valores distintos</b> que la optimizaci&oacute;n por valor exige &mdash; el gate que mata a la mayor&iacute;a de los casinos.</p>
+      </div>
+      <div class="card">
+        <h3>Prellenar el primer mensaje, siempre</h3>
+        <p>Alrededor del <b>75%</b> abre el chat y no manda nada. El texto prellenado (&ldquo;Hola, quiero cargar 10000 &mdash; REF A7X&rdquo;) sube la tasa de env&iacute;o y es la <b>&uacute;nica atribuci&oacute;n que ve el cajero</b>.</p>
+      </div>
+      <div class="card">
+        <h3>Prueba de pago, no prueba social</h3>
+        <p>La objeci&oacute;n real del rubro no es &ldquo;&iquest;me voy a divertir?&rdquo;: es <b>&ldquo;&iquest;me van a pagar?&rdquo;</b>. Capturas de retiros con hora, tiempo de acreditaci&oacute;n en n&uacute;meros, m&eacute;todos de pago reales.</p>
+      </div>
+      <div class="card">
+        <h3>Los 90 segundos siguientes</h3>
+        <p>El dep&oacute;sito se decide en la primera sesi&oacute;n. Primera respuesta del cajero en menos de 3 minutos en hora pico, CBU listo para copiar en el segundo mensaje. <b>Medir p50 y p95 del tiempo de respuesta y publicarlo en el tablero.</b></p>
+      </div>
+    </div>
+    <div class="card warn" style="margin-top:11px">
+      <h3>El rollover se dice de frente</h3>
+      <p>Esconderlo sube los mensajes y destruye la tasa de dep&oacute;sito y el LTV, porque el jugador se entera en el chat y se va. Es preferible perder el 20% de los mensajes en la landing que quemarle 20 minutos al cajero por cada uno.</p>
+    </div>
+  </section>
+
+  <!-- ============ RIESGOS ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="n">08 / LO QUE PUEDE SALIR MAL</span>
+      <h2>Los tres que no se ven venir</h2>
+    </div>
+
+    <div class="card bad">
+      <h3>El sesgo del cajero &mdash; el riesgo que nadie ve</h3>
+      <p>El campo lo llena un humano bajo carga. <b>Cuando entra m&aacute;s tr&aacute;fico, lo llena peor</b> &mdash; justo en la hora y el creativo que estás evaluando. O sea que Meta no recibe una muestra al azar de los dep&oacute;sitos: recibe una muestra <b>sesgada hacia los creativos de bajo volumen</b>, y el algoritmo optimiza hacia donde el cajero tuvo tiempo de tipear. Ense&ntilde;ar mal es peor que no ense&ntilde;ar, y este sesgo es invisible en toda m&eacute;trica de Meta.</p>
+    </div>
+    <div class="card bad">
+      <h3>Atribuci&oacute;n equivocada &ne; atribuci&oacute;n faltante</h3>
+      <p>Un error de tipeo produce <b>no-match</b>: resta volumen en silencio. Pegar el usuario en el lead equivocado produce <b>match err&oacute;neo</b>: le acredit&aacute;s plata a un anuncio que no la gener&oacute; y adem&aacute;s met&eacute;s a un no-convertidor en la semilla de tus p&uacute;blicos similares. Por evento, el err&oacute;neo es mucho m&aacute;s t&oacute;xico. Hay que medir los dos por separado, y poner una restricci&oacute;n de unicidad sobre el usuario del casino.</p>
+    </div>
+    <div class="card bad">
+      <h3>El cuello de botella no es Meta: es el cruce, y hoy est&aacute; roto</h3>
+      <p>Est&aacute; probado en este proyecto: el casino <b>no guarda</b> el identificador del click y el tel&eacute;fono es opcional &mdash; la cobertura conocida es del orden del <b>15%</b>. Con ese n&uacute;mero no hay ROAS por anuncio: hay una demo. Ning&uacute;n trabajo sobre CAPI, EMQ o <code>action_source</code> lo arregla. Las dos &uacute;nicas salidas son que el casino guarde el click id, o que el tel&eacute;fono pase a obligatorio.</p>
+    </div>
+  </section>
+
+  <!-- ============ CONDICIONES ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="n">09 / CONDICIONES M&Iacute;NIMAS</span>
+      <h2>Sin estas seis, se vende conteo de dep&oacute;sitos, no ROAS</h2>
+    </div>
+    <ul class="check">
+      <li><b>El cruce determin&iacute;stico.</b> El casino guarda el click id, o el tel&eacute;fono pasa a obligatorio. Sin esto no hay proyecto: hay instrumentaci&oacute;n.</li>
+      <li><b>Token con <code>ads_read</code> + el <code>act_</code> de la cuenta.</b> Ya probado que el token de CAPI no sirve para leer gasto. Sin gasto por anuncio no hay ROAS de ning&uacute;n tipo.</li>
+      <li><b>Autorizaci&oacute;n de juego vigente</b> sobre la cuenta concreta que va a correr, con licencia v&aacute;lida en el territorio y segmentaci&oacute;n +18.</li>
+      <li><b>Dataset tuyo, compartido <i>y</i> asignado</b> a la cuenta del cliente. Compartir no alcanza.</li>
+      <li><b>Decisiones cerradas en constantes:</b> <code>action_source: website</code>, primer dep&oacute;sito como <code>Purchase</code>, <code>currency</code> expl&iacute;cito, <code>event_id</code> determinista.</li>
+      <li><b>Dos semanas de medici&oacute;n antes de cualquier promesa:</b> demora click&rarr;dep&oacute;sito, % de leads con click resuelto y % de dep&oacute;sitos con click resuelto. No existe benchmark p&uacute;blico de ninguno de los tres: <b>se miden, no se estiman</b>.</li>
+    </ul>
+  </section>
+
+  <!-- ============ DESCARTADO ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="n">10 / LO QUE NO HAY QUE COMPRAR</span>
+      <h2>Descartado, con el motivo</h2>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Qu&eacute;</th><th>Costo evitado</th><th>Por qu&eacute; no</th></tr></thead>
+        <tbody>
+          <tr><td class="what">App propia + &ldquo;Conectar con Meta&rdquo;</td><td class="cost">30-60 h</td><td>Exige App Review igual (lo que Meta sac&oacute; fue el video, no el review) y expone la app justo por ser tr&aacute;fico de casino. El partner access con un Business ID fijo hace lo mismo, gratis.</td></tr>
+          <tr><td class="what">Alquilar cuentas de agencia</td><td class="cost">5-12% del spend</td><td>Violaci&oacute;n expl&iacute;cita de las pol&iacute;ticas de Meta. Saldo precargado no recuperable, sin recurso.</td></tr>
+          <tr><td class="what">Keitaro / Binom</td><td class="cost">~USD 125/mes</td><td>Ninguno inventa el evento de dep&oacute;sito: lo recibe, y el casino no lo manda. Construir el sender + tabla de clicks no es construir un tracker.</td></tr>
+          <tr><td class="what">CAPI Gateway de Meta</td><td class="cost">&mdash;</td><td>Su entrada es el p&iacute;xel del navegador: no puede originar el evento que importa, que nace en el panel del casino.</td></tr>
+          <tr><td class="what">Server-side GTM / Stape</td><td class="cost">USD 20-300/mes</td><td>Un salto y un proveedor m&aacute;s para hacer lo que el backend propio ya hace con un POST.</td></tr>
+          <tr><td class="what">Un p&iacute;xel &uacute;nico para todos</td><td class="cost">&mdash;</td><td>Vector documentado de ban en cascada: un cliente flageado arrastra a todos.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+
+  <section>
+    <div class="sec-head">
+      <span class="n">11 / REGLAS DE ORO</span>
+      <h2>Las que no se rompen nunca</h2>
+      <p>Cada una viene de un modo de falla concreto, no de una preferencia.</p>
+    </div>
+    <ul class="check">
+      <li><b>El cliente es socio, nunca persona.</b> Agregarlo como persona de tu portafolio le muestra los activos de todos los dem&aacute;s. Es la &uacute;nica forma de que un cliente vea algo de otro, y es 100% evitable.</li>
+      <li><b>Cero admins humanos en com&uacute;n</b> entre el BM t&eacute;cnico y el de cualquier cliente. Es el &uacute;nico vector que la pol&iacute;tica de Meta nombra literalmente. Un solo perfil de los dos lados anula todo el dise&ntilde;o.</li>
+      <li><b>Nunca dejar el principal y el espejo conectados a la misma cuenta.</b> No hay deduplicaci&oacute;n entre datasets distintos: el doble conteo es certeza, no riesgo, y te <b>duplica el costo por dep&oacute;sito</b> con el que factur&aacute;s. Compartir el d&iacute;a 1, conectar reci&eacute;n en el failover.</li>
+      <li><b>El primer dep&oacute;sito va como <code>Purchase</code> est&aacute;ndar, nunca como conversi&oacute;n personalizada.</b> Es lo &uacute;nico que deja repuntar un conjunto sin duplicarlo: con conversi&oacute;n personalizada, cada failover cuesta un d&iacute;a en vez de una hora.</li>
+      <li><b>Un token por dataset, jam&aacute;s uno global.</b> Con token por dataset, un ID equivocado da error de permisos. Con uno que escribe en los 20, un bug o una filtraci&oacute;n inyecta dep&oacute;sitos falsos en toda la cartera: en un negocio que factura por FTD, eso es fraude de facturaci&oacute;n.</li>
+      <li><b>El <code>dataset_id</code> se resuelve siempre desde la tabla maestra</b>, por clave inmutable de cliente. Nunca por nombre, ni por posici&oacute;n, ni hardcodeado en un prelander. Los eventos mal ruteados no se borran jam&aacute;s.</li>
+      <li><b>El d&iacute;a que un cliente cae baneado, se revoca el acceso y no se le vuelve a compartir ese dataset ni ese dominio a ning&uacute;n BM sucesor del mismo due&ntilde;o.</b> Ah&iacute; dej&aacute;s de ser un tercero y pas&aacute;s a ser el instrumento de evasi&oacute;n: es el &uacute;nico escenario en que tu portafolio merece caer.</li>
+      <li><b>El swap se hace una vez y despu&eacute;s no se toca nada por 7 d&iacute;as.</b> Presupuesto, puja, segmentaci&oacute;n o creativos encadenan reinicios de aprendizaje y el conjunto puede no salir nunca.</li>
+      <li><b>El monitoreo vive en tu servidor, no en Events Manager.</b> Un token muerto se ve como &ldquo;poco volumen&rdquo;, no como error, mientras las campa&ntilde;as gastan contra una se&ntilde;al muerta.</li>
+      <li><b>6-8 clientes por BM t&eacute;cnico</b>, agrupados por perfil de riesgo. No por l&iacute;mite de Meta (entran 100 datasets) sino para acotar el radio de explosi&oacute;n.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p><b>Cronograma honesto.</b> Semanas 0-2: instrumentar y medir, cero promesas. Semanas 2-6: campa&ntilde;a de Ventas &rsaquo; Sitio web optimizando registro, con <code>Purchase</code> envi&aacute;ndose solo para reporte &mdash; el tablero ya muestra ROAS por creativo. Mes 2-4: mover la optimizaci&oacute;n a <code>Purchase</code> si el conjunto sostiene 50 por semana. Con volumen t&iacute;pico de casino chico argentino, lo m&aacute;s probable es vivir en el escal&oacute;n 1 &mdash; y ah&iacute; ya se gan&oacute; el 80% del valor.</p>
+    <p style="margin-top:10px"><b>Origen.</b> Dos investigaciones de 7 y 8 agentes en paralelo con verificaci&oacute;n adversarial sobre documentaci&oacute;n oficial de Meta, foros de afiliados y docs de proveedores. Lo marcado como descartado se descart&oacute; con fuente. Los porcentajes de atribuci&oacute;n de este proyecto son medidos, no estimados.</p>
+  </footer>
+
+</div>

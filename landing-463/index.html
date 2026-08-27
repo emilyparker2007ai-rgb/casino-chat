@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>463 · Triplicá tu primera carga</title>
+<meta name="description" content="Creá tu usuario en 1 minuto y llevate 200% extra en tu primera carga. Retiros en minutos, atención 24/7.">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='78' font-size='78' text-anchor='middle' x='50'>%F0%9F%92%8E</text></svg>">
+<link rel="preload" as="image" href="logo463.webp" fetchpriority="high" type="image/webp">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&display=swap">
+<style>
+:root{
+  --gold:#ffd24a; --gold-2:#e0a41c; --gold-3:#8a5f0c;
+  --wa:#25d366; --wa-2:#0f9d4f;
+  --bg:#000; --ink:#fff; --mut:#a9a29a; --line:#241c0c; --card:#0d0b07;
+  --sans:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  --disp:"Anton",Impact,"Arial Black",sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16.5px;line-height:1.55;
+  background-image:radial-gradient(120% 55% at 50% 0%,#231a06 0%,transparent 60%),radial-gradient(90% 45% at 50% 100%,#1a1305 0%,transparent 60%)}
+.wrap{max-width:560px;margin:0 auto;padding:20px 18px 132px}
+
+/* ---------- logo ---------- */
+.logo-wrap{position:relative;margin:4px auto 0;max-width:430px}
+.logo-wrap::before{content:"";position:absolute;left:50%;top:50%;width:118%;height:150%;transform:translate(-50%,-50%);
+  background:radial-gradient(closest-side,rgba(255,190,60,.20),rgba(255,190,60,.06) 55%,transparent 72%);pointer-events:none}
+.logo{position:relative;display:block;width:100%;height:auto;mix-blend-mode:screen}
+.tag{text-align:center;font-family:var(--disp);font-size:13px;letter-spacing:.42em;color:var(--gold);
+  text-transform:uppercase;margin:2px 0 22px;text-indent:.42em}
+
+/* ---------- oferta ---------- */
+.offer{text-align:center;margin-bottom:6px}
+.offer .l1{font-family:var(--disp);font-size:clamp(21px,6.2vw,29px);line-height:1.04;letter-spacing:.5px;text-transform:uppercase;color:#fff}
+.pct{font-family:var(--disp);font-size:clamp(84px,27vw,132px);line-height:.84;letter-spacing:-2px;margin:2px 0 0;
+  background:linear-gradient(180deg,#fff7d6 0%,var(--gold) 42%,var(--gold-2) 74%,var(--gold-3) 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:var(--gold);
+  filter:drop-shadow(0 6px 20px rgba(255,176,32,.32))}
+.sub{text-align:center;color:var(--mut);font-size:15px;margin:8px auto 20px;max-width:330px}
+.sub b{color:#fff}
+
+/* ---------- selector de monto ---------- */
+.q{text-align:center;font-weight:700;font-size:15px;margin:0 0 10px}
+.amounts{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:16px}
+.amt{appearance:none;border:1.5px solid var(--line);background:var(--card);color:var(--ink);
+  border-radius:13px;padding:13px 4px;font-family:var(--sans);font-weight:700;font-size:16px;cursor:pointer;
+  transition:border-color .15s,background .15s,transform .1s}
+.amt small{display:block;font-weight:600;font-size:11px;color:var(--mut);margin-top:2px}
+.amt[aria-pressed="true"]{border-color:var(--gold);background:#1a1408;color:var(--gold)}
+.amt[aria-pressed="true"] small{color:var(--gold-2)}
+.amt:active{transform:scale(.97)}
+
+/* ---------- CTA ---------- */
+.cta{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:100%;
+  border:0;cursor:pointer;text-decoration:none;position:relative;overflow:hidden;
+  background:linear-gradient(180deg,#2ee878,var(--wa-2));color:#04240f;border-radius:16px;padding:17px 18px;
+  font-family:var(--sans);font-weight:800;box-shadow:0 10px 30px rgba(37,211,102,.32),inset 0 1px 0 rgba(255,255,255,.4);
+  animation:pulse 2.4s ease-in-out infinite}
+.cta b{font-size:20px;letter-spacing:.3px;display:flex;align-items:center;gap:9px}
+.cta span{font-size:12.5px;font-weight:700;opacity:.85}
+.cta svg{width:21px;height:21px;fill:#04240f;flex:0 0 auto}
+@keyframes pulse{0%,100%{box-shadow:0 10px 26px rgba(37,211,102,.3),inset 0 1px 0 rgba(255,255,255,.4)}
+  50%{box-shadow:0 10px 40px rgba(37,211,102,.6),inset 0 1px 0 rgba(255,255,255,.4)}}
+
+/* ---------- confianza ---------- */
+.rows{margin:22px 0 0;border:1px solid var(--line);border-radius:15px;background:var(--card);overflow:hidden}
+.row{display:flex;align-items:center;gap:11px;padding:13px 16px;font-size:14.5px}
+.row+.row{border-top:1px solid var(--line)}
+.row i{font-style:normal;font-size:17px;width:22px;text-align:center;flex:0 0 auto}
+.row b{color:var(--gold)}
+.bonus{margin:16px 0 0;border:1px solid var(--line);border-radius:15px;padding:16px 18px;background:linear-gradient(180deg,#140f05,#0a0805)}
+.bonus h2{font-family:var(--disp);font-size:16px;letter-spacing:.16em;color:var(--gold);margin:0 0 10px;text-transform:uppercase}
+.bonus ul{margin:0;padding:0;list-style:none}
+.bonus li{font-size:14.5px;color:var(--mut);padding:5px 0 5px 20px;position:relative}
+.bonus li::before{content:"+";position:absolute;left:2px;color:var(--gold);font-weight:800}
+.bonus li b{color:#fff}
+.foot{text-align:center;color:#6f665c;font-size:11.5px;margin-top:22px;line-height:1.5}
+.foot b{color:#8d8377}
+
+/* ---------- sticky mobile ---------- */
+.sticky{position:fixed;left:0;right:0;bottom:0;z-index:9;padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+  background:linear-gradient(180deg,rgba(0,0,0,0),#000 38%);display:none}
+.sticky .cta{border-radius:14px;padding:15px}
+@media (max-width:820px){.sticky{display:block}}
+@media (prefers-reduced-motion:reduce){.cta{animation:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="logo-wrap">
+    <picture>
+      <source srcset="logo463.webp" type="image/webp">
+      <img class="logo" src="logo463.jpg" alt="Casino 463" width="840" height="280" fetchpriority="high" decoding="async">
+    </picture>
+  </div>
+  <p class="tag">Casino online</p>
+
+  <div class="offer">
+    <div class="l1">Triplicamos tu primera carga</div>
+    <div class="pct">200%</div>
+  </div>
+  <p class="sub">Cargás <b>10.000</b> y jugás con <b>30.000</b>. Te creamos el usuario en <b>1 minuto</b> por WhatsApp.</p>
+
+  <p class="q">¿Con cuánto querés arrancar?</p>
+  <div class="amounts" id="amt">
+    <button class="amt" type="button" data-v="5000">$5.000<small>jugás 15.000</small></button>
+    <button class="amt" type="button" data-v="10000" aria-pressed="true">$10.000<small>jugás 30.000</small></button>
+    <button class="amt" type="button" data-v="20000">$20.000<small>jugás 60.000</small></button>
+  </div>
+
+  <a class="cta" id="cta" href="#" rel="noopener">
+    <b><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M.06 24l1.68-6.16A11.9 11.9 0 010 11.93C0 5.35 5.35 0 11.93 0a11.86 11.86 0 018.44 3.5 11.82 11.82 0 013.49 8.44c0 6.58-5.35 11.93-11.93 11.93a11.9 11.9 0 01-5.7-1.45L.06 24zM6.6 20.2c1.63.97 3.19 1.55 5.25 1.55 5.46 0 9.91-4.44 9.91-9.9 0-5.47-4.45-9.91-9.91-9.91S1.95 6.38 1.95 11.85c0 2.17.64 3.79 1.7 5.48l-.99 3.63 3.94-.76zm11.28-5.6c-.07-.12-.27-.2-.57-.35-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.14-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.06 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.63.71.23 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41z"/></svg>CARGAR POR WHATSAPP</b>
+    <span>Te atienden ahora mismo</span>
+  </a>
+
+  <div class="rows">
+    <div class="row"><i>⚡</i><div><b>Retiros en minutos</b> — pagamos las 24 hs, todos los días</div></div>
+    <div class="row"><i>💳</i><div>Cargás por <b>transferencia o CBU</b>, mínimo $1.000</div></div>
+    <div class="row"><i>🎰</i><div><b>+10.000 juegos</b>: slots, ruleta y casino en vivo</div></div>
+    <div class="row"><i>💬</i><div>Atención humana <b>24/7</b> por WhatsApp</div></div>
+  </div>
+
+  <div class="bonus">
+    <h2>Todos los bonos</h2>
+    <ul>
+      <li><b>200% extra</b> en tu primera carga</li>
+      <li><b>100% extra</b> de 13 a 15 hs y de 21 a 22 hs</li>
+      <li><b>3.000 fichas gratis</b> por cada amigo que traigas</li>
+    </ul>
+  </div>
+
+  <p class="foot">Juego responsable · Solo para mayores de <b>18</b> años.<br>El juego compulsivo es perjudicial para la salud.</p>
+</div>
+
+<div class="sticky">
+  <a class="cta" id="cta2" href="#" rel="noopener">
+    <b><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M.06 24l1.68-6.16A11.9 11.9 0 010 11.93C0 5.35 5.35 0 11.93 0a11.86 11.86 0 018.44 3.5 11.82 11.82 0 013.49 8.44c0 6.58-5.35 11.93-11.93 11.93a11.9 11.9 0 01-5.7-1.45L.06 24zM6.6 20.2c1.63.97 3.19 1.55 5.25 1.55 5.46 0 9.91-4.44 9.91-9.9 0-5.47-4.45-9.91-9.91-9.91S1.95 6.38 1.95 11.85c0 2.17.64 3.79 1.7 5.48l-.99 3.63 3.94-.76zm11.28-5.6c-.07-.12-.27-.2-.57-.35-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.14-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.06 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.63.71.23 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41z"/></svg>CARGAR POR WHATSAPP</b>
+    <span>200% extra en tu primera carga</span>
+  </a>
+</div>
+
+<script>
+/* ================== CONFIGURAR ACÁ ================== */
+var WHATSAPP = "5491164501013";   // línea API, solo números con código de país
+/* ==================================================== */
+(function(){
+  var monto = "10000";
+  // código corto del anuncio: sirve para que el cajero sepa de dónde vino (atribución)
+  var p = new URLSearchParams(location.search);
+  var ref = (p.get("utm_content") || p.get("utm_campaign") || p.get("fbclid") || "").slice(0,14);
+  try{ if(ref) localStorage.setItem("r463",ref); else ref = localStorage.getItem("r463")||""; }catch(e){}
+
+  function link(){
+    var t = "Hola! Quiero crear mi usuario y cargar $" + Number(monto).toLocaleString("es-AR") +
+            " con el 200% de bono" + (ref ? " (ref " + ref + ")" : "");
+    return "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(t);
+  }
+  function sync(){ var h=link(); document.getElementById("cta").href=h; document.getElementById("cta2").href=h; }
+
+  document.getElementById("amt").addEventListener("click", function(e){
+    var b = e.target.closest(".amt"); if(!b) return;
+    [].forEach.call(this.children, function(x){ x.setAttribute("aria-pressed", x===b ? "true":"false"); });
+    monto = b.dataset.v; sync();
+  });
+  sync();
+})();
+</script>
+</body>
+</html>
