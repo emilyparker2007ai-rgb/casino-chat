@@ -162,6 +162,18 @@ const server = http.createServer(async (req, res) => {
     return send(res, 200, INDEX, "text/html; charset=utf-8");
   if (req.method === "GET" && (u === "/admin" || u === "/admin.html"))
     return send(res, 200, ADMIN, "text/html; charset=utf-8");
+  // landing estatica 463 (HTML + logo webp/jpg)
+  if (req.method === "GET" && (u === "/463" || u === "/463/" || u.startsWith("/463/"))) {
+    const rel = (u === "/463" || u === "/463/") ? "index.html" : u.slice(5).replace(/\.\./g, "");
+    const types = { ".html": "text/html; charset=utf-8", ".webp": "image/webp", ".jpg": "image/jpeg" };
+    const ext = rel.slice(rel.lastIndexOf("."));
+    try {
+      const buf = fs.readFileSync(path.join(__dirname, "..", "landing-463", rel));
+      res.writeHead(200, { "Content-Type": types[ext] || "application/octet-stream", "Cache-Control": "public, max-age=3600" });
+      return res.end(buf);
+    } catch (e) { return send(res, 404, { ok: false }); }
+  }
+
   if (req.method === "GET" && u === "/gsap.min.js")
     return send(res, 200, GSAP, "application/javascript; charset=utf-8");
 
