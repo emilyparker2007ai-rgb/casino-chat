@@ -164,7 +164,9 @@ const server = http.createServer(async (req, res) => {
     return send(res, 200, ADMIN, "text/html; charset=utf-8");
   // landing estatica 463 (HTML + logo webp/jpg)
   if (req.method === "GET" && (u === "/463" || u === "/463/" || u.startsWith("/463/"))) {
-    const rel = (u === "/463" || u === "/463/") ? "index.html" : u.slice(5).replace(/\.\./g, "");
+    // sin barra final los relativos se resuelven contra la raiz y el logo da 404
+    if (u === "/463") { res.writeHead(301, { Location: "/463/" }); return res.end(); }
+    const rel = (u === "/463/") ? "index.html" : u.slice(5).replace(/\.\./g, "");
     const types = { ".html": "text/html; charset=utf-8", ".webp": "image/webp", ".jpg": "image/jpeg" };
     const ext = rel.slice(rel.lastIndexOf("."));
     try {
