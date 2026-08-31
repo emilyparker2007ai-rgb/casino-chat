@@ -185,7 +185,9 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opac
   function sync(){ var h=link(); document.getElementById("cta").href=h; document.getElementById("cta2").href=h; }
 
   // si el archivo se abre suelto (sin servidor), arma el destino en el momento del click
-  var TEL = "5491157402506";
+  // si el archivo se usa sin servidor, la lista va aca (misma logica de rotacion)
+  var TELS = ["5491157402506"];
+  var TEL = TELS[Math.floor(Math.random()*TELS.length)];
   function suelto(e){
     if (location.protocol === "http:" || location.protocol === "https:") return;
     e.preventDefault();

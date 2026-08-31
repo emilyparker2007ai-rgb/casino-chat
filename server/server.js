@@ -13,6 +13,24 @@ const STATUS_ID = parseInt(process.env.KOMMO_STATUS_ID || "82365651", 10);
 const ADMIN_KEY = process.env.ADMIN_KEY || "463admin";
 const PORT = process.env.PORT || 3000;
 
+// ---- rotador de lineas de WhatsApp ----
+// WA_PHONES: numeros separados por coma. Acepta local ("1157402506") o internacional.
+function waNorm(raw) {
+  let d = String(raw).replace(/\D/g, "");
+  if (d.startsWith("00")) d = d.slice(2);
+  if (!d.startsWith("54")) d = "549" + d;                 // local argentino -> movil
+  else if (!d.startsWith("549")) d = "549" + d.slice(2);  // 54 sin el 9
+  return d;
+}
+const WA_LIST = String(process.env.WA_PHONES || process.env.WA_PHONE || "1157402506")
+  .split(",").map((x) => waNorm(x)).filter((x) => x.length >= 12);
+let waIdx = 0;
+function waNext() {
+  const n = WA_LIST[waIdx % WA_LIST.length];
+  waIdx = (waIdx + 1) % (WA_LIST.length * 1000);
+  return n;
+}
+
 function page(name) {
   try { return fs.readFileSync(path.join(__dirname, "..", name)); }
   catch (e) { return Buffer.from("<h1>" + name + " missing</h1>"); }
@@ -156,7 +174,7 @@ const server = http.createServer(async (req, res) => {
   const u = url.pathname;
   const q = url.searchParams;
   if (req.method === "OPTIONS") return send(res, 204, {});
-  if (u === "/health") return send(res, 200, { ok: true, convs: convs.size });
+  if (u === "/health") return send(res, 200, { ok: true, convs: convs.size, wa_lineas: WA_LIST.length });
 
   if (req.method === "GET" && (u === "/" || u === "/index.html"))
     return send(res, 200, INDEX, "text/html; charset=utf-8");
@@ -164,7 +182,7 @@ const server = http.createServer(async (req, res) => {
     return send(res, 200, ADMIN, "text/html; charset=utf-8");
   // salida a WhatsApp desde NUESTRO dominio (la pagina no contiene ningun link de WhatsApp)
   if (req.method === "GET" && u === "/463/ir") {
-    const phone = process.env.WA_PHONE || "5491157402506";
+    const phone = waNext();
     const m = (q.get("m") || "").replace(/\D/g, "").slice(0, 9);
     const ref = (q.get("ref") || "").replace(/[^\w-]/g, "").slice(0, 20);
     const monto = m ? Number(m).toLocaleString("es-AR") : "10.000";
