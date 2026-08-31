@@ -183,10 +183,8 @@ const server = http.createServer(async (req, res) => {
   // salida a WhatsApp desde NUESTRO dominio (la pagina no contiene ningun link de WhatsApp)
   if (req.method === "GET" && u === "/463/ir") {
     const phone = waNext();
-    const m = (q.get("m") || "").replace(/\D/g, "").slice(0, 9);
     const ref = (q.get("ref") || "").replace(/[^\w-]/g, "").slice(0, 20);
-    const monto = m ? Number(m).toLocaleString("es-AR") : "10.000";
-    const texto = "Hola! Quiero crear mi usuario y cargar $" + monto + " con el 200% de bono" + (ref ? " (ref " + ref + ")" : "");
+    const texto = "Hola! Quiero crear mi usuario y aprovechar el 200% de bono" + (ref ? " (ref " + ref + ")" : "");
     const dest = "https://api.whatsapp.com/send?phone=" + phone + "&text=" + encodeURIComponent(texto);
     res.writeHead(302, { Location: dest, "Cache-Control": "no-store", "Referrer-Policy": "no-referrer" });
     return res.end();
