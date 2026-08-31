@@ -195,7 +195,7 @@ const server = http.createServer(async (req, res) => {
     // sin barra final los relativos se resuelven contra la raiz y el logo da 404
     if (u === "/463") { res.writeHead(301, { Location: "/463/" }); return res.end(); }
     const rel = (u === "/463/") ? "index.html" : u.slice(5).replace(/\.\./g, "");
-    const types = { ".html": "text/html; charset=utf-8", ".webp": "image/webp", ".jpg": "image/jpeg" };
+    const types = { ".html": "text/html; charset=utf-8", ".webp": "image/webp", ".png": "image/png", ".jpg": "image/jpeg" };
     const ext = rel.slice(rel.lastIndexOf("."));
     try {
       const buf = fs.readFileSync(path.join(__dirname, "..", "landing-463", rel));
