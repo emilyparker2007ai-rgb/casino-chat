@@ -162,6 +162,18 @@ const server = http.createServer(async (req, res) => {
     return send(res, 200, INDEX, "text/html; charset=utf-8");
   if (req.method === "GET" && (u === "/admin" || u === "/admin.html"))
     return send(res, 200, ADMIN, "text/html; charset=utf-8");
+  // salida a WhatsApp desde NUESTRO dominio (la pagina no contiene ningun link de WhatsApp)
+  if (req.method === "GET" && u === "/463/ir") {
+    const phone = process.env.WA_PHONE || "5491157402506";
+    const m = (q.get("m") || "").replace(/\D/g, "").slice(0, 9);
+    const ref = (q.get("ref") || "").replace(/[^\w-]/g, "").slice(0, 20);
+    const monto = m ? Number(m).toLocaleString("es-AR") : "10.000";
+    const texto = "Hola! Quiero crear mi usuario y cargar $" + monto + " con el 200% de bono" + (ref ? " (ref " + ref + ")" : "");
+    const dest = "https://api.whatsapp.com/send?phone=" + phone + "&text=" + encodeURIComponent(texto);
+    res.writeHead(302, { Location: dest, "Cache-Control": "no-store", "Referrer-Policy": "no-referrer" });
+    return res.end();
+  }
+
   // landing estatica 463 (HTML + logo webp/jpg)
   if (req.method === "GET" && (u === "/463" || u === "/463/" || u.startsWith("/463/"))) {
     // sin barra final los relativos se resuelven contra la raiz y el logo da 404

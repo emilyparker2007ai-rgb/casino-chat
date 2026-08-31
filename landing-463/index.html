@@ -144,20 +144,16 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font
 </div>
 
 <script>
-/* ================== CONFIGURAR ACÁ ================== */
-var WHATSAPP = "5491164501013";   // línea API, solo números con código de país
-/* ==================================================== */
 (function(){
   var monto = "10000";
-  // código corto del anuncio: sirve para que el cajero sepa de dónde vino (atribución)
+  // codigo corto del anuncio: sirve para que el cajero sepa de donde vino (atribucion)
   var p = new URLSearchParams(location.search);
   var ref = (p.get("utm_content") || p.get("utm_campaign") || p.get("fbclid") || "").slice(0,14);
   try{ if(ref) localStorage.setItem("r463",ref); else ref = localStorage.getItem("r463")||""; }catch(e){}
 
   function link(){
-    var t = "Hola! Quiero crear mi usuario y cargar $" + Number(monto).toLocaleString("es-AR") +
-            " con el 200% de bono" + (ref ? " (ref " + ref + ")" : "");
-    return "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(t);
+    // el href apunta a NUESTRO dominio; el servidor redirige a la conversacion
+    return "ir?m=" + monto + (ref ? "&ref=" + encodeURIComponent(ref) : "");
   }
   function sync(){ var h=link(); document.getElementById("cta").href=h; document.getElementById("cta2").href=h; }
 
