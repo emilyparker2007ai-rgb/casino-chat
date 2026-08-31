@@ -77,6 +77,9 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opac
 .sub b{color:#fff}
 
 /* ---------- selector de monto ---------- */
+.expl{text-align:center;margin:16px auto 20px;max-width:340px;font-size:15px;color:var(--mut);
+  border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:rgba(20,14,4,.55);line-height:1.5}
+.expl b{color:var(--gold)}
 .q{text-align:center;font-weight:700;font-size:15px;margin:0 0 10px}
 .amounts{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:16px}
 .amt{appearance:none;border:1.5px solid var(--line);background:var(--card);color:var(--ink);
@@ -114,7 +117,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opac
 .bonus li{font-size:14.5px;color:var(--mut);padding:5px 0 5px 20px;position:relative}
 .bonus li::before{content:"+";position:absolute;left:2px;color:var(--gold);font-weight:800}
 .bonus li b{color:#fff}
-.foot{text-align:center;color:#6f665c;font-size:11.5px;margin-top:22px;line-height:1.5}
+.foot{text-align:center;color:#7d7368;font-size:12px;margin-top:18px}
 .foot b{color:#8d8377}
 
 /* ---------- sticky mobile ---------- */
@@ -134,13 +137,12 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opac
       <img class="logo" src="logo463.jpg" alt="Casino 463" width="840" height="280" fetchpriority="high" decoding="async">
     </picture>
   </div>
-  <p class="tag">Casino online</p>
 
   <div class="offer">
     <div class="l1">Triplicamos tu primera carga</div>
     <div class="pct">200%</div>
   </div>
-  <p class="sub">Cargás <b>10.000</b> y jugás con <b>30.000</b>. Usuario listo en <b>1 minuto</b>.</p>
+  <p class="expl">Deposit&aacute; y recib&iacute;s el <b>triple</b> en tu cuenta.<br>Carg&aacute;s <b>$10.000</b> y jug&aacute;s con <b>$30.000</b>.</p>
 
   <p class="q">¿Con cuánto querés arrancar?</p>
   <div class="amounts" id="amt">
@@ -154,13 +156,9 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opac
     <span>Te atienden ahora mismo</span>
   </a>
 
-  <div class="chips">
-    <div class="chip"><b>Retiros</b>en minutos</div>
-    <div class="chip"><b>Mínimo</b>$1.000</div>
-    <div class="chip"><b>Atención</b>24/7</div>
   </div>
 
-  <p class="foot">Juego responsable · Solo para mayores de <b>18</b> años.<br>El juego compulsivo es perjudicial para la salud.</p>
+  <p class="foot">Atenci&oacute;n 24/7 &middot; Retiros en minutos &middot; Solo <b>+18</b></p>
 </div>
 
 <div class="sticky">
