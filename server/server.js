@@ -180,26 +180,35 @@ const server = http.createServer(async (req, res) => {
     return send(res, 200, INDEX, "text/html; charset=utf-8");
   if (req.method === "GET" && (u === "/admin" || u === "/admin.html"))
     return send(res, 200, ADMIN, "text/html; charset=utf-8");
-  // salida a WhatsApp desde NUESTRO dominio (la pagina no contiene ningun link de WhatsApp)
-  if (req.method === "GET" && u === "/463/ir") {
-    const phone = waNext();
-    const ref = (q.get("ref") || "").replace(/[^\w-]/g, "").slice(0, 20);
-    const texto = "Hola! Quiero crear mi usuario y aprovechar el 200% de bono" + (ref ? " (ref " + ref + ")" : "");
-    const dest = "https://api.whatsapp.com/send?phone=" + phone + "&text=" + encodeURIComponent(texto);
-    res.writeHead(302, { Location: dest, "Cache-Control": "no-store", "Referrer-Policy": "no-referrer" });
-    return res.end();
-  }
+  // ---------- landings estaticas ----------
+  // Cada entrada es una ruta publica -> carpeta en disco. Agregar una variante es una linea mas.
+  const LANDINGS = { "463": "landing-463", "ganar": "landing-463-ganar" };
+  const TIPOS = { ".html": "text/html; charset=utf-8", ".webp": "image/webp", ".png": "image/png", ".jpg": "image/jpeg" };
+  const seg = u.split("/")[1] || "";
 
-  // landing estatica 463 (HTML + logo webp/jpg)
-  if (req.method === "GET" && (u === "/463" || u === "/463/" || u.startsWith("/463/"))) {
+  if (req.method === "GET" && LANDINGS[seg]) {
+    const resto = u.slice(seg.length + 2);   // lo que va despues de "/<seg>/"
+
+    // salida a WhatsApp desde NUESTRO dominio: la pagina no contiene ningun link de WhatsApp
+    if (resto === "ir") {
+      const phone = waNext();
+      const ref = (q.get("ref") || "").replace(/[^\w-]/g, "").slice(0, 20);
+      const texto = (q.get("t") === "premio")
+        ? "Hola! Quiero crear mi usuario para jugar por los premios" + (ref ? " (ref " + ref + ")" : "")
+        : "Hola! Quiero crear mi usuario y aprovechar el 200% de bono" + (ref ? " (ref " + ref + ")" : "");
+      const dest = "https://api.whatsapp.com/send?phone=" + phone + "&text=" + encodeURIComponent(texto);
+      res.writeHead(302, { Location: dest, "Cache-Control": "no-store", "Referrer-Policy": "no-referrer" });
+      return res.end();
+    }
+
     // sin barra final los relativos se resuelven contra la raiz y el logo da 404
-    if (u === "/463") { res.writeHead(301, { Location: "/463/" }); return res.end(); }
-    const rel = (u === "/463/") ? "index.html" : u.slice(5).replace(/\.\./g, "");
-    const types = { ".html": "text/html; charset=utf-8", ".webp": "image/webp", ".png": "image/png", ".jpg": "image/jpeg" };
+    if (u === "/" + seg) { res.writeHead(301, { Location: "/" + seg + "/" }); return res.end(); }
+
+    const rel = resto === "" ? "index.html" : resto.replace(/\.\./g, "");
     const ext = rel.slice(rel.lastIndexOf("."));
     try {
-      const buf = fs.readFileSync(path.join(__dirname, "..", "landing-463", rel));
-      res.writeHead(200, { "Content-Type": types[ext] || "application/octet-stream", "Cache-Control": "public, max-age=3600" });
+      const buf = fs.readFileSync(path.join(__dirname, "..", LANDINGS[seg], rel));
+      res.writeHead(200, { "Content-Type": TIPOS[ext] || "application/octet-stream", "Cache-Control": "public, max-age=3600" });
       return res.end(buf);
     } catch (e) { return send(res, 404, { ok: false }); }
   }

@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>463 · El retiro más grande</title>
+<meta name="description" content="El retiro más grande del mes pasado y todos los que se pagaron. Abrí tu cuenta por WhatsApp en 1 minuto.">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='78' font-size='78' text-anchor='middle' x='50'>%F0%9F%92%8E</text></svg>">
+<link rel="preload" as="image" href="logo463.webp" fetchpriority="high" type="image/webp">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&display=swap">
+<style>
+:root{
+  --gold:#ffd24a; --gold-2:#e0a41c; --gold-3:#8a5f0c;
+  --wa:#25d366; --wa-2:#0f9d4f;
+  --bg:#000; --ink:#fff; --mut:#a9a29a; --line:#241c0c; --card:#0d0b07;
+  --sans:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  --disp:"Anton",Impact,"Arial Black",sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;display:flex;flex-direction:column;background:#060402;color:var(--ink);font-family:var(--sans);font-size:16.5px;line-height:1.55;
+  min-height:100dvh;overflow-x:hidden;position:relative;
+  background-image:
+    radial-gradient(115% 58% at 50% 36%,transparent 40%,rgba(0,0,0,.62) 100%),
+    radial-gradient(70% 32% at 50% 8%,rgba(255,196,78,.44) 0%,rgba(255,150,30,.14) 40%,transparent 68%),
+    radial-gradient(95% 34% at 50% 103%,rgba(255,168,38,.20) 0%,rgba(255,140,20,.07) 45%,transparent 72%),
+    linear-gradient(180deg,#3a2607 0%,#1c1204 28%,#0c0804 58%,#100a03 100%);
+  background-attachment:scroll}
+
+/* orbes dorados desenfocados: dan profundidad y no cuestan nada */
+body::before{content:"";position:fixed;inset:-10%;pointer-events:none;z-index:0;
+  background-image:
+    radial-gradient(circle 190px at 14% 20%,rgba(255,188,60,.22),transparent 70%),
+    radial-gradient(circle 130px at 88% 13%,rgba(255,214,110,.18),transparent 70%),
+    radial-gradient(circle 230px at 78% 52%,rgba(214,150,40,.15),transparent 72%),
+    radial-gradient(circle 150px at 8% 62%,rgba(255,180,60,.13),transparent 72%),
+    radial-gradient(circle 110px at 62% 84%,rgba(255,200,80,.10),transparent 72%);
+  animation:breathe 9s ease-in-out infinite}
+@keyframes breathe{0%,100%{opacity:.75}50%{opacity:1}}
+
+/* destellos finos */
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+  background-image:
+    radial-gradient(2px 2px at 12% 14%,rgba(255,228,160,.95),transparent 60%),
+    radial-gradient(1.6px 1.6px at 83% 9%,rgba(255,215,130,.85),transparent 60%),
+    radial-gradient(2.4px 2.4px at 68% 26%,rgba(255,236,180,.75),transparent 60%),
+    radial-gradient(1.4px 1.4px at 26% 33%,rgba(255,215,130,.8),transparent 60%),
+    radial-gradient(2px 2px at 93% 41%,rgba(255,224,150,.6),transparent 60%),
+    radial-gradient(1.6px 1.6px at 6% 46%,rgba(255,215,130,.65),transparent 60%),
+    radial-gradient(2.2px 2.2px at 45% 5%,rgba(255,240,190,.9),transparent 60%),
+    radial-gradient(1.8px 1.8px at 34% 60%,rgba(255,224,150,.5),transparent 60%),
+    radial-gradient(2px 2px at 89% 68%,rgba(255,215,130,.45),transparent 60%),
+    radial-gradient(1.5px 1.5px at 17% 76%,rgba(255,224,150,.4),transparent 60%);
+  animation:tw 7s ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:.35}50%{opacity:.7}}
+
+.wrap{position:relative}
+.wrap{width:100%;max-width:520px;margin:auto;
+  padding:calc(18px + env(safe-area-inset-top)) 18px calc(22px + env(safe-area-inset-bottom))}
+
+/* ---------- logo ---------- */
+.logo-wrap{position:relative;margin:0 auto;max-width:470px;width:100%}
+.logo-wrap::before{content:"";position:absolute;left:50%;top:50%;width:118%;height:150%;transform:translate(-50%,-50%);
+  background:radial-gradient(closest-side,rgba(255,190,60,.20),rgba(255,190,60,.06) 55%,transparent 72%);pointer-events:none}
+.logo{position:relative;display:block;width:100%;height:auto}
+.tag{text-align:center;font-family:var(--disp);font-size:13px;letter-spacing:.42em;color:var(--gold);
+  text-transform:uppercase;margin:2px 0 22px;text-indent:.42em}
+
+/* ---------- oferta ---------- */
+.offer{text-align:center;margin:2px 0 4px}
+.offer .l1{font-family:var(--disp);font-size:clamp(21px,6.2vw,29px);line-height:1.04;letter-spacing:.5px;text-transform:uppercase;color:#fff}
+.pct{font-family:var(--disp);font-size:clamp(52px,19.5vw,104px);line-height:1.02;letter-spacing:-2px;margin:-2px 0 0;padding:.04em 0 .1em;overflow:visible;
+  background:linear-gradient(180deg,#fff7d6 0%,var(--gold) 42%,var(--gold-2) 74%,var(--gold-3) 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:var(--gold);
+  filter:drop-shadow(0 6px 20px rgba(255,176,32,.32))}
+.numlabel{text-align:center;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--gold-2);margin:-2px 0 0}
+.sub{text-align:center;color:var(--mut);font-size:15px;margin:8px auto 20px;max-width:330px}
+.sub b{color:#fff}
+
+/* ---------- selector de monto ---------- */
+.expl{text-align:center;margin:18px auto 22px;max-width:340px;font-size:15px;color:var(--mut);
+  border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:rgba(20,14,4,.55);line-height:1.5}
+.expl b{color:var(--gold)}
+.q{text-align:center;font-weight:700;font-size:15px;margin:0 0 10px}
+.amounts{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:16px}
+.amt{appearance:none;border:1.5px solid var(--line);background:var(--card);color:var(--ink);
+  border-radius:13px;padding:13px 4px;font-family:var(--sans);font-weight:700;font-size:16px;cursor:pointer;
+  transition:border-color .15s,background .15s,transform .1s}
+.amt small{display:block;font-weight:600;font-size:11px;color:var(--mut);margin-top:2px}
+.amt[aria-pressed="true"]{border-color:var(--gold);background:#1a1408;color:var(--gold)}
+.amt[aria-pressed="true"] small{color:var(--gold-2)}
+.amt:active{transform:scale(.97)}
+
+/* ---------- CTA ---------- */
+.cta{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:100%;
+  border:0;cursor:pointer;text-decoration:none;position:relative;overflow:hidden;
+  background:linear-gradient(180deg,#2ee878,var(--wa-2));color:#04240f;border-radius:16px;padding:17px 18px;
+  font-family:var(--sans);font-weight:800;box-shadow:0 10px 30px rgba(37,211,102,.32),inset 0 1px 0 rgba(255,255,255,.4);
+  animation:pulse 2.4s ease-in-out infinite}
+.cta b{font-size:20px;letter-spacing:.3px;display:flex;align-items:center;gap:9px}
+.cta span{font-size:12.5px;font-weight:700;opacity:.85}
+.cta svg{width:21px;height:21px;fill:#04240f;flex:0 0 auto}
+@keyframes pulse{0%,100%{box-shadow:0 10px 26px rgba(37,211,102,.3),inset 0 1px 0 rgba(255,255,255,.4)}
+  50%{box-shadow:0 10px 40px rgba(37,211,102,.6),inset 0 1px 0 rgba(255,255,255,.4)}}
+
+/* ---------- confianza ---------- */
+.chips{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:20px 0 0}
+.chip{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:12px 6px;text-align:center;font-size:12.5px;color:var(--mut);line-height:1.3}
+.chip b{display:block;color:var(--gold);font-size:14px;margin-bottom:1px}
+.rows{margin:22px 0 0;border:1px solid var(--line);border-radius:15px;background:var(--card);overflow:hidden}
+.row{display:flex;align-items:center;gap:11px;padding:13px 16px;font-size:14.5px}
+.row+.row{border-top:1px solid var(--line)}
+.row i{font-style:normal;font-size:17px;width:22px;text-align:center;flex:0 0 auto}
+.row b{color:var(--gold)}
+.bonus{margin:16px 0 0;border:1px solid var(--line);border-radius:15px;padding:16px 18px;background:linear-gradient(180deg,#140f05,#0a0805)}
+.bonus h2{font-family:var(--disp);font-size:16px;letter-spacing:.16em;color:var(--gold);margin:0 0 10px;text-transform:uppercase}
+.bonus ul{margin:0;padding:0;list-style:none}
+.bonus li{font-size:14.5px;color:var(--mut);padding:5px 0 5px 20px;position:relative}
+.bonus li::before{content:"+";position:absolute;left:2px;color:var(--gold);font-weight:800}
+.bonus li b{color:#fff}
+.auto{text-align:center;margin:22px auto 0;max-width:360px;font-size:13.5px;font-weight:700;color:var(--gold);
+  letter-spacing:.2px;text-wrap:balance}
+.auto b{color:#fff}
+.foot{text-align:center;color:#6f665c;font-size:11.5px;margin-top:10px}
+.foot b{color:#8d8377}
+
+@media (prefers-reduced-motion:reduce){.cta,body::before,body::after{animation:none}}
+</style>
+</head>
+<body>
+<!--
+  ============================================================
+  OJO: LOS TRES NUMEROS DE ESTA PAGINA SON DE MUESTRA.
+  Antes de poner un peso en anuncios hay que pedirle al casino,
+  por escrito y con fecha de corte:
+    1) el retiro individual mas alto pagado el mes pasado   -> reemplaza $4.100.000
+    2) cuantos retiros se pagaron ese mes                   -> reemplaza 2.847
+    3) la MEDIANA de acreditacion (no el mejor caso)        -> reemplaza 9 minutos
+  Publicar cifras que el anunciante no pueda probar es publicidad
+  enganiosa (Ley 24.240 art. 8 y Res. 446/2025).
+  Todo el texto esta en pasado y en tercera persona a proposito:
+  nunca le promete al lector que va a ganar. No cambiar a "vas a
+  cobrar" ni agregar frases absolutas tipo "ninguno quedo pendiente".
+  ============================================================
+-->
+<div class="wrap">
+
+  <div class="logo-wrap">
+    <picture>
+      <source srcset="logo463.webp" type="image/webp">
+      <img class="logo" src="logo463.png" alt="Casino 463" width="840" height="280" fetchpriority="high" decoding="async">
+    </picture>
+  </div>
+
+  <div class="offer">
+    <div class="l1">Un solo jugador se llev&oacute;</div>
+    <div class="pct">$4.100.000</div>
+    <div class="numlabel">El retiro m&aacute;s grande de agosto</div>
+  </div>
+
+  <p class="expl">Fue uno de <b>2.847 retiros</b> pagados ese mes.<br>Se le acredit&oacute; en <b>9 minutos</b>.</p>
+
+  <a class="cta" id="cta" href="#" rel="noopener">
+    <b><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M.06 24l1.68-6.16A11.9 11.9 0 010 11.93C0 5.35 5.35 0 11.93 0a11.86 11.86 0 018.44 3.5 11.82 11.82 0 013.49 8.44c0 6.58-5.35 11.93-11.93 11.93a11.9 11.9 0 01-5.7-1.45L.06 24zM6.6 20.2c1.63.97 3.19 1.55 5.25 1.55 5.46 0 9.91-4.44 9.91-9.9 0-5.47-4.45-9.91-9.91-9.91S1.95 6.38 1.95 11.85c0 2.17.64 3.79 1.7 5.48l-.99 3.63 3.94-.76zm11.28-5.6c-.07-.12-.27-.2-.57-.35-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.14-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.06 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.63.71.23 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41z"/></svg>QUIERO MI CUENTA</b>
+    <span>Te atiende una persona por WhatsApp</span>
+  </a>
+
+
+  <p class="auto">&#9889; Dep&oacute;sitos y retiros <b>AUTOM&Aacute;TICOS</b> &middot; 24/7</p>
+  <p class="foot">Cifras de agosto 2026 &middot; Solo <b>+18</b></p>
+</div>
+
+
+<script>
+(function(){
+  // codigo corto del anuncio: sirve para saber de donde vino el lead
+  var p = new URLSearchParams(location.search);
+  var ref = (p.get("utm_content") || p.get("utm_campaign") || p.get("fbclid") || "").slice(0,14);
+  try{ if(ref) localStorage.setItem("r463",ref); else ref = localStorage.getItem("r463")||""; }catch(e){}
+
+  var h = "ir?t=premio" + (ref ? "&ref=" + encodeURIComponent(ref) : "");
+  document.getElementById("cta").href = h;
+
+  // si el archivo se abre suelto (sin servidor), arma el destino al tocar
+  var TELS = ["5491157402506"];
+  function suelto(e){
+    if (location.protocol === "http:" || location.protocol === "https:") return;
+    e.preventDefault();
+    var t = "Hola! Quiero crear mi usuario para jugar por los premios" + (ref ? " (ref " + ref + ")" : "");
+    location.href = ["https://","api.","whatsapp",".com/send"].join("") + "?phone=" +
+      TELS[Math.floor(Math.random()*TELS.length)] + "&text=" + encodeURIComponent(t);
+  }
+  document.getElementById("cta").addEventListener("click", suelto);
+})();
+</script>
+</body>
+</html>
