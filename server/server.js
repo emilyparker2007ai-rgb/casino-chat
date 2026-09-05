@@ -182,7 +182,7 @@ const server = http.createServer(async (req, res) => {
     return send(res, 200, ADMIN, "text/html; charset=utf-8");
   // ---------- landings estaticas ----------
   // Cada entrada es una ruta publica -> carpeta en disco. Agregar una variante es una linea mas.
-  const LANDINGS = { "463": "landing-463", "ganar": "landing-463-ganar" };
+  const LANDINGS = { "463": "landing-463", "ganar": "landing-463-ganar", "grupo": "landing-grupo" };
   const TIPOS = { ".html": "text/html; charset=utf-8", ".webp": "image/webp", ".png": "image/png", ".jpg": "image/jpeg" };
   const seg = u.split("/")[1] || "";
 
@@ -191,6 +191,15 @@ const server = http.createServer(async (req, res) => {
 
     // salida a WhatsApp desde NUESTRO dominio: la pagina no contiene ningun link de WhatsApp
     if (resto === "ir") {
+      // la landing del grupo no manda a un chat individual sino al link de invitacion
+      if (seg === "grupo") {
+        const grupo = process.env.WA_GROUP || "";
+        if (!/^https:\/\/chat\.whatsapp\.com\/[A-Za-z0-9]+$/.test(grupo)) {
+          return send(res, 503, { ok: false, error: "falta configurar WA_GROUP" });
+        }
+        res.writeHead(302, { Location: grupo, "Cache-Control": "no-store", "Referrer-Policy": "no-referrer" });
+        return res.end();
+      }
       const phone = waNext();
       const ref = (q.get("ref") || "").replace(/[^\w-]/g, "").slice(0, 20);
       const texto = (q.get("t") === "premio")
