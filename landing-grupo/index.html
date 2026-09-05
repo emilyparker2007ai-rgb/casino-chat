@@ -102,7 +102,8 @@ body::before{content:"";position:fixed;inset:-10%;pointer-events:none;z-index:0;
   de tu propio dominio que redirige. Asi la pagina no contiene
   ningun link de WhatsApp.
   Para cambiar el grupo: Render -> Environment -> WA_GROUP -> pegar
-  el link de invitacion (https://chat.whatsapp.com/XXXXXXXX).
+  el link de invitacion del grupo (el que empieza con chat punto
+  whatsapp punto com, se copia desde Info del grupo -> Invitar por link).
   Si usas este archivo suelto, sin servidor, cambia GRUPO abajo.
   ============================================================
 -->
@@ -149,7 +150,7 @@ body::before{content:"";position:fixed;inset:-10%;pointer-events:none;z-index:0;
   document.getElementById("cta").href = "ir" + (ref ? "?ref=" + encodeURIComponent(ref) : "");
 
   // si el archivo se abre suelto (sin servidor), se usa este link
-  var GRUPO = "";   // <- pegar aca el https://chat.whatsapp.com/... solo para uso sin servidor
+  var GRUPO = "";   // <- solo para uso sin servidor: pegar aca el link de invitacion del grupo
   document.getElementById("cta").addEventListener("click", function(e){
     if (location.protocol === "http:" || location.protocol === "https:") return;
     if (!GRUPO) return;
