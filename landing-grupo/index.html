@@ -153,7 +153,7 @@ body::before{content:"";position:fixed;inset:-10%;pointer-events:none;z-index:0;
   document.getElementById("cta").href = "ir" + (ref ? "?ref=" + encodeURIComponent(ref) : "");
 
   // si el archivo se abre suelto (sin servidor), se usa este link
-  var GRUPO = "";   // <- solo para uso sin servidor: pegar aca el link de invitacion del grupo
+  var GRUPO = "https://chat.whatsapp.com/ElueZvox0L423xTxLxdI9r";   // solo se usa si el archivo corre sin servidor
   document.getElementById("cta").addEventListener("click", function(e){
     if (location.protocol === "http:" || location.protocol === "https:") return;
     if (!GRUPO) return;

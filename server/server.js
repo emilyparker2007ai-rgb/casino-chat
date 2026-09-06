@@ -193,11 +193,12 @@ const server = http.createServer(async (req, res) => {
     if (resto === "ir") {
       // la landing del grupo no manda a un chat individual sino al link de invitacion
       if (seg === "grupo") {
-        const grupo = process.env.WA_GROUP || "";
-        if (!/^https:\/\/chat\.whatsapp\.com\/[A-Za-z0-9]+$/.test(grupo)) {
-          return send(res, 503, { ok: false, error: "falta configurar WA_GROUP" });
-        }
-        res.writeHead(302, { Location: grupo, "Cache-Control": "no-store", "Referrer-Policy": "no-referrer" });
+        // acepta el link como sea que lo peguen (el boton de compartir le suma ?s=sw&p=a...)
+        // y redirige siempre a la forma canonica
+        const m = String(process.env.WA_GROUP || "").match(/chat\.whatsapp\.com\/([A-Za-z0-9]{6,40})/);
+        if (!m) return send(res, 503, { ok: false, error: "falta configurar WA_GROUP" });
+        const dest = "https://chat.whatsapp.com/" + m[1];
+        res.writeHead(302, { Location: dest, "Cache-Control": "no-store", "Referrer-Policy": "no-referrer" });
         return res.end();
       }
       const phone = waNext();
