@@ -198,6 +198,14 @@ const server = http.createServer(async (req, res) => {
   if (req.method === "GET" && LANDINGS[seg]) {
     const resto = u.slice(seg.length + 2);   // lo que va despues de "/<seg>/"
 
+    // baliza de permanencia: la manda la propia pagina a los 2 segundos.
+    // Separa a una persona mirando de una precarga del navegador interno de Meta.
+    if (resto === "ok") {
+      stats.track("e", seg, req, q.get("ref"));
+      res.writeHead(204, { "Cache-Control": "no-store" });
+      return res.end();
+    }
+
     // salida a WhatsApp desde NUESTRO dominio: la pagina no contiene ningun link de WhatsApp
     if (resto === "ir") {
       // la landing del grupo no manda a un chat individual sino al link de invitacion
@@ -225,7 +233,9 @@ const server = http.createServer(async (req, res) => {
     if (u === "/" + seg) { res.writeHead(301, { Location: "/" + seg + "/" }); return res.end(); }
 
     const rel = resto === "" ? "index.html" : resto.replace(/\.\./g, "");
-    if (rel === "index.html") stats.track("v", seg, req, q.get("utm_content") || q.get("utm_campaign") || q.get("ref"));
+    if (rel === "index.html") {
+      stats.track("v", seg, req, q.get("utm_content") || q.get("utm_campaign") || q.get("ref"), q.get("fbclid"));
+    }
     const ext = rel.slice(rel.lastIndexOf("."));
     try {
       const buf = fs.readFileSync(path.join(__dirname, "..", LANDINGS[seg], rel));
@@ -369,6 +379,13 @@ function panelHTML(d, key) {
   const NOMBRE = { "463": "Bono 200%", ganar: "Premio pagado", grupo: "Grupo WhatsApp" };
   const nom = (L) => NOMBRE[L] || L;
 
+  const totF = Object.values(d.fuentes || {}).reduce((a, b) => a + b, 0) || 1;
+  const fuentes = Object.keys(d.fuentes || {}).length
+    ? Object.keys(d.fuentes).sort((a, b) => d.fuentes[b] - d.fuentes[a]).map((f) =>
+        '<tr><td>' + esc(f) + '</td><td class="n">' + d.fuentes[f] + '</td>' +
+        '<td class="n tasa">' + Math.round((d.fuentes[f] / totF) * 100) + '%</td></tr>').join("")
+    : '<tr><td colspan="3" class="vacio">Sin datos todavia</td></tr>';
+
   const maxDia = Math.max(1, ...d.porDia.map((x) => x.v));
   const barras = d.porDia.map((x) => {
     const alto = Math.round((x.v / maxDia) * 100);
@@ -453,10 +470,13 @@ function panelHTML(d, key) {
 '<div class="live">se actualiza solo cada 30 s &middot; <b>en vivo</b></div></header>' +
 '<div class="kpis">' +
 '<div class="k b"><u>Visitas hoy</u><b>' + d.hoy.v + '</b><small>' + d.hoy.vu + ' personas distintas</small></div>' +
+'<div class="k"><u>Se quedan 2 s</u><b>' + d.hoy.quedan + '%</b><small>' + d.hoy.e + ' de ' + d.hoy.v + ' &middot; el resto rebota o es precarga</small></div>' +
 '<div class="k w"><u>Clics al boton</u><b>' + d.hoy.c + '</b><small>tocaron para escribir</small></div>' +
 '<div class="k g"><u>Convierten</u><b>' + d.hoy.tasa + '%</b><small>de los que entran</small></div>' +
 '<div class="k"><u>Acumulado</u><b>' + d.total.v + '</b><small>' + d.total.c + ' clics en total</small></div>' +
 '</div>' +
+'<section><h2>De donde viene el trafico (hoy)</h2><table><tr><th>Fuente</th><th>Visitas</th><th>%</th></tr>' + fuentes + '</table>' +
+'<p class="nota" style="margin-top:10px">Con <b>' + d.hoy.fb + '</b> visitas llego el codigo <b>fbclid</b>, que Meta agrega a todo clic pago: ese es el trafico que realmente vino del anuncio.</p></section>' +
 '<section><h2>Hoy, por landing</h2><table><tr><th>Landing</th><th>Visitas</th><th>Personas</th><th>Clics</th><th>Convierte</th></tr>' + filas + '</table></section>' +
 '<section><h2>Visitas por dia</h2><div class="chart">' + barras + '</div></section>' +
 '<section><h2>Hoy, hora por hora</h2><div class="horas">' + horas + '</div></section>' +

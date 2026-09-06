@@ -40,6 +40,16 @@ function huella(req) {
   const base = ipDe(req) + "|" + (req.headers["user-agent"] || "") + "|" + hoyAR();
   return crypto.createHmac("sha256", SAL).update(base).digest("hex").slice(0, 16);
 }
+// De donde llega: el navegador interno de Meta se delata en el user-agent.
+// Sirve para saber si el trafico es realmente del anuncio y si son personas o precargas.
+function fuenteDe(req) {
+  const ua = String(req.headers["user-agent"] || "");
+  if (/FBAN|FBAV|FB_IAB|FBIOS/i.test(ua)) return "facebook-app";
+  if (/Instagram/i.test(ua)) return "instagram-app";
+  if (/\bWebView\b|; wv\)/i.test(ua)) return "otra-app";
+  if (/Mobile|Android|iPhone|iPad/i.test(ua)) return "navegador-movil";
+  return "navegador-escritorio";
+}
 function esBot(req) {
   const ua = String(req.headers["user-agent"] || "");
   return !ua || BOTS.test(ua);
@@ -47,7 +57,7 @@ function esBot(req) {
 function cajaDia(dia, landing) {
   if (!dias.has(dia)) dias.set(dia, {});
   const d = dias.get(dia);
-  if (!d[landing]) d[landing] = { v: 0, c: 0, vu: new Set(), cu: new Set(), horas: {}, refs: {} };
+  if (!d[landing]) d[landing] = { v: 0, c: 0, e: 0, fb: 0, vu: new Set(), cu: new Set(), eu: new Set(), horas: {}, refs: {}, fuentes: {} };
   return d[landing];
 }
 function limpiar() {
@@ -56,20 +66,27 @@ function limpiar() {
 }
 
 // kind: "v" (visita) | "c" (clic en el boton)
-function track(kind, landing, req, ref) {
+function track(kind, landing, req, ref, fbclid) {
   if (esBot(req)) return;
   const ts = Date.now();
   const dia = hoyAR(ts);
   const box = cajaDia(dia, landing);
   const h = huella(req);
-  const r = String(ref || "").replace(/[^\w-]/g, "").slice(0, 24) || "(directo)";
+  const r = String(ref || "").replace(/[^\w-]/g, "").slice(0, 24) || (fbclid ? "(meta sin utm)" : "(directo)");
 
   box[kind]++;
-  (kind === "v" ? box.vu : box.cu).add(h);
+  if (kind === "v") {
+    box.vu.add(h);
+    if (fbclid) box.fb++;
+    const f = fuenteDe(req);
+    if (!box.fuentes[f]) box.fuentes[f] = 0;
+    box.fuentes[f]++;
+  } else if (kind === "e") { box.eu.add(h); }
+  else { box.cu.add(h); }
   const hh = horaAR(ts);
-  if (!box.horas[hh]) box.horas[hh] = { v: 0, c: 0 };
+  if (!box.horas[hh]) box.horas[hh] = { v: 0, c: 0, e: 0 };
   box.horas[hh][kind]++;
-  if (!box.refs[r]) box.refs[r] = { v: 0, c: 0 };
+  if (!box.refs[r]) box.refs[r] = { v: 0, c: 0, e: 0 };
   box.refs[r][kind]++;
 
   total[kind]++;
@@ -98,18 +115,24 @@ function reporte(nDias) {
   const dia = hoyAR();
   const hoy = dias.get(dia) || {};
   const porLanding = {};
-  let hv = 0, hc = 0, hvu = 0;
+  let hv = 0, hc = 0, hvu = 0, he = 0, hfb = 0;
   Object.keys(hoy).forEach((L) => {
     const b = hoy[L];
-    porLanding[L] = { v: b.v, c: b.c, vu: b.vu.size, cu: b.cu.size,
-      tasa: b.v ? Math.round((b.c / b.v) * 1000) / 10 : 0 };
-    hv += b.v; hc += b.c; hvu += b.vu.size;
+    porLanding[L] = { v: b.v, c: b.c, e: b.e, fb: b.fb, vu: b.vu.size, cu: b.cu.size, eu: b.eu.size,
+      tasa: b.v ? Math.round((b.c / b.v) * 1000) / 10 : 0,
+      quedan: b.v ? Math.round((b.e / b.v) * 1000) / 10 : 0 };
+    hv += b.v; hc += b.c; hvu += b.vu.size; he += b.e; hfb += b.fb;
   });
 
   const horas = {};
   Object.keys(hoy).forEach((L) => Object.keys(hoy[L].horas).forEach((h) => {
     if (!horas[h]) horas[h] = { v: 0, c: 0 };
     horas[h].v += hoy[L].horas[h].v; horas[h].c += hoy[L].horas[h].c;
+  }));
+
+  const fuentesHoy = {};
+  Object.keys(hoy).forEach((L) => Object.keys(hoy[L].fuentes || {}).forEach((f) => {
+    fuentesHoy[f] = (fuentesHoy[f] || 0) + hoy[L].fuentes[f];
   }));
 
   const refs = {};
@@ -123,7 +146,10 @@ function reporte(nDias) {
 
   return {
     dia, desde: arranque,
-    hoy: { v: hv, c: hc, vu: hvu, tasa: hv ? Math.round((hc / hv) * 1000) / 10 : 0 },
+    hoy: { v: hv, c: hc, e: he, fb: hfb, vu: hvu,
+      tasa: hv ? Math.round((hc / hv) * 1000) / 10 : 0,
+      quedan: hv ? Math.round((he / hv) * 1000) / 10 : 0 },
+    fuentes: fuentesHoy,
     porLanding, horas, topRefs, porDia, total,
     ultimos: ultimos.slice(-40).reverse(),
   };
@@ -137,7 +163,7 @@ function guardar() {
       plano[dia] = {};
       Object.keys(d).forEach((L) => {
         const b = d[L];
-        plano[dia][L] = { v: b.v, c: b.c, vu: [...b.vu], cu: [...b.cu], horas: b.horas, refs: b.refs };
+        plano[dia][L] = { v: b.v, c: b.c, e: b.e, fb: b.fb, vu: [...b.vu], cu: [...b.cu], eu: [...b.eu], horas: b.horas, refs: b.refs, fuentes: b.fuentes };
       });
     });
     fs.writeFileSync(ARCHIVO, JSON.stringify({ total, dias: plano, arranque }), "utf8");
@@ -150,10 +176,11 @@ function cargar() {
       Object.keys(j.dias[dia]).forEach((L) => {
         const b = j.dias[dia][L];
         const box = cajaDia(dia, L);
-        box.v = b.v || 0; box.c = b.c || 0;
+        box.v = b.v || 0; box.c = b.c || 0; box.e = b.e || 0; box.fb = b.fb || 0;
         (b.vu || []).forEach((x) => box.vu.add(x));
         (b.cu || []).forEach((x) => box.cu.add(x));
-        box.horas = b.horas || {}; box.refs = b.refs || {};
+        (b.eu || []).forEach((x) => box.eu.add(x));
+        box.horas = b.horas || {}; box.refs = b.refs || {}; box.fuentes = b.fuentes || {};
       });
     });
     if (j.total) total = j.total;

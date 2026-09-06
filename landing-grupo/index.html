@@ -154,6 +154,11 @@ body::before{content:"";position:fixed;inset:-10%;pointer-events:none;z-index:0;
 
   // si el archivo se abre suelto (sin servidor), se usa este link
   var GRUPO = "https://chat.whatsapp.com/ElueZvox0L423xTxLxdI9r";   // solo se usa si el archivo corre sin servidor
+  // avisa a los 2 segundos que hay alguien mirando de verdad (no una precarga)
+  setTimeout(function(){
+    try{ fetch("ok" + (ref ? "?ref=" + encodeURIComponent(ref) : ""), {method:"GET", keepalive:true}); }catch(e){}
+  }, 2000);
+
   document.getElementById("cta").addEventListener("click", function(e){
     if (location.protocol === "http:" || location.protocol === "https:") return;
     if (!GRUPO) return;
