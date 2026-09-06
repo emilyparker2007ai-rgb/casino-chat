@@ -1,14 +1,16 @@
+# El servicio en Render es un web service de Node que sirve el chat, el panel,
+# las landings y el analytics desde server/server.js.
+# ATENCION: este archivo antes declaraba runtime: static con un rewrite de /* a
+# index.html. Eso NO corresponde a lo que esta corriendo y, si alguien
+# sincronizaba el blueprint, reemplazaba el servidor por un sitio estatico y
+# se caian el chat, los redirects a WhatsApp y las metricas.
 services:
   - type: web
     name: casino-chat
-    runtime: static
-    staticPublishPath: .
+    runtime: node
+    plan: starter
+    region: oregon
+    buildCommand: "true"
+    startCommand: node server/server.js
+    healthCheckPath: /health
     pullRequestPreviewsEnabled: false
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
-    headers:
-      - path: /*
-        name: Cache-Control
-        value: public, max-age=300

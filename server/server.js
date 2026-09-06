@@ -184,7 +184,7 @@ const server = http.createServer(async (req, res) => {
   // ---------- analytics ----------
   if (req.method === "GET" && (u === "/stats" || u === "/api/stats")) {
     if (q.get("key") !== ADMIN_KEY) return send(res, 401, { ok: false, error: "clave invalida" });
-    const data = stats.reporte(q.get("dias"));
+    const data = stats.reporte(q.get("dias"), q.get("n"));
     if (u === "/api/stats") return send(res, 200, { ok: true, ...data });
     return send(res, 200, panelHTML(data, q.get("key")), "text/html; charset=utf-8");
   }
@@ -230,7 +230,12 @@ const server = http.createServer(async (req, res) => {
     }
 
     // sin barra final los relativos se resuelven contra la raiz y el logo da 404
-    if (u === "/" + seg) { res.writeHead(301, { Location: "/" + seg + "/" }); return res.end(); }
+    if (u === "/" + seg) {
+      // conservar el query: si no, el 301 se come el fbclid y el utm_content del anuncio
+      const qs = url.search || "";
+      res.writeHead(301, { Location: "/" + seg + "/" + qs });
+      return res.end();
+    }
 
     const rel = resto === "" ? "index.html" : resto.replace(/\.\./g, "");
     if (rel === "index.html") {

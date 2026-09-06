@@ -95,7 +95,7 @@ function track(kind, landing, req, ref, fbclid) {
   limpiar();
 }
 
-function reporte(nDias) {
+function reporte(nDias, nEventos) {
   const n = Math.min(Math.max(parseInt(nDias || 7, 10), 1), 60);
   // se arma la serie completa hacia atras, con ceros en los dias sin trafico:
   // asi el grafico tiene la misma forma desde el primer dia
@@ -151,7 +151,7 @@ function reporte(nDias) {
       quedan: hv ? Math.round((he / hv) * 1000) / 10 : 0 },
     fuentes: fuentesHoy,
     porLanding, horas, topRefs, porDia, total,
-    ultimos: ultimos.slice(-40).reverse(),
+    ultimos: ultimos.slice(-Math.min(Math.max(parseInt(nEventos || 40, 10), 1), 400)).reverse(),
   };
 }
 
