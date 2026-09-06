@@ -132,6 +132,7 @@ async function loadFromKommo() {
 
 // ---- campos personalizados del lead (por nombre, cacheados) ----
 const bot = require("./bot463");
+const stats = require("./stats");
 let FIELD_CACHE = null;
 async function fieldIds() {
   if (FIELD_CACHE) return FIELD_CACHE;
@@ -180,6 +181,14 @@ const server = http.createServer(async (req, res) => {
     return send(res, 200, INDEX, "text/html; charset=utf-8");
   if (req.method === "GET" && (u === "/admin" || u === "/admin.html"))
     return send(res, 200, ADMIN, "text/html; charset=utf-8");
+  // ---------- analytics ----------
+  if (req.method === "GET" && (u === "/stats" || u === "/api/stats")) {
+    if (q.get("key") !== ADMIN_KEY) return send(res, 401, { ok: false, error: "clave invalida" });
+    const data = stats.reporte(q.get("dias"));
+    if (u === "/api/stats") return send(res, 200, { ok: true, ...data });
+    return send(res, 200, panelHTML(data, q.get("key")), "text/html; charset=utf-8");
+  }
+
   // ---------- landings estaticas ----------
   // Cada entrada es una ruta publica -> carpeta en disco. Agregar una variante es una linea mas.
   const LANDINGS = { "463": "landing-463", "ganar": "landing-463-ganar", "grupo": "landing-grupo" };
@@ -192,6 +201,7 @@ const server = http.createServer(async (req, res) => {
     // salida a WhatsApp desde NUESTRO dominio: la pagina no contiene ningun link de WhatsApp
     if (resto === "ir") {
       // la landing del grupo no manda a un chat individual sino al link de invitacion
+      stats.track("c", seg, req, q.get("ref"));
       if (seg === "grupo") {
         // acepta el link como sea que lo peguen (el boton de compartir le suma ?s=sw&p=a...)
         // y redirige siempre a la forma canonica
@@ -215,6 +225,7 @@ const server = http.createServer(async (req, res) => {
     if (u === "/" + seg) { res.writeHead(301, { Location: "/" + seg + "/" }); return res.end(); }
 
     const rel = resto === "" ? "index.html" : resto.replace(/\.\./g, "");
+    if (rel === "index.html") stats.track("v", seg, req, q.get("utm_content") || q.get("utm_campaign") || q.get("ref"));
     const ext = rel.slice(rel.lastIndexOf("."));
     try {
       const buf = fs.readFileSync(path.join(__dirname, "..", LANDINGS[seg], rel));
@@ -351,3 +362,108 @@ server.listen(PORT, () => {
   // precalienta la sesion del panel del casino
   bot.adminLogin().catch(() => {});
 });
+
+// ---------- tablero de analytics (HTML, sin librerias) ----------
+function panelHTML(d, key) {
+  const esc = (x) => String(x).replace(/[<>&"]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;" }[c]));
+  const NOMBRE = { "463": "Bono 200%", ganar: "Premio pagado", grupo: "Grupo WhatsApp" };
+  const nom = (L) => NOMBRE[L] || L;
+
+  const maxDia = Math.max(1, ...d.porDia.map((x) => x.v));
+  const barras = d.porDia.map((x) => {
+    const alto = Math.round((x.v / maxDia) * 100);
+    const dd = x.dia.slice(8) + "/" + x.dia.slice(5, 7);
+    return '<div class="bar"><div class="col"><span style="height:' + Math.max(alto, 2) + '%"></span></div>' +
+      '<b>' + x.v + '</b><i>' + dd + '</i></div>';
+  }).join("");
+
+  const maxHora = Math.max(1, ...Object.values(d.horas).map((h) => h.v));
+  let horas = "";
+  for (let h = 0; h < 24; h++) {
+    const x = d.horas[h] || { v: 0, c: 0 };
+    const alto = Math.round((x.v / maxHora) * 100);
+    horas += '<div class="hb" title="' + h + 'h: ' + x.v + ' visitas, ' + x.c + ' clics">' +
+      '<span style="height:' + Math.max(alto, 2) + '%"></span><i>' + (h % 6 === 0 ? h : "") + '</i></div>';
+  }
+
+  const filas = Object.keys(d.porLanding).length
+    ? Object.keys(d.porLanding).sort().map((L) => {
+        const b = d.porLanding[L];
+        return '<tr><td><b>' + esc(nom(L)) + '</b><small>/' + esc(L) + '</small></td>' +
+          '<td class="n">' + b.v + '</td><td class="n">' + b.vu + '</td>' +
+          '<td class="n">' + b.c + '</td><td class="n tasa">' + b.tasa + '%</td></tr>';
+      }).join("")
+    : '<tr><td colspan="5" class="vacio">Todavia no entro nadie hoy</td></tr>';
+
+  const refs = d.topRefs.length
+    ? d.topRefs.map((r) => '<tr><td>' + esc(r.ref) + '</td><td class="n">' + r.v + '</td>' +
+        '<td class="n">' + r.c + '</td><td class="n tasa">' + r.tasa + '%</td></tr>').join("")
+    : '<tr><td colspan="4" class="vacio">Sin datos todavia</td></tr>';
+
+  const vivo = d.ultimos.length
+    ? d.ultimos.map((e) => {
+        const t = new Date(e.ts).toLocaleTimeString("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hour: "2-digit", minute: "2-digit", second: "2-digit" });
+        return '<li><span class="' + (e.kind === "c" ? "pc" : "pv") + '">' + (e.kind === "c" ? "CLIC" : "visita") + '</span>' +
+          '<b>' + esc(nom(e.landing)) + '</b><em>' + esc(e.ref) + '</em><i>' + t + '</i></li>';
+      }).join("")
+    : '<li class="vacio">Sin movimiento todavia</li>';
+
+  return '<!doctype html><html lang="es"><head><meta charset="utf-8">' +
+'<meta name="viewport" content="width=device-width,initial-scale=1"><title>Analytics 463</title>' +
+'<link rel="icon" href="data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><text y=\'78\' font-size=\'78\' text-anchor=\'middle\' x=\'50\'>%F0%9F%93%8A</text></svg>">' +
+'<style>' +
+':root{--bg:#0b0d10;--card:#12161b;--line:#1e252d;--ink:#e9edf2;--mut:#8b96a3;--gold:#ffd24a;--wa:#25d366;--blue:#5aa9ff}' +
+'*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif}' +
+'.wrap{max-width:1000px;margin:0 auto;padding:22px 16px 60px}' +
+'header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}' +
+'h1{font-size:19px;margin:0;letter-spacing:.2px}h1 span{color:var(--mut);font-weight:400;font-size:14px}' +
+'.live{font-size:12px;color:var(--mut)}.live b{color:var(--wa)}' +
+'.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:11px;margin-bottom:20px}' +
+'.k{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:14px 16px}' +
+'.k u{display:block;text-decoration:none;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-bottom:5px}' +
+'.k b{display:block;font-size:30px;line-height:1.1;font-variant-numeric:tabular-nums}' +
+'.k.g b{color:var(--gold)}.k.w b{color:var(--wa)}.k.b b{color:var(--blue)}' +
+'.k small{color:var(--mut);font-size:12px}' +
+'section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}' +
+'h2{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin:0 0 14px}' +
+'table{width:100%;border-collapse:collapse;font-size:14px}' +
+'th{text-align:right;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);padding:0 0 8px;font-weight:600}' +
+'th:first-child,td:first-child{text-align:left}' +
+'td{padding:9px 0;border-top:1px solid var(--line);font-variant-numeric:tabular-nums}' +
+'td.n{text-align:right}td.tasa{color:var(--wa);font-weight:700}' +
+'td small{display:block;color:var(--mut);font-size:11.5px}.vacio{color:var(--mut);text-align:center;padding:18px 0}' +
+'.chart{display:flex;align-items:flex-end;justify-content:center;gap:8px;height:150px}' +
+'.bar{flex:1;max-width:88px;display:flex;flex-direction:column;align-items:center;gap:5px;height:100%}' +
+'.col{flex:1;width:100%;display:flex;align-items:flex-end}' +
+'.col span{width:100%;background:linear-gradient(180deg,var(--gold),#8a5f0c);border-radius:5px 5px 0 0;min-height:3px}' +
+'.bar b{font-size:12.5px;font-variant-numeric:tabular-nums}.bar i{font-size:10.5px;color:var(--mut);font-style:normal}' +
+'.horas{display:flex;align-items:flex-end;gap:3px;height:80px}' +
+'.hb{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%}' +
+'.hb span{width:100%;background:var(--blue);border-radius:3px 3px 0 0;min-height:2px;opacity:.75}' +
+'.hb i{font-size:9.5px;color:var(--mut);font-style:normal;height:12px}' +
+'ul{list-style:none;margin:0;padding:0;max-height:300px;overflow:auto}' +
+'li{display:flex;align-items:center;gap:9px;padding:7px 0;border-top:1px solid var(--line);font-size:13.5px}' +
+'li span{font-size:10px;font-weight:800;letter-spacing:.06em;padding:3px 7px;border-radius:5px;flex:0 0 auto}' +
+'.pv{background:#17222e;color:var(--blue)}.pc{background:#12301f;color:var(--wa)}' +
+'li b{font-weight:600}li em{color:var(--mut);font-style:normal;font-size:12px}li i{margin-left:auto;color:var(--mut);font-style:normal;font-size:12px;font-variant-numeric:tabular-nums}' +
+'.nota{color:var(--mut);font-size:12.5px;line-height:1.6;margin-top:16px}' +
+'@media(max-width:560px){.k b{font-size:25px}.chart{height:120px}}' +
+'</style></head><body><div class="wrap">' +
+'<header><h1>Analytics <span>&middot; ' + esc(d.dia) + ' (hora de Argentina)</span></h1>' +
+'<div class="live">se actualiza solo cada 30 s &middot; <b>en vivo</b></div></header>' +
+'<div class="kpis">' +
+'<div class="k b"><u>Visitas hoy</u><b>' + d.hoy.v + '</b><small>' + d.hoy.vu + ' personas distintas</small></div>' +
+'<div class="k w"><u>Clics al boton</u><b>' + d.hoy.c + '</b><small>tocaron para escribir</small></div>' +
+'<div class="k g"><u>Convierten</u><b>' + d.hoy.tasa + '%</b><small>de los que entran</small></div>' +
+'<div class="k"><u>Acumulado</u><b>' + d.total.v + '</b><small>' + d.total.c + ' clics en total</small></div>' +
+'</div>' +
+'<section><h2>Hoy, por landing</h2><table><tr><th>Landing</th><th>Visitas</th><th>Personas</th><th>Clics</th><th>Convierte</th></tr>' + filas + '</table></section>' +
+'<section><h2>Visitas por dia</h2><div class="chart">' + barras + '</div></section>' +
+'<section><h2>Hoy, hora por hora</h2><div class="horas">' + horas + '</div></section>' +
+'<section><h2>De que anuncio vienen (hoy)</h2><table><tr><th>Codigo</th><th>Visitas</th><th>Clics</th><th>Convierte</th></tr>' + refs + '</table></section>' +
+'<section><h2>Ultimos movimientos</h2><ul>' + vivo + '</ul></section>' +
+'<p class="nota">Se cuenta del lado del servidor, sin scripts ni cookies en la landing: no lo frenan los bloqueadores. ' +
+'Se descartan bots y las vistas previas de WhatsApp y Meta. &laquo;Personas distintas&raquo; es un calculo aproximado del dia, no permite identificar a nadie.<br>' +
+'Los datos se pierden cuando se hace un deploy nuevo, porque el servicio no tiene disco propio.</p>' +
+'</div><script>setTimeout(function(){location.reload()},30000)</script></body></html>';
+}
